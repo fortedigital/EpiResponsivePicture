@@ -10,12 +10,13 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Background
     public static class ResizeBackgroundHelper
     {
         private const int MaxResizedImageWidth = 3200;
+
         public static string ResizeBackground(this HtmlHelper helper, ContentReference image,
             BackgroundPictureProfile profile)
         {
             if (image == null)
                 return "error-no-image";
-            
+
             var className = "_" + Guid.NewGuid().ToString("N");
             var styles = GenerateMediaQueryStyles(helper, profile, image, className);
             helper.RenderXhtmlString(new XhtmlString(styles));
@@ -51,7 +52,8 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Background
                                                    (-o-min-device-pixel-ratio: 2/1)    {mediaQuerySelector},
                                                    (   min-device-pixel-ratio: 2)      {mediaQuerySelector} {{");
 
-            RenderBackgroundCssClass(helper, image, stringBuilder, className, Math.Min(allowedSize.ImageWidth * 2,MaxResizedImageWidth));
+            RenderBackgroundCssClass(helper, image, stringBuilder, className,
+                Math.Min(allowedSize.ImageWidth * 2, MaxResizedImageWidth));
             stringBuilder.Append("}");
         }
 
@@ -61,20 +63,21 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Background
             if (!string.IsNullOrEmpty(mediaQuery))
                 stringBuilder.Append($"@media ({mediaQuery}) {{");
 
-            RenderBackgroundCssClass(helper, image, stringBuilder, className, Math.Min(allowedSize.ImageWidth, 
+            RenderBackgroundCssClass(helper, image, stringBuilder, className, Math.Min(allowedSize.ImageWidth,
                 MaxResizedImageWidth));
 
             if (!string.IsNullOrEmpty(mediaQuery))
                 stringBuilder.Append("}"); // media query close
         }
 
-        private static void RenderBackgroundCssClass(HtmlHelper helper, ContentReference image, StringBuilder stringBuilder,
+        private static void RenderBackgroundCssClass(HtmlHelper helper, ContentReference image,
+            StringBuilder stringBuilder,
             string className, int imageWidth)
         {
             stringBuilder.Append($".{className} {{ ");
 
             stringBuilder.Append(
-                $"background-image: url('{helper.ResizedImageUrl(image,imageWidth)}');");
+                $"background-image: url('{helper.ResizedImageUrl(image, imageWidth)}');");
 
             stringBuilder.Append("}"); // css class close
         }

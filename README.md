@@ -1,3 +1,3 @@
 # Forte.EpiResponsivePicture
 
-Smart responsive images in Episerver with ImageResizing.Net and Focal point
+One image to rule them all
