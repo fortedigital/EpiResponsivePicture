@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Forte.EpiResponsivePicture</id>
+    <version>$version$</version>
+    <description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point
+    </description>
+    <title>Forte.EpiResponsivePicture</title>
+    <authors>Forte_ Digital</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/fortedigital/EpiResponsivePicture</projectUrl>
+    <licenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  </metadata>
+</package>

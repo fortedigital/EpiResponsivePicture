@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpiResponsivePicture", "EpiResponsivePicture\EpiResponsivePicture.csproj", "{302D1EFD-BDAF-4237-9990-02E1BB69DACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpiResponsivePicture.Tests", "EpiResponsivePicture.Tests\EpiResponsivePicture.Tests.csproj", "{6474C710-2726-4AD3-902C-9BB9E0CD5052}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
