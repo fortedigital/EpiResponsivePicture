@@ -50,6 +50,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         public virtual IEnumerable<CultureInfo> ExistingLanguages { get; set; }
         public virtual CultureInfo MasterLanguage { get; set; }
 
+        [Display(Name="Focal point")]
         [BackingType(typeof(PropertyFocalPoint))]
         public virtual FocalPoint FocalPoint { get; set; }
 
