@@ -81,3 +81,6 @@ This will render following markup:
     <img alt="" src="/globalassets/path-to-image.jpg?w=800">
 </picture>
 ```
+
+## Other
+Consider using Azure Blob cache plugin to improve performance: https://github.com/fortedigital/ImageResizer.AzureBlobCache
