@@ -4,14 +4,14 @@ To successfully migrate from previous version of Responsive images (contained in
 1. Update package Forte.EpiCommonUtils to version with responsive pictures extracted (min. VERSION_MISSING)
 1. Install this NuGet package (Forte.EpiResponsivePicture)
 1. Update namespace usings: 
-  - Forte.EpiCommonUtils.Infrastructure.Model.ImageBase -> Forte.EpiResponsivePicture.ResizedImage.ImageBase
-  - Forte.EpiCommonUtils.ResizedImage.PictureProfile -> Forte.EpiResponsivePicture.ResizedImage.PictureProfile
-  - Forte.EpiCommonUtils.ResizedImage.ScaleMode -> Forte.EpiResponsivePicture.ResizedImage.ScaleMode
-  - Forte.EpiCommonUtils.ResizedImage.ImageTransformationHelper -> Forte.EpiResponsivePicture.ResizedImage.ImageTransformationHelper
+    - Forte.EpiCommonUtils.Infrastructure.Model.ImageBase -> Forte.EpiResponsivePicture.ResizedImage.ImageBase
+    - Forte.EpiCommonUtils.ResizedImage.PictureProfile -> Forte.EpiResponsivePicture.ResizedImage.PictureProfile
+    - Forte.EpiCommonUtils.ResizedImage.ScaleMode -> Forte.EpiResponsivePicture.ResizedImage.ScaleMode
+    - Forte.EpiCommonUtils.ResizedImage.ImageTransformationHelper -> Forte.EpiResponsivePicture.ResizedImage.ImageTransformationHelper
 1. Migrate all picture profiles. Instead of properties `SrcSetSizes`, `SrcSetWidths`, `Mode` and `Quality`, add property `Sources` with single `PictureSource` item, containing following values of properties:
-  - Sizes - value of current SrcSetSizes,
-  - AllowedWidths - value of current SetWidths,
-  - Quality and Mode - value of picture profile mirror properties.
+    - Sizes - value of current SrcSetSizes,
+    - AllowedWidths - value of current SetWidths,
+    - Quality and Mode - value of picture profile mirror properties.
 1. As new ImageBase have additional `Width` and `Height` properties, that gets calculated on image publishing automatically, it is necessary to do this for all existing images. The easiest way is probably to republish all the images and let event handler do this for us, for example using following job:
 
 ```cs
