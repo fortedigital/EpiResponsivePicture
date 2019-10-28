@@ -150,13 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EpiCommonUtils\EpiCommonUtils.csproj">
-      <Project>{302d1efd-bdaf-4237-9990-02e1bb69dace}</Project>
-      <Name>EpiCommonUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
+  </ItemGroup>>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

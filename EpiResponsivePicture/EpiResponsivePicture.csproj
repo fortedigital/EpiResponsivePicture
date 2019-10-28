@@ -52,6 +52,9 @@
       <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Cms.AspNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Cms.Shell.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Cms.Shell.UI.dll</HintPath>
+    </Reference>
     <Reference Include="EPiServer.Configuration, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -96,9 +99,27 @@
       <HintPath>..\packages\EPiServer.ServiceLocation.StructureMap.2.0.1\lib\net461\EPiServer.ServiceLocation.StructureMap.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Shell, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.Shell.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Shell.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="EPiServer.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.UI.dll</HintPath>
+    </Reference>
     <Reference Include="EPiServer.Web.WebControls, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Web.WebControls.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ImagePointEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImagePointEditor.1.0.0\lib\net461\ImagePointEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.4.0.1\lib\net45\ImageResizer.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.EPiServerBlobReader, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.Plugins.EPiServerBlobReader.7.0.0\lib\net461\ImageResizer.Plugins.EPiServerBlobReader.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -214,17 +235,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResizedImage\AspectRatio.cs" />
     <Compile Include="ResizedImage\Background\BackgroundPictureProfile.cs" />
     <Compile Include="ResizedImage\Background\PictureSize.cs" />
     <Compile Include="ResizedImage\Background\ResizeBackgroundHelper.cs" />
+    <Compile Include="ResizedImage\CropSettings.cs" />
+    <Compile Include="ResizedImage\IImage.cs" />
     <Compile Include="ResizedImage\ImageBase.cs" />
+    <Compile Include="ResizedImage\ImageCropper.cs" />
+    <Compile Include="ResizedImage\ImagePublishingEventHandler.cs" />
     <Compile Include="ResizedImage\ImageTransformationHelper.cs" />
+    <Compile Include="ResizedImage\IResponsiveImage.cs" />
     <Compile Include="ResizedImage\PictureProfile.cs" />
+    <Compile Include="ResizedImage\PictureSource.cs" />
+    <Compile Include="ResizedImage\Property\FocalPoint.cs" />
+    <Compile Include="ResizedImage\Property\FocalPointEditorDescriptor.cs" />
+    <Compile Include="ResizedImage\Property\JsonFocalPointConverter.cs" />
+    <Compile Include="ResizedImage\Property\PropertyFocalPoint.cs" />
     <Compile Include="ResizedImage\ResizedPictureViewModel.cs" />
+    <Compile Include="ResizedImage\ResponsivePictureModule.cs" />
     <Compile Include="ResizedImage\ScaleMode.cs" />
     <Compile Include="ResizedImage\UrlBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="module.config" />
+    <None Include="modules\_protected\ImagePointEditor\ImagePointEditor.zip" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

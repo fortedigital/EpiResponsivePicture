@@ -11,5 +11,8 @@
     <projectUrl>https://github.com/fortedigital/EpiResponsivePicture</projectUrl>
     <licenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <dependencies>
+        <dependency id="ImagePointEditor" version="1.0.0" />
+    </dependencies>
   </metadata>
 </package>

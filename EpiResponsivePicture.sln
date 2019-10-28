@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpiResponsivePicture", "EpiResponsivePicture\EpiResponsivePicture.csproj", "{302D1EFD-BDAF-4237-9990-02E1BB69DACE}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpiResponsivePicture", "EpiResponsivePicture\EpiResponsivePicture.csproj", "{02F13737-8B23-415A-BA95-EBD2ED5F761C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpiResponsivePicture.Tests", "EpiResponsivePicture.Tests\EpiResponsivePicture.Tests.csproj", "{6474C710-2726-4AD3-902C-9BB9E0CD5052}"
 EndProject
@@ -10,13 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{302D1EFD-BDAF-4237-9990-02E1BB69DACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02F13737-8B23-415A-BA95-EBD2ED5F761C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02F13737-8B23-415A-BA95-EBD2ED5F761C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02F13737-8B23-415A-BA95-EBD2ED5F761C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02F13737-8B23-415A-BA95-EBD2ED5F761C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6474C710-2726-4AD3-902C-9BB9E0CD5052}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02CE1E74-0663-40BC-8365-67D03F4ED8ED}
 	EndGlobalSection
 EndGlobal

@@ -4,11 +4,11 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Background
     {
         public PictureSize(string mediaCondition, int imageWidth)
         {
-            this.MediaCondition = mediaCondition;
-            this.ImageWidth = imageWidth;
+            MediaCondition = mediaCondition;
+            ImageWidth = imageWidth;
         }
 
         public string MediaCondition { get; }
-        public int ImageWidth { get;  }
+        public int ImageWidth { get; }
     }
 }
