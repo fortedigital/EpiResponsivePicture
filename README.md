@@ -1,6 +1,6 @@
 # Forte.EpiResponsivePicture
 
-Looking how to migrate from Forte.EpiCommonUtils? See MIGRATING.md
+Looking how to migrate from Forte.EpiCommonUtils? See our [migration guide](MIGRATING.md).
 
 ## How to start
 
