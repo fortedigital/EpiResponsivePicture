@@ -28,7 +28,8 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             if (pictureModel == null) pictureModel = new ResizedPictureViewModel();
 
             var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>()
-                                 .TryGet<IContentData>(image, out var content) &&
+                                 .TryGet<IContentData>(image, new LoaderOptions{ LanguageLoaderOption.FallbackWithMaster() }, 
+                                     out var content) &&
                              content is IImage;
 
             var baseUrl = imageFound
