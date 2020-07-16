@@ -60,5 +60,10 @@ namespace Forte.EpiResponsivePicture.ResizedImage
 
             return target.Add("mode", mode.ToString().ToLowerInvariant());
         }
+
+        public static UrlBuilder Format(this UrlBuilder target, ResizedImageFormat format)
+        {
+            return target.Add("format", format.ToString().ToLowerInvariant());
+        }
     }
 }
