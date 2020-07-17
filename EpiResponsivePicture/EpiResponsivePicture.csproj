@@ -252,6 +252,7 @@
     <Compile Include="ResizedImage\Property\FocalPointEditorDescriptor.cs" />
     <Compile Include="ResizedImage\Property\JsonFocalPointConverter.cs" />
     <Compile Include="ResizedImage\Property\PropertyFocalPoint.cs" />
+    <Compile Include="ResizedImage\ResizedImageFormat.cs" />
     <Compile Include="ResizedImage\ResizedPictureViewModel.cs" />
     <Compile Include="ResizedImage\ResponsivePictureModule.cs" />
     <Compile Include="ResizedImage\ScaleMode.cs" />

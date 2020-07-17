@@ -29,6 +29,15 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             return target;
         }
 
+        public static UrlBuilder Remove(this UrlBuilder target, string key)
+        {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (!target.IsEmpty && target.QueryCollection[key] != null)
+                target.QueryCollection.Remove(key);
+            return target;
+        }
+
         public static UrlBuilder Width(this UrlBuilder target, int width)
         {
             return target.Add("w", width.ToString());
@@ -59,6 +68,15 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             if (mode == ScaleMode.Default) return target;
 
             return target.Add("mode", mode.ToString().ToLowerInvariant());
+        }
+
+        public static UrlBuilder Format(this UrlBuilder target, ResizedImageFormat format)
+        {
+            if (format == ResizedImageFormat.Preserve)
+                target.QueryCollection.Remove("format");
+            else
+                target.Add("format", format.ToString().ToLowerInvariant());
+            return target;
         }
     }
 }
