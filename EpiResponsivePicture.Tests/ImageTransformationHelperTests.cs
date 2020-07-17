@@ -31,96 +31,66 @@ namespace Forte.EpiResponsivePicture.Tests
             }));
         }
 
-        [Test]
-        public void TestResizedImageUrl()
+        [TestCase(ResizedImageFormat.Preserve, ExpectedResult = "/images/foo.jpg?w=500")]
+        [TestCase(ResizedImageFormat.Jpg, ExpectedResult = "/images/foo.jpg?w=500&format=jpg")]
+        public string TestResizedImageUrl(ResizedImageFormat format)
         {
             HtmlHelper html = null;
 
-            var urlWithoutFormat = html.ResizedImageUrl(new ContentReference(123), 500).ToString();
-            var urlWithFormat = html.ResizedImageUrl(new ContentReference(123), 500, ResizedImageFormat.Jpg).ToString();
-
-            Assert.That(urlWithoutFormat, Is.EqualTo("/images/foo.jpg?w=500"));
-            Assert.That(urlWithFormat, Is.EqualTo("/images/foo.jpg?w=500&format=jpg"));
+            return html.ResizedImageUrl(new ContentReference(123), 500, format).ToString();
         }
 
         [Test]
-        public void TestResizedPicture()
+        public void When_PictureProfile_Preserves_ImageFormat_ResizedPicture_Does_Not_Add_Format_To_QueryString()
         {
             HtmlHelper html = null;
 
-            var profileWithoutFormat = new PictureProfile()
+            var markup = html.ResizedPicture(new ContentReference(123), profilePreservingFormat, "/images/foo.jpg").ToString();
+
+            Assert.That(markup, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?w=1900 1900w, /images/foo.jpg?w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?w=0\" /></picture>"));
+        }
+
+        [Test]
+        public void When_PictureProfile_Overrides_ImageFormat_ResizedPicture_Adds_Format_To_QueryString()
+        {
+            HtmlHelper html = null;
+
+            var markup = html.ResizedPicture(new ContentReference(123), profileOverridingFormat, "/images/foo.jpg").ToString();
+
+            Assert.That(markup, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?format=jpg&amp;w=1900 1900w, /images/foo.jpg?format=jpg&amp;w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?format=jpg&amp;w=0\" /></picture>"));
+        }
+        
+        private static readonly PictureProfile profileOverridingFormat = new PictureProfile()
+        {
+            Format = ResizedImageFormat.Jpg,
+            Sources = new[]
             {
-                Sources = new[]
+                new PictureSource()
                 {
-                    new PictureSource()
+                    MediaCondition = "(min-width:1900px)",
+                    AllowedWidths = new[] {1900, 2400},
+                    Sizes = new[]
                     {
-                        MediaCondition = "(min-width:1900px)",
-                        AllowedWidths = new[] {1900, 2400},
-                        Sizes = new[]
-                        {
-                            "90vw"
-                        }
-                    },
+                        "90vw"
+                    }
                 },
-            };
+            },
+        };
 
-            var profileWithFormat = new PictureProfile()
+        private static readonly PictureProfile profilePreservingFormat = new PictureProfile()
+        {
+            Sources = new[]
             {
-                Format = ResizedImageFormat.Jpg,
-                Sources = new[]
+                new PictureSource()
                 {
-                    new PictureSource()
+                    MediaCondition = "(min-width:1900px)",
+                    AllowedWidths = new[] {1900, 2400},
+                    Sizes = new[]
                     {
-                        MediaCondition = "(min-width:1900px)",
-                        AllowedWidths = new[] {1900, 2400},
-                        Sizes = new[]
-                        {
-                            "90vw"
-                        }
-                    },
+                        "90vw"
+                    }
                 },
-            };
-            
-            var urlWithoutFormat = html.ResizedPicture(new ContentReference(123), profileWithoutFormat, "/images/foo.jpg").ToString();
-            var urlWithFormat = html.ResizedPicture(new ContentReference(123), profileWithFormat, "/images/foo.jpg").ToString();
-
-            Assert.That(urlWithoutFormat, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?w=1900 1900w, /images/foo.jpg?w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?w=0\" /></picture>"));
-            Assert.That(urlWithFormat, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?format=jpg&amp;w=1900 1900w, /images/foo.jpg?format=jpg&amp;w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?format=jpg&amp;w=0\" /></picture>"));
-        }
-    }
-
-    public class DummyServiceLocator : IServiceLocator
-    {
-        private readonly IReadOnlyDictionary<Type, object> services;
-
-        public DummyServiceLocator(IReadOnlyDictionary<Type, object> services)
-        {
-            this.services = services;
-        }
-
-        public object GetService(Type serviceType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object GetInstance(Type serviceType)
-        {
-            return this.services[serviceType];
-        }
-
-        public TService GetInstance<TService>()
-        {
-            return (TService) this.GetInstance(typeof(TService));
-        }
-
-        public bool TryGetExistingInstance(Type serviceType, out object instance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<object> GetAllInstances(Type serviceType)
-        {
-            throw new NotImplementedException();
-        }
+            },
+        };
     }
 }

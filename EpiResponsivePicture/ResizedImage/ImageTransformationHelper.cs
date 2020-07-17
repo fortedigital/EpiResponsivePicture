@@ -12,15 +12,13 @@ namespace Forte.EpiResponsivePicture.ResizedImage
     public static class ImageTransformationHelper
     {
         public static UrlBuilder ResizedImageUrl(this HtmlHelper helper, ContentReference image, int width,
-            ResizedImageFormat? format = null)
+            ResizedImageFormat format = ResizedImageFormat.Preserve)
         {
             var baseUrl = ResolveImageUrl(image);
 
-            var target = new UrlBuilder(baseUrl);
-            target.Width(width);
-            if (format.HasValue)
-                target.Format(format.Value);
-            return target;
+            return new UrlBuilder(baseUrl)
+                .Width(width)
+                .Format(format);
         }
 
         public static MvcHtmlString ResizedPicture(this HtmlHelper helper,
@@ -84,7 +82,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         }
 
         private static TagBuilder CreateSourceElement(string imageUrl, PictureSource source,
-            IResponsiveImage focalPoint, int maxImageDimension, ResizedImageFormat? format)
+            IResponsiveImage focalPoint, int maxImageDimension, ResizedImageFormat format)
         {
             var srcSets = source.AllowedWidths
                 .Select(width => BuildSize(imageUrl, width, source.Mode, source.TargetAspectRatio, source.Quality,
@@ -105,7 +103,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
 
         private static string BuildSize(string imageUrl, int width, ScaleMode sourceMode,
             AspectRatio sourceTargetAspectRatio, int? sourceQuality, IResponsiveImage focalPoint, int maxImageDimension,
-            ResizedImageFormat? format)
+            ResizedImageFormat format)
         {
             var url = BuildResizedImageUrl(imageUrl, width, sourceMode, sourceTargetAspectRatio, sourceQuality,
                 focalPoint,
@@ -133,7 +131,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
 
         private static UrlBuilder BuildResizedImageUrl(string imageUrl, int width,
             ScaleMode scaleMode, AspectRatio targetAspectRatio, int? quality,
-            IResponsiveImage image, int? maxImageDimension, ResizedImageFormat? format)
+            IResponsiveImage image, int? maxImageDimension, ResizedImageFormat format)
         {
             width = Math.Min(width, maxImageDimension ?? int.MaxValue);
 
@@ -145,8 +143,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             if (quality.HasValue)
                 target.Quality(quality.Value);
 
-            if (format.HasValue)
-                target.Format(format.Value);
+            target.Format(format);
 
             if (scaleMode != ScaleMode.Default && scaleMode != ScaleMode.Max
                                                && image != null)
