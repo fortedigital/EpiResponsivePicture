@@ -12,7 +12,7 @@ To successfully migrate from previous version of Responsive images (contained in
     - Sizes - value of current SrcSetSizes,
     - AllowedWidths - value of current SetWidths,
     - Quality and Mode - value of picture profile mirror properties.
-1. As new ImageBase have additional `Width` and `Height` properties, that gets calculated on image publishing automatically, it is necessary to do this for all existing images. The easiest way is probably to republish all the images and let event handler do this for us, for example using following job:
+1. As new ImageBase have additional `Width` and `Height` properties, that gets calculated on image publishing automatically, it is necessary to do this for all existing images. Also, `ImageBase` implements `ILocalizable` interface. It means that images created before don't have any information (`null`s) about language. This might result in EpiServer having troubles to find (404) image wihout any language set. The easiest way to fix these problems is probably to republish all the images:  event handler will fill width and height for us but you need to set language by your own, for example by using following job:
 
 ```cs
 using System.Linq;
@@ -53,6 +53,8 @@ using EPiServer.Security;
             {
                 var image = _contentRepository.Get<Image>(imageLink);
                 image = (Image) image.CreateWritableClone();
+                image.MasterLanguage = CultureInfo.GetCultureInfo("en"); //set CultureInfo you want
+                image.Language = CultureInfo.GetCultureInfo("en"); //set CultureInfo you want
                 _contentRepository.Save(image, SaveAction.Publish | SaveAction.ForceNewVersion, AccessLevel.NoAccess);
             }
 
