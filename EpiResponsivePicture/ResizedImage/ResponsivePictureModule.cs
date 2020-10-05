@@ -15,12 +15,12 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         public void Initialize(InitializationEngine context)
         {
             _imagePublishingEventHandler = ServiceLocator.Current.GetInstance<ImagePublishingEventHandler>();
-            context.Locate.ContentEvents().SavingContent += _imagePublishingEventHandler.CalculateDimensions;
+            context.Locate.ContentEvents().PublishingContent += _imagePublishingEventHandler.CalculateDimensions;
         }
 
         public void Uninitialize(InitializationEngine context)
         {
-            context.Locate.ContentEvents().SavingContent -= _imagePublishingEventHandler.CalculateDimensions;
+            context.Locate.ContentEvents().PublishingContent -= _imagePublishingEventHandler.CalculateDimensions;
         }
     }
 }
