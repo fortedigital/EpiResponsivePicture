@@ -79,6 +79,7 @@
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.11.0" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
   </ItemGroup>
 
 </Project>
