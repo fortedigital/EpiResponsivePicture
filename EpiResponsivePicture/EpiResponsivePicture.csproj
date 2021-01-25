@@ -1,275 +1,84 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{02F13737-8B23-415A-BA95-EBD2ED5F761C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
-    <AssemblyName>Forte.EpiResponsivePicture</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</FileVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
+    <PackageId>Forte.EpiResponsivePicture</PackageId>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</PackageVersion>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
+    <Title>Forte.EpiResponsivePicture</Title>
+    <Authors>Forte_ Digital</Authors>
+    <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
+    <PackageProjectUrl>https://github.com/fortedigital/EpiResponsivePicture</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <!-- Include symbol files (*.pdb) in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
-      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
-      <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.Core.11.11.2\lib\net461\EPiServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.ApplicationModules, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.ApplicationModules.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Cms.AspNet, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Cms.AspNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Cms.Shell.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Cms.Shell.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Configuration, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Data, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Data.Cache, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.Data.Cache.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Enterprise, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.Core.11.11.2\lib\net461\EPiServer.Enterprise.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Events, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.Events.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Framework, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.Framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Framework.AspNet, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.AspNet.11.11.2\lib\net461\EPiServer.Framework.AspNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.ImageLibrary, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.ImageLibrary.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Licensing, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.Framework.11.11.2\lib\net461\EPiServer.Licensing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.LinkAnalyzer, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.Core.11.11.2\lib\net461\EPiServer.LinkAnalyzer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.ServiceLocation.StructureMap, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\EPiServer.ServiceLocation.StructureMap.2.0.1\lib\net461\EPiServer.ServiceLocation.StructureMap.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Shell, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Shell.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Shell.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.Shell.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.UI, Version=11.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.11.1.0\lib\net461\EPiServer.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="EPiServer.Web.WebControls, Version=11.11.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\packages\EPiServer.CMS.AspNet.11.11.2\lib\net461\EPiServer.Web.WebControls.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ImagePointEditor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImagePointEditor.1.0.0\lib\net461\ImagePointEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageResizer.4.0.1\lib\net45\ImageResizer.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.EPiServerBlobReader, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageResizer.Plugins.EPiServerBlobReader.7.0.0\lib\net461\ImageResizer.Plugins.EPiServerBlobReader.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StructureMap, Version=4.5.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\StructureMap.4.5.2\lib\net45\StructureMap.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\structuremap.web.4.0.0.315\lib\net40\StructureMap.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Data.SqlClient, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Data.SqlClient.4.4.0\lib\net461\System.Data.SqlClient.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Security.AccessControl.4.4.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Xml, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Security.Cryptography.Xml.4.4.2\lib\net461\System.Security.Cryptography.Xml.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Permissions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Security.Permissions.4.4.0\lib\net461\System.Security.Permissions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.4.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.4.5.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.AccessControl, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Threading.AccessControl.4.4.0\lib\net461\System.Threading.AccessControl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.6\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResizedImage\AspectRatio.cs" />
-    <Compile Include="ResizedImage\Background\BackgroundPictureProfile.cs" />
-    <Compile Include="ResizedImage\Background\PictureSize.cs" />
-    <Compile Include="ResizedImage\Background\ResizeBackgroundHelper.cs" />
-    <Compile Include="ResizedImage\CropSettings.cs" />
-    <Compile Include="ResizedImage\IImage.cs" />
-    <Compile Include="ResizedImage\ImageBase.cs" />
-    <Compile Include="ResizedImage\ImageCropper.cs" />
-    <Compile Include="ResizedImage\ImagePublishingEventHandler.cs" />
-    <Compile Include="ResizedImage\ImageTransformationHelper.cs" />
-    <Compile Include="ResizedImage\IResponsiveImage.cs" />
-    <Compile Include="ResizedImage\PictureProfile.cs" />
-    <Compile Include="ResizedImage\PictureSource.cs" />
-    <Compile Include="ResizedImage\Property\FocalPoint.cs" />
-    <Compile Include="ResizedImage\Property\FocalPointEditorDescriptor.cs" />
-    <Compile Include="ResizedImage\Property\JsonFocalPointConverter.cs" />
-    <Compile Include="ResizedImage\Property\PropertyFocalPoint.cs" />
-    <Compile Include="ResizedImage\ResizedImageFormat.cs" />
-    <Compile Include="ResizedImage\ResizedPictureViewModel.cs" />
-    <Compile Include="ResizedImage\ResponsivePictureModule.cs" />
-    <Compile Include="ResizedImage\ScaleMode.cs" />
-    <Compile Include="ResizedImage\UrlBuilderExtensions.cs" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="module.config" />
-    <None Include="modules\_protected\ImagePointEditor\ImagePointEditor.zip" />
-    <None Include="packages.config" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="EpiResponsivePicture.nuspec" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
+    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
+    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
+    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.11.0" />
+  </ItemGroup>
+
 </Project>
