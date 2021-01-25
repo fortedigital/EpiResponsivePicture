@@ -45,9 +45,12 @@ namespace Forte.EpiResponsivePicture.Tests
         {
             HtmlHelper html = null;
 
-            var markup = html.ResizedPicture(new ContentReference(123), profilePreservingFormat, "/images/foo.jpg").ToString();
+            var markup = html.ResizedPicture(new ContentReference(123), profilePreservingFormat, "/images/foo.jpg")
+                .ToString();
 
-            Assert.That(markup, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?w=1900 1900w, /images/foo.jpg?w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?w=0\" /></picture>"));
+            Assert.That(markup,
+                Is.EqualTo(
+                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?w=1900 1900w, /images/foo.jpg?w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?w=0\" /></picture>"));
         }
 
         [Test]
@@ -55,11 +58,14 @@ namespace Forte.EpiResponsivePicture.Tests
         {
             HtmlHelper html = null;
 
-            var markup = html.ResizedPicture(new ContentReference(123), profileOverridingFormat, "/images/foo.jpg").ToString();
+            var markup = html.ResizedPicture(new ContentReference(123), profileOverridingFormat, "/images/foo.jpg")
+                .ToString();
 
-            Assert.That(markup, Is.EqualTo("<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?format=jpg&amp;w=1900 1900w, /images/foo.jpg?format=jpg&amp;w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?format=jpg&amp;w=0\" /></picture>"));
+            Assert.That(markup,
+                Is.EqualTo(
+                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?format=jpg&amp;w=1900 1900w, /images/foo.jpg?format=jpg&amp;w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?format=jpg&amp;w=0\" /></picture>"));
         }
-        
+
         private static readonly PictureProfile profileOverridingFormat = new PictureProfile()
         {
             Format = ResizedImageFormat.Jpg,
