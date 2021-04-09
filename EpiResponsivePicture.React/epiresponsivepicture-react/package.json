@@ -1,10 +1,10 @@
 {
   "name": "epiresponsivepicture-react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "ResponsivePicture React component for Forte.EpiResponsivePicture package",
-  "author": "kpkozak",
+  "author": "Forte Digital",
   "license": "MIT",
-  "repository": "kpkozak/epiresponsivepicture-react",
+  "repository": "fortedigital/EpiResponsivePicture",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",

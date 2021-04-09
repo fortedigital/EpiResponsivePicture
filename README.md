@@ -82,5 +82,8 @@ This will render following markup:
 </picture>
 ```
 
+## Using Forte.EpiResponsivePicture with React
+[npm package](./EpiResponsivePicture.React/epiresponsivepicture-react/Readme.md) available
+
 ## Other
 Consider using Azure Blob cache plugin to improve performance: https://github.com/fortedigital/ImageResizer.AzureBlobCache
