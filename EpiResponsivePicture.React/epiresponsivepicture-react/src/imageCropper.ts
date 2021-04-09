@@ -1,5 +1,4 @@
-import {ResponsiveImageViewModel} from "./index";
-import {AspectRatio} from "./ResizedImage/AspectRatio.csharp";
+import {AspectRatio, ResponsiveImageViewModel} from "./index";
 
 export class ImageCropper { // port from ImageCropper.cs from EpiResponsivePicture
     static getCropSettings(aspectRatio: AspectRatio, image: ResponsiveImageViewModel):string|null {
