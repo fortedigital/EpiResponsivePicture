@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Text;
-using System.Web.Mvc;
 using EPiServer.Core;
-using EPiServer.Web.Mvc.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Forte.EpiResponsivePicture.ResizedImage.Background
 {
@@ -19,7 +19,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Background
 
             var className = "_" + Guid.NewGuid().ToString("N");
             var styles = GenerateMediaQueryStyles(helper, profile, image, className);
-            helper.RenderXhtmlString(new XhtmlString(styles));
+            helper.Display(styles);
             return className;
         }
 

@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
-    <TargetFrameworks>net461;net462;net47;net471;net472;net48</TargetFrameworks>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</AssemblyVersion>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</FileVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</FileVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
     <PackageId>Forte.EpiResponsivePicture</PackageId>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</PackageVersion>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</PackageVersion>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
     <Title>Forte.EpiResponsivePicture</Title>
     <Authors>Forte_ Digital</Authors>
     <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
@@ -19,67 +19,12 @@
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.11.0" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore" Version="12.6.0" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="12.6.0" />
+    <PackageReference Include="EPiServer.Framework" Version="12.6.0" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="12.7.0" />
   </ItemGroup>
 
 </Project>

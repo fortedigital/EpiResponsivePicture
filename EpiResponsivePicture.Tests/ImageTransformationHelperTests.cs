@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -8,6 +7,7 @@ using EPiServer.Web.Routing;
 using Moq;
 using NUnit.Framework;
 using Forte.EpiResponsivePicture.ResizedImage;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Forte.EpiResponsivePicture.Tests
 {
@@ -24,7 +24,7 @@ namespace Forte.EpiResponsivePicture.Tests
                 .Setup(r => r.GetUrl(It.IsAny<ContentReference>(), It.IsAny<string>(),
                     It.IsAny<UrlResolverArguments>())).Returns("/images/foo.jpg");
 
-            ServiceLocator.SetLocator(new DummyServiceLocator(new Dictionary<Type, object>
+            ServiceLocator.SetServiceProvider(new DummyServiceLocator(new Dictionary<Type, object>
             {
                 {typeof(IContentLoader), contentLoaderMock.Object},
                 {typeof(IUrlResolver), urlResolverMock.Object}

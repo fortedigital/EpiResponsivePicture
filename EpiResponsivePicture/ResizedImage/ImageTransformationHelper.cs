@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Web.Mvc;
+using System.Text.Encodings.Web;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Forte.EpiResponsivePicture.ResizedImage
 {
@@ -21,7 +25,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
                 .Format(format);
         }
 
-        public static MvcHtmlString ResizedPicture(this HtmlHelper helper,
+        public static HtmlString ResizedPicture(this HtmlHelper helper,
             ContentReference image,
             PictureProfile profile,
             string fallbackUrl = null,
@@ -49,36 +53,37 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             return GenerateResizedPicture(baseUrl, profile, content as IResponsiveImage, pictureModel);
         }
 
-        private static MvcHtmlString GenerateResizedPicture(string imageBaseUrl,
+        private static HtmlString GenerateResizedPicture(string imageBaseUrl,
             PictureProfile profile, IResponsiveImage image, ResizedPictureViewModel pictureModel)
         {
             return GeneratePictureElement(profile, imageBaseUrl, image, pictureModel);
         }
 
-        private static MvcHtmlString GeneratePictureElement(PictureProfile profile,
+        private static HtmlString GeneratePictureElement(PictureProfile profile,
             string imgUrl,
             IResponsiveImage focalPoint, ResizedPictureViewModel pictureModel)
         {
             var sourceElements = profile.Sources?.Select(x => CreateSourceElement(imgUrl, x, focalPoint,
                 profile.MaxImageDimension, profile.Format));
+            
+            var pictureElement = new TagBuilder("picture");
 
-            var pictureElement = new TagBuilder("picture")
+            foreach (var (key, value) in pictureModel.PictureElementAttributes)
             {
-                InnerHtml =
-                    string.Join(string.Empty,
-                        sourceElements?.Select(x => x.ToString(TagRenderMode.SelfClosing)) ?? new string[0]) +
-                    CreateImgElement(
-                            BuildResizedImageUrl(imgUrl, profile.DefaultWidth, ScaleMode.Default, AspectRatio.Original,
-                                null, focalPoint, null, profile.Format).ToString(), pictureModel.ImgElementAttributes)
-                        .ToString(TagRenderMode.SelfClosing)
-            };
-
-            foreach (var kv in pictureModel.PictureElementAttributes)
-            {
-                pictureElement.Attributes.Add(kv.Key, kv.Value);
+                pictureElement.Attributes.Add(key, value);
             }
 
-            return new MvcHtmlString(pictureElement.ToString());
+            using var writer = new StringWriter();
+
+            foreach (var sourceElement in sourceElements.Append(CreateImgElement(
+                BuildResizedImageUrl(imgUrl, profile.DefaultWidth, ScaleMode.Default, AspectRatio.Original,
+                    null, focalPoint, null, profile.Format).ToString(), pictureModel.ImgElementAttributes)))
+            {
+                pictureElement.InnerHtml.AppendHtml(sourceElement.RenderSelfClosingTag());
+            }
+
+            pictureElement.WriteTo(writer, HtmlEncoder.Default);
+            return new HtmlString(writer.ToString());
         }
 
         private static TagBuilder CreateSourceElement(string imageUrl, PictureSource source,
