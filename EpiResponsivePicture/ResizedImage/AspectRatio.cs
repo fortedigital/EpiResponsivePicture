@@ -7,7 +7,9 @@ namespace Forte.EpiResponsivePicture.ResizedImage
             Ratio = ratio;
         }
 
-        public static AspectRatio Original => new AspectRatio(-1);
+        public static AspectRatio Original => new(-1);
+
+        public static AspectRatio Default => new(1.333);
 
         public double Ratio { get; }
         public bool HasValue => Ratio > 0;
@@ -19,7 +21,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
 
         public static AspectRatio Create(double ratio)
         {
-            return new AspectRatio(ratio);
+            return new(ratio);
         }
     }
 }

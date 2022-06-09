@@ -12,7 +12,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
 
             // must always add crop parameter because of
             // https://github.com/imazen/resizer/issues/247
-            var focalPoint = image.FocalPoint ?? new FocalPoint(0.5, 0.5);
+            var focalPoint = image.FocalPoint ?? FocalPoint.Center;
 
             var sourceWidth = image.Width;
             var sourceHeight = image.Height;
