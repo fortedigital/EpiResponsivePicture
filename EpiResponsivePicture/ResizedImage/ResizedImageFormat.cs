@@ -1,3 +1,5 @@
+using System;
+
 namespace Forte.EpiResponsivePicture.ResizedImage
 {
     public enum ResizedImageFormat
@@ -6,8 +8,11 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         /// Keeps the original format of the image being resized
         /// </summary>
         Preserve = 0,
+        [Obsolete($"Use {nameof(Jpeg)} instead")]
         Jpg,
+        Jpeg,
         Png,
-        Gif
+        Gif,
+        Bmp,
     }
 }

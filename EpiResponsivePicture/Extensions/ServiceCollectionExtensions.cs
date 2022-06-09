@@ -4,6 +4,7 @@ using Baaijte.Optimizely.ImageSharp.Web.Caching;
 using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using EPiServer.Shell.Modules;
 using Forte.EpiResponsivePicture.Configuration;
+using Forte.EpiResponsivePicture.GeneratorProfiles;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp.Web.Caching.Azure;
@@ -60,6 +61,7 @@ namespace Forte.EpiResponsivePicture.Extensions
         private static void ConfigureModule(IServiceCollection services)
         {
             services.AddSingleton<ImagePublishingEventHandler>();
+            services.AddTransient<IResizedUrlGenerator, ImageSharpResizedUrlGenerator>();
             
             services.Configure<ProtectedModuleOptions>(options =>
             {
