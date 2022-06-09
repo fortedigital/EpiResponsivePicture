@@ -4,6 +4,7 @@ using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Forte.EpiResponsivePicture.GeneratorProfiles;
 using Moq;
 using NUnit.Framework;
 using Forte.EpiResponsivePicture.ResizedImage;
@@ -27,12 +28,13 @@ namespace Forte.EpiResponsivePicture.Tests
             ServiceLocator.SetServiceProvider(new DummyServiceLocator(new Dictionary<Type, object>
             {
                 {typeof(IContentLoader), contentLoaderMock.Object},
-                {typeof(IUrlResolver), urlResolverMock.Object}
+                {typeof(IUrlResolver), urlResolverMock.Object},
+                {typeof(IResizedUrlGenerator), new ImageSharpResizedUrlGenerator() },
             }));
         }
 
-        [TestCase(ResizedImageFormat.Preserve, ExpectedResult = "/images/foo.jpg?w=500")]
-        [TestCase(ResizedImageFormat.Jpg, ExpectedResult = "/images/foo.jpg?w=500&format=jpg")]
+        [TestCase(ResizedImageFormat.Preserve, ExpectedResult = "/images/foo.jpg?width=500")]
+        [TestCase(ResizedImageFormat.Jpeg, ExpectedResult = "/images/foo.jpg?width=500&format=JPEG")]
         public string TestResizedImageUrl(ResizedImageFormat format)
         {
             HtmlHelper html = null;
@@ -50,7 +52,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
             Assert.That(markup,
                 Is.EqualTo(
-                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?w=1900 1900w, /images/foo.jpg?w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?w=0\" /></picture>"));
+                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=90&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=90&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
         }
 
         [Test]
@@ -63,7 +65,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
             Assert.That(markup,
                 Is.EqualTo(
-                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?format=jpg&amp;w=1900 1900w, /images/foo.jpg?format=jpg&amp;w=2400 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?format=jpg&amp;w=0\" /></picture>"));
+                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=90&amp;format=JPEG&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=90&amp;format=JPEG&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
         }
 
         private static readonly PictureProfile profileOverridingFormat = new PictureProfile()
@@ -75,10 +77,11 @@ namespace Forte.EpiResponsivePicture.Tests
                 {
                     MediaCondition = "(min-width:1900px)",
                     AllowedWidths = new[] {1900, 2400},
+                    TargetAspectRatio = AspectRatio.Create(1),
                     Sizes = new[]
                     {
-                        "90vw"
-                    }
+                        "90vw",
+                    },
                 },
             },
         };
@@ -93,8 +96,8 @@ namespace Forte.EpiResponsivePicture.Tests
                     AllowedWidths = new[] {1900, 2400},
                     Sizes = new[]
                     {
-                        "90vw"
-                    }
+                        "90vw",
+                    },
                 },
             },
         };
