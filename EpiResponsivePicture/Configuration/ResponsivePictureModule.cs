@@ -3,8 +3,9 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
+using Forte.EpiResponsivePicture.ResizedImage;
 
-namespace Forte.EpiResponsivePicture.ResizedImage
+namespace Forte.EpiResponsivePicture.Configuration
 {
     [ModuleDependency(typeof(ShellInitialization))]
     [InitializableModule]
