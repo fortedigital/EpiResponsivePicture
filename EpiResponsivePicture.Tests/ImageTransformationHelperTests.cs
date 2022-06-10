@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using static Forte.EpiResponsivePicture.ResizedImage.CssHelpers;
 
 namespace Forte.EpiResponsivePicture.Tests
 {
@@ -52,7 +53,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
             Assert.That(markup,
                 Is.EqualTo(
-                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=90&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=90&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
+                    "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=80&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=80&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
             Assert.That(markup,
                 Is.EqualTo(
-                    "<picture><source media=\"(min-width:1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=90&amp;format=JPEG&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=90&amp;format=JPEG&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
+                    "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=80&amp;format=JPEG&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=80&amp;format=JPEG&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
         }
 
         private static readonly PictureProfile profileOverridingFormat = new PictureProfile()
@@ -75,12 +76,12 @@ namespace Forte.EpiResponsivePicture.Tests
             {
                 new PictureSource()
                 {
-                    MediaCondition = "(min-width:1900px)",
+                    MediaCondition = MediaQueryMinWidth(1900),
                     AllowedWidths = new[] {1900, 2400},
                     TargetAspectRatio = AspectRatio.Create(1),
                     Sizes = new[]
                     {
-                        "90vw",
+                        Size((90, Unit.Vw)),
                     },
                 },
             },
@@ -92,11 +93,11 @@ namespace Forte.EpiResponsivePicture.Tests
             {
                 new PictureSource()
                 {
-                    MediaCondition = "(min-width:1900px)",
+                    MediaCondition = MediaQueryMinWidth(1900),
                     AllowedWidths = new[] {1900, 2400},
                     Sizes = new[]
                     {
-                        "90vw",
+                        Size((90, Unit.Vw)),
                     },
                 },
             },
