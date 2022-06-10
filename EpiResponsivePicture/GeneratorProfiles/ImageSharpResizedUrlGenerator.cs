@@ -12,11 +12,11 @@ namespace Forte.EpiResponsivePicture.GeneratorProfiles
         }
         protected override (string Key, string Value) WidthQuery(int width) => ("width", width.ToString());
 
-        protected override (string Key, string Value) HeightQuery(int width, PictureSource source) => ("height",
-            Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
+        protected override (string Key, string Value) HeightQuery(int width, PictureSource source) => 
+            ("height", Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
 
-        protected override (string Key, string Value) QualityQuery(PictureSource source) => ("quality",
-            source.Quality.HasValue ? source.Quality.Value.ToString() : "90");
+        protected override (string Key, string Value) QualityQuery(PictureSource source) => 
+            ("quality", source.Quality.HasValue ? source.Quality.Value.ToString() : "80");
 
         protected override (string Key, string Value) FormatQuery(ResizedImageFormat format) => ("format", format switch
         {

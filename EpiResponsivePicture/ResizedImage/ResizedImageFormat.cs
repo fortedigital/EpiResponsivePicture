@@ -9,8 +9,8 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         /// </summary>
         Preserve = 0,
         [Obsolete($"Use {nameof(Jpeg)} instead")]
-        Jpg,
-        Jpeg,
+        Jpg = Jpeg,
+        Jpeg = 1,
         Png,
         Gif,
         Bmp,
