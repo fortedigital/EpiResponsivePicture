@@ -42,7 +42,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage
         public static string MediaQueryMinWidthWithSize(ValueTuple<double, Unit> queryWidth, ValueTuple<double, Unit> width)
             => BuildMediaQueryWithSizeString(Min, queryWidth, width);
 
-        public static string SizePixel(double widthPixel) => BuildSize((widthPixel, Unit.Px));
+        public static string Size(double widthPixel) => BuildSize((widthPixel, Unit.Px));
         public static string Size(ValueTuple<double, Unit> width) => BuildSize(width);
         
         private static string BuildMediaQueryWithSizeString(string mediaQueryType, ValueTuple<double, Unit> queryWidth, ValueTuple<double, Unit> width) => 
