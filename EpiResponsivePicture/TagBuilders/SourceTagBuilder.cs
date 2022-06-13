@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using EPiServer.ServiceLocation;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
@@ -10,7 +9,7 @@ using Microsoft.Toolkit.Diagnostics;
 
 namespace Forte.EpiResponsivePicture.TagBuilders
 {
-    public class SourceTagBuilder
+    public class SourceTagBuilder : ISourceTagBuilder
     {
         private TagBuilder element;
         private string imageUrl;
@@ -25,27 +24,27 @@ namespace Forte.EpiResponsivePicture.TagBuilders
             resizedUrlGenerator = ServiceLocator.Current.GetInstance<IResizedUrlGenerator>();
         }
 
-        public static SourceTagBuilder Create() => new();
+        public static ISourceTagBuilder Create() => new SourceTagBuilder();
 
-        public SourceTagBuilder WithImageUrl(string url)
+        public ISourceTagBuilder WithImageUrl(string url)
         {
             imageUrl = url;
             return this;
         }
 
-        public SourceTagBuilder WithSource(PictureSource source)
+        public ISourceTagBuilder WithSource(PictureSource source)
         {
             pictureSource = source;
             return this;
         }
 
-        public SourceTagBuilder WithFocalPoint(FocalPoint point)
+        public ISourceTagBuilder WithFocalPoint(FocalPoint point)
         {
             focalPoint = point;
             return this;
         }
 
-        public SourceTagBuilder WithResizedImageFormat(ResizedImageFormat format)
+        public ISourceTagBuilder WithResizedImageFormat(ResizedImageFormat format)
         {
             resizedImageFormat = format;
             return this;
@@ -63,7 +62,7 @@ namespace Forte.EpiResponsivePicture.TagBuilders
             return element;
         }
 
-        public SourceTagBuilder Clear()
+        public ISourceTagBuilder Clear()
         {
             element = new TagBuilder("source");
             return this;

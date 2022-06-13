@@ -9,7 +9,7 @@ using Microsoft.Toolkit.Diagnostics;
 
 namespace Forte.EpiResponsivePicture.TagBuilders
 {
-    public class PictureTagBuilder
+    public class PictureTagBuilder : IPictureTagBuilder
     {
         private readonly TagBuilder element;
         private PictureProfile pictureProfile;
@@ -25,27 +25,27 @@ namespace Forte.EpiResponsivePicture.TagBuilders
             element = new TagBuilder("picture");
         }
 
-        public static PictureTagBuilder Create() => new();
+        public static IPictureTagBuilder Create() => new PictureTagBuilder();
 
-        public PictureTagBuilder WithProfile(PictureProfile profile)
+        public IPictureTagBuilder WithProfile(PictureProfile profile)
         {
             pictureProfile = profile;
             return this;
         }
 
-        public PictureTagBuilder WithContentReference(ContentReference contentReference)
+        public IPictureTagBuilder WithContentReference(ContentReference contentReference)
         {
             pictureContentReference = contentReference;
             return this;
         }
 
-        public PictureTagBuilder WithFallbackUrl(string fallbackUrl)
+        public IPictureTagBuilder WithFallbackUrl(string fallbackUrl)
         {
             pictureFallbackUrl = fallbackUrl;
             return this;
         }
 
-        public PictureTagBuilder WithViewModel(ResizedPictureViewModel viewModel)
+        public IPictureTagBuilder WithViewModel(ResizedPictureViewModel viewModel)
         {
             pictureViewModel = viewModel;
             return this;
@@ -54,7 +54,6 @@ namespace Forte.EpiResponsivePicture.TagBuilders
         public TagBuilder Build()
         {
             Guard.IsNotNull(pictureProfile, nameof(pictureProfile));
-            Guard.IsNotNull(pictureContentReference, nameof(pictureContentReference));
             
             pictureFallbackUrl ??= string.Empty;
             pictureViewModel ??= new ResizedPictureViewModel();
