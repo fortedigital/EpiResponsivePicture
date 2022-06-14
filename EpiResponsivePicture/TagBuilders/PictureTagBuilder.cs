@@ -58,7 +58,7 @@ public class PictureTagBuilder : IPictureTagBuilder
         pictureFallbackUrl ??= string.Empty;
         pictureViewModel ??= new ResizedPictureViewModel();
             
-        GetPictureData();
+        SetPictureData();
 
         var sourceTagBuilder = SourceTagBuilder
             .Create()
@@ -83,26 +83,26 @@ public class PictureTagBuilder : IPictureTagBuilder
         return element;
     }
         
-    private void GetPictureData()
+    private void SetPictureData()
     {
         var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(pictureContentReference,
             new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage;
             
         if(imageFound)
-            GetImgAltText((IImage) content);
+            SetImageAltText((IImage) content);
 
-        GetFocalPoint(content as IResponsiveImage);
+        SetFocalPoint(content as IResponsiveImage);
         SetPictureProfilesAspectRatios(content as IResponsiveImage);
 
         pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
     }
 
-    private void GetImgAltText(IImage image)
+    private void SetImageAltText(IImage image)
     {
         altImgText = image.Description ?? string.Empty;
     }
         
-    private void GetFocalPoint(IResponsiveImage responsiveImage)
+    private void SetFocalPoint(IResponsiveImage responsiveImage)
     {
         focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
     }
