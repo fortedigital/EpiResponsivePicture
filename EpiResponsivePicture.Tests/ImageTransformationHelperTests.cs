@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -69,37 +70,31 @@ namespace Forte.EpiResponsivePicture.Tests
                     "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?width=1900&amp;height=1425&amp;quality=80&amp;format=JPEG&amp;rxy=0.5,0.5 1900w, /images/foo.jpg?width=2400&amp;height=1800&amp;quality=80&amp;format=JPEG&amp;rxy=0.5,0.5 2400w\" /><img alt=\"\" src=\"/images/foo.jpg\" /></picture>"));
         }
 
-        private static readonly PictureProfile profileOverridingFormat = new PictureProfile()
+        private static readonly PictureProfile profileOverridingFormat = new()
         {
             Format = ResizedImageFormat.Jpg,
-            Sources = new[]
+            Sources = new ImmutableArray<PictureSource>
             {
-                new PictureSource()
+                new()
                 {
                     MediaCondition = MediaQueryMinWidth(1900),
-                    AllowedWidths = new[] {1900, 2400},
+                    AllowedWidths = new ImmutableArray<int>() { 1900, 2400 },
                     TargetAspectRatio = AspectRatio.Create(1),
-                    Sizes = new[]
-                    {
-                        Size((90, Unit.Vw)),
-                    },
-                },
+                    Sizes = new ImmutableArray<string> { Size((90, Unit.Vw)) },
+                }
             },
         };
 
-        private static readonly PictureProfile profilePreservingFormat = new PictureProfile()
+        private static readonly PictureProfile profilePreservingFormat = new()
         {
-            Sources = new[]
+            Sources = new ImmutableArray<PictureSource>()
             {
-                new PictureSource()
+                new()
                 {
                     MediaCondition = MediaQueryMinWidth(1900),
-                    AllowedWidths = new[] {1900, 2400},
-                    Sizes = new[]
-                    {
-                        Size((90, Unit.Vw)),
-                    },
-                },
+                    AllowedWidths = new ImmutableArray<int> { 1900, 2400 },
+                    Sizes = new ImmutableArray<string> { Size((90, Unit.Vw)) },
+                }
             },
         };
     }

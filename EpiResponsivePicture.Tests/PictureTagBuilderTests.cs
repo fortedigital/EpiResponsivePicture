@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Text.Encodings.Web;
 using EPiServer;
@@ -67,47 +68,37 @@ namespace Forte.EpiResponsivePicture.Tests
             contentLoaderMock.Setup(loader =>
                 loader.TryGet(It.IsAny<ContentReference>(), It.IsAny<LoaderOptions>(), out imageContentMock)).Returns(true);
 
-            var profile = new PictureProfile()
+            var profile = new PictureProfile
             {
                 DefaultWidth = 800,
                 MaxImageDimension = 2500,
-                Sources = new []
+                Sources = new ImmutableArray<PictureSource>
                 {
-                    new PictureSource
+                    new()
                     {
                         MediaCondition = MediaQueryMinWidth(1900),
-                        AllowedWidths = new [] {1900,2400},
-                        Sizes = new []
-                        {
-                            Size((90, Unit.Vw))
-                        }
-                    }, 
-                    new PictureSource
+                        AllowedWidths = new ImmutableArray<int> { 1900, 2400 },
+                        Sizes = new ImmutableArray<string> { Size((90, Unit.Vw)) }
+                    },
+                    new()
                     {
                         MediaCondition = MediaQueryMinWidth(1000),
-                        AllowedWidths = new [] {1000,1200, 1400,1600},
+                        AllowedWidths = new ImmutableArray<int> { 1000, 1200, 1400, 1600 },
                         Mode = ScaleMode.Crop,
                         TargetAspectRatio = AspectRatio.Create(16,9),
-                        Sizes = new []
-                        {
-                            MediaQueryMinWidthWithSize(1400, 1400),
-                            Size((100, Unit.Vw)),
-                        }
+                        Sizes = new ImmutableArray<string> { MediaQueryMinWidthWithSize(1400, 1400), Size((100, Unit.Vw)) }
             
                     },
-                    new PictureSource
+                    new()
                     {
                         MediaCondition = MediaQueryMaxWidth(1000),
-                        AllowedWidths = new [] {1000,1200, 1400,1600},
+                        AllowedWidths = new ImmutableArray<int> { 1000, 1200, 1400, 1600 },
                         Mode = ScaleMode.Crop,
                         TargetAspectRatio = AspectRatio.Create(1),
                         Quality = 60,
-                        Sizes = new []
-                        {
-                            Size((50, Unit.Vw)),
-                        }
+                        Sizes = new ImmutableArray<string> { Size((50, Unit.Vw)) }
                     }
-                }
+                },
             };
             
             var pictureTagBuilder = PictureTagBuilder
