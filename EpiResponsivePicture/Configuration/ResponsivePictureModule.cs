@@ -5,23 +5,22 @@ using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using Forte.EpiResponsivePicture.ResizedImage;
 
-namespace Forte.EpiResponsivePicture.Configuration
+namespace Forte.EpiResponsivePicture.Configuration;
+
+[ModuleDependency(typeof(ShellInitialization))]
+[InitializableModule]
+public class ResponsivePictureModule : IInitializableModule
 {
-    [ModuleDependency(typeof(ShellInitialization))]
-    [InitializableModule]
-    public class ResponsivePictureModule : IInitializableModule
+    private ImagePublishingEventHandler _imagePublishingEventHandler;
+
+    public void Initialize(InitializationEngine context)
     {
-        private ImagePublishingEventHandler _imagePublishingEventHandler;
+        _imagePublishingEventHandler = ServiceLocator.Current.GetInstance<ImagePublishingEventHandler>();
+        context.Locate.ContentEvents().PublishingContent += _imagePublishingEventHandler.CalculateDimensions;
+    }
 
-        public void Initialize(InitializationEngine context)
-        {
-            _imagePublishingEventHandler = ServiceLocator.Current.GetInstance<ImagePublishingEventHandler>();
-            context.Locate.ContentEvents().PublishingContent += _imagePublishingEventHandler.CalculateDimensions;
-        }
-
-        public void Uninitialize(InitializationEngine context)
-        {
-            context.Locate.ContentEvents().PublishingContent -= _imagePublishingEventHandler.CalculateDimensions;
-        }
+    public void Uninitialize(InitializationEngine context)
+    {
+        context.Locate.ContentEvents().PublishingContent -= _imagePublishingEventHandler.CalculateDimensions;
     }
 }

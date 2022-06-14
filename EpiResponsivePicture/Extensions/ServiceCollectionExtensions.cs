@@ -14,67 +14,65 @@ using SixLabors.ImageSharp.Web.Providers;
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
-namespace Forte.EpiResponsivePicture.Extensions
+namespace Forte.EpiResponsivePicture.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    
-    public static class ServiceCollectionExtensions
+    /// <summary>
+    /// Register services for FocalPoint, resizing with local caching. Fluent API
+    /// </summary>
+    /// <param name="services">Services</param>
+    /// <returns>services</returns>
+    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services)
     {
-        /// <summary>
-        /// Register services for FocalPoint, resizing with local caching. Fluent API
-        /// </summary>
-        /// <param name="services">Services</param>
-        /// <returns>services</returns>
-        public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services)
-        {
 
-            services.AddImageSharp()
-                .ClearProviders()
-                .AddProvider<BlobImageProvider>()
-                .AddProvider<PhysicalFileSystemProvider>()
-                .SetCache<BlobImageCache>();
+        services.AddImageSharp()
+            .ClearProviders()
+            .AddProvider<BlobImageProvider>()
+            .AddProvider<PhysicalFileSystemProvider>()
+            .SetCache<BlobImageCache>();
             
-            ConfigureModule(services);
+        ConfigureModule(services);
                    
-            return services;
-        }
+        return services;
+    }
 
-        /// <summary>
-        /// Register services for FocalPoint, resizing with Azure Blob Storage caching. Fluent API
-        /// </summary>
-        /// <param name="services">Services</param>
-        /// <param name="azureStorageOptions">Azure blob storage options</param>
-        /// <returns>services</returns>
-        public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
-            Action<AzureBlobStorageCacheOptions> azureStorageOptions)
-        {
-            services.AddImageSharp()
-                .Configure(azureStorageOptions)
-                .ClearProviders()
-                .AddProvider<BlobImageProvider>()
-                .SetCache<AzureBlobStorageCache>();
+    /// <summary>
+    /// Register services for FocalPoint, resizing with Azure Blob Storage caching. Fluent API
+    /// </summary>
+    /// <param name="services">Services</param>
+    /// <param name="azureStorageOptions">Azure blob storage options</param>
+    /// <returns>services</returns>
+    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
+        Action<AzureBlobStorageCacheOptions> azureStorageOptions)
+    {
+        services.AddImageSharp()
+            .Configure(azureStorageOptions)
+            .ClearProviders()
+            .AddProvider<BlobImageProvider>()
+            .SetCache<AzureBlobStorageCache>();
             
-            ConfigureModule(services);
+        ConfigureModule(services);
 
-            return services;
-        }
+        return services;
+    }
 
-        private static void ConfigureModule(IServiceCollection services)
-        {
-            services.AddSingleton<ImagePublishingEventHandler>();
-            services.AddTransient<IResizedUrlGenerator, ImageSharpResizedUrlGenerator>();
+    private static void ConfigureModule(IServiceCollection services)
+    {
+        services.AddSingleton<ImagePublishingEventHandler>();
+        services.AddTransient<IResizedUrlGenerator, ImageSharpResizedUrlGenerator>();
             
-            services.Configure<ProtectedModuleOptions>(options =>
+        services.Configure<ProtectedModuleOptions>(options =>
+        {
+            if (!options.Items.Any(x => x.Name.Equals(Constants.ModuleName)))
             {
-                if (!options.Items.Any(x => x.Name.Equals(Constants.ModuleName)))
-                {
-                    options.Items.Add(
-                        new ModuleDetails
-                        {
-                            Name = Constants.ModuleName,
-                        }
-                    );
-                }
-            });
-        }
+                options.Items.Add(
+                    new ModuleDetails
+                    {
+                        Name = Constants.ModuleName,
+                    }
+                );
+            }
+        });
     }
 }

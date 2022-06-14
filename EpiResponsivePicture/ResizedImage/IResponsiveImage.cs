@@ -1,11 +1,10 @@
 using Forte.EpiResponsivePicture.ResizedImage.Property;
 
-namespace Forte.EpiResponsivePicture.ResizedImage
+namespace Forte.EpiResponsivePicture.ResizedImage;
+
+public interface IResponsiveImage
 {
-    public interface IResponsiveImage
-    {
-        FocalPoint FocalPoint { get; }
-        int Width { get; set; }
-        int Height { get; set; }
-    }
+    FocalPoint FocalPoint { get; }
+    int Width { get; set; }
+    int Height { get; set; }
 }

@@ -1,12 +1,11 @@
-namespace Forte.EpiResponsivePicture.ResizedImage
+namespace Forte.EpiResponsivePicture.ResizedImage;
+
+public enum ScaleMode
 {
-    public enum ScaleMode
-    {
-        Default = 0,
-        Max,
-        Pad,
-        Crop,
-        Carve,
-        Stretch
-    }
+    Default = 0,
+    Max,
+    Pad,
+    Crop,
+    Carve,
+    Stretch
 }

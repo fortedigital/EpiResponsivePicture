@@ -1,7 +1,6 @@
-namespace Forte.EpiResponsivePicture.Configuration
+namespace Forte.EpiResponsivePicture.Configuration;
+
+internal static class Constants
 {
-    internal static class Constants
-    {
-        internal const string ModuleName = "Forte.EpiResponsivePicture";
-    }
+    internal const string ModuleName = "Forte.EpiResponsivePicture";
 }
