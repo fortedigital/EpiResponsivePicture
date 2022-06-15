@@ -9,7 +9,8 @@ public interface ISourceTagBuilder
     ISourceTagBuilder WithImageUrl(string url);
     ISourceTagBuilder WithSource(PictureSource source);
     ISourceTagBuilder WithFocalPoint(FocalPoint point);
-    ISourceTagBuilder WithResizedImageFormat(ResizedImageFormat format);
+    ISourceTagBuilder WithProfile(PictureProfile profile);
+    ISourceTagBuilder WithImageDimensions(IImageWithWidthAndHeight image);
     TagBuilder Build();
     ISourceTagBuilder Clear();
 }

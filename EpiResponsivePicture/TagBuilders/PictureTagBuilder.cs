@@ -17,6 +17,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     private string pictureFallbackUrl;
     private ResizedPictureViewModel pictureViewModel;
     private FocalPoint focalPoint;
+    private IImageWithWidthAndHeight image;
     private string pictureUrl;
     private string altImgText;
         
@@ -64,7 +65,8 @@ public class PictureTagBuilder : IPictureTagBuilder
             .Create()
             .WithImageUrl(pictureUrl)
             .WithFocalPoint(focalPoint)
-            .WithResizedImageFormat(pictureProfile.Format);
+            .WithImageDimensions(image)
+            .WithProfile(pictureProfile);
 
         foreach (var pictureSource in pictureProfile.Sources)
         {
@@ -86,13 +88,13 @@ public class PictureTagBuilder : IPictureTagBuilder
     private void SetPictureData()
     {
         var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(pictureContentReference,
-            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage;
+            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage or IResponsiveImage;
             
         if(imageFound)
             SetImageAltText((IImage) content);
 
         SetFocalPoint(content as IResponsiveImage);
-        SetPictureProfilesAspectRatios(content as IResponsiveImage);
+        SetImageDimensions(content as IImageWithWidthAndHeight);
 
         pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
     }
@@ -107,19 +109,9 @@ public class PictureTagBuilder : IPictureTagBuilder
         focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
     }
 
-    private void SetPictureProfilesAspectRatios(IResponsiveImage responsiveImage)
+    private void SetImageDimensions(IImageWithWidthAndHeight imageWithWidthAndHeight)
     {
-        foreach (var pictureProfileSource in pictureProfile.Sources)
-        {
-            if (responsiveImage is null || pictureProfileSource.TargetAspectRatio is null)
-            {
-                pictureProfileSource.TargetAspectRatio = AspectRatio.Default; // 4:3 
-                continue;                    
-            }
-                
-            if(pictureProfileSource.TargetAspectRatio == AspectRatio.Original)
-                pictureProfileSource.TargetAspectRatio = AspectRatio.Create((double) responsiveImage.Width / responsiveImage.Height);
-        }
+        image = imageWithWidthAndHeight;
     }
 
     private string ResolveUrl()

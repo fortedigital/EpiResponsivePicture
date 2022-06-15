@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.ServiceLocation;
@@ -15,9 +16,10 @@ public class SourceTagBuilder : ISourceTagBuilder
     private string imageUrl;
     private PictureSource pictureSource;
     private IResizedUrlGenerator resizedUrlGenerator;
+    private IImageWithWidthAndHeight imageDimensions;
     private FocalPoint focalPoint;
-    private ResizedImageFormat resizedImageFormat;
-        
+    private PictureProfile pictureProfile;
+
     private SourceTagBuilder()
     {
         element = new TagBuilder("source");
@@ -37,6 +39,12 @@ public class SourceTagBuilder : ISourceTagBuilder
         pictureSource = source;
         return this;
     }
+    
+    public ISourceTagBuilder WithProfile(PictureProfile profile)
+    {
+        pictureProfile = profile;
+        return this;
+    }
 
     public ISourceTagBuilder WithFocalPoint(FocalPoint point)
     {
@@ -44,12 +52,12 @@ public class SourceTagBuilder : ISourceTagBuilder
         return this;
     }
 
-    public ISourceTagBuilder WithResizedImageFormat(ResizedImageFormat format)
+    public ISourceTagBuilder WithImageDimensions(IImageWithWidthAndHeight image)
     {
-        resizedImageFormat = format;
+        imageDimensions = image;
         return this;
     }
-        
+
     public TagBuilder Build()
     {
         Guard.IsNotNull(pictureSource, nameof(pictureSource));
@@ -70,16 +78,17 @@ public class SourceTagBuilder : ISourceTagBuilder
 
     private void AddSizeAttributes(IEnumerable<string> sourceSets)
     {
-        element.Attributes.Add("media", $"{pictureSource.MediaCondition}");
+        if(!string.IsNullOrEmpty(pictureSource.MediaCondition))
+            element.Attributes.Add("media", $"{pictureSource.MediaCondition}");
         element.Attributes.Add("srcset", string.Join(", ", sourceSets));
         element.Attributes.Add("sizes", string.Join(", ", pictureSource.Sizes));
     }
         
-    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(BuildSize);  
+    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(width => BuildSize(Math.Min(width, pictureProfile.MaxImageDimension)));  
 
     private string BuildSize(int width)
     {
-        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, focalPoint, resizedImageFormat);
+        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint, imageDimensions);
 
         return $"{url} {width}w";
     }
