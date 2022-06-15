@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -27,7 +28,11 @@ namespace Forte.EpiResponsivePicture.Tests
         private Mock<IUrlResolver> urlResolverMock;
         private Mock<ContentReference> contentReferenceMock;
         private Mock<IResizedUrlGenerator> resizedUrlGenerator;
-        
+
+        private readonly Regex sizesRegex = new("sizes=\"(?<sizes>.*?)\"");
+        private readonly Regex srcSetRegex = new("srcset=\"(?<srcset>.*?)\"");
+        private readonly Regex sourceTagRegex = new("(?<sources><source (?:.*?) />)");
+        private readonly Regex imgTagRegex = new("(?<img><img (?:.*?) />)");
         
         [SetUp]
         public void Setup()
@@ -38,7 +43,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
             resizedUrlGenerator = new Mock<IResizedUrlGenerator>();
             resizedUrlGenerator.Setup(generator => generator.GenerateUrl(It.IsAny<string>(), It.IsAny<int>(),
-                It.IsAny<PictureSource>(), It.IsAny<FocalPoint>(), It.IsAny<ResizedImageFormat>())).Returns(new UrlBuilder(ResizedUrl));
+                It.IsAny<PictureSource>(), It.IsAny<PictureProfile>(), It.IsAny<FocalPoint>(),It.IsAny<IImageWithWidthAndHeight>())).Returns(new UrlBuilder(ResizedUrl));
 
             urlResolverMock = new Mock<IUrlResolver>();
             urlResolverMock
@@ -72,33 +77,33 @@ namespace Forte.EpiResponsivePicture.Tests
             {
                 DefaultWidth = 800,
                 MaxImageDimension = 2500,
-                Sources = new ImmutableArray<PictureSource>
+                Sources = new []
                 {
-                    new()
+                    new PictureSource
                     {
                         MediaCondition = MediaQueryMinWidth(1900),
-                        AllowedWidths = new ImmutableArray<int> { 1900, 2400 },
-                        Sizes = new ImmutableArray<string> { Size((90, Unit.Vw)) }
+                        AllowedWidths = new [] { 1900, 2400 }.ToImmutableArray(),
+                        Sizes = new [] { Size((90, Unit.Vw)) }.ToImmutableArray(),
                     },
-                    new()
+                    new PictureSource
                     {
                         MediaCondition = MediaQueryMinWidth(1000),
-                        AllowedWidths = new ImmutableArray<int> { 1000, 1200, 1400, 1600 },
+                        AllowedWidths = new [] { 1000, 1200, 1400, 1600 }.ToImmutableArray(),
                         Mode = ScaleMode.Crop,
                         TargetAspectRatio = AspectRatio.Create(16,9),
-                        Sizes = new ImmutableArray<string> { MediaQueryMinWidthWithSize(1400, 1400), Size((100, Unit.Vw)) }
+                        Sizes = new [] { MediaQueryMinWidthWithSize(1400, 1400), Size((100, Unit.Vw)) }.ToImmutableArray(),
             
                     },
-                    new()
+                    new PictureSource
                     {
                         MediaCondition = MediaQueryMaxWidth(1000),
-                        AllowedWidths = new ImmutableArray<int> { 1000, 1200, 1400, 1600 },
+                        AllowedWidths = new [] { 1000, 1200, 1400, 1600 }.ToImmutableArray(),
                         Mode = ScaleMode.Crop,
                         TargetAspectRatio = AspectRatio.Create(1),
                         Quality = 60,
-                        Sizes = new ImmutableArray<string> { Size((50, Unit.Vw)) }
+                        Sizes = new [] { Size((50, Unit.Vw)) }.ToImmutableArray(),
                     }
-                },
+                }.ToImmutableArray(),
             };
             
             var pictureTagBuilder = PictureTagBuilder
@@ -112,6 +117,141 @@ namespace Forte.EpiResponsivePicture.Tests
             pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
             return writer.ToString();
+        }
+
+        [Test]
+        public void Each_Size_Should_Generate_Entry_In_Sizes_Attribute()
+        {
+            var profile = new PictureProfile
+            {
+                Sources = new[]
+                {
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100), Size(200), Size(300) }.ToImmutableArray(),
+                    },
+                }.ToImmutableArray(),
+            };
+            
+            var pictureTagBuilder = PictureTagBuilder
+                .Create()
+                .WithProfile(profile)
+                .WithContentReference(contentReferenceMock.Object)
+                .WithFallbackUrl(FallbackUrl);
+
+            using var writer = new StringWriter();
+            
+            pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
+
+            var match = sizesRegex.Match(writer.ToString());
+            Assert.AreEqual(3, match.Groups["sizes"].Value.Split(',').Length);
+        }
+        
+        [Test]
+        public void Each_AllowedWidth_Should_Generate_Entry_In_Srcset_Attribute()
+        {
+            var profile = new PictureProfile
+            {
+                Sources = new[]
+                {
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                }.ToImmutableArray(),
+            };
+            
+            var pictureTagBuilder = PictureTagBuilder
+                .Create()
+                .WithProfile(profile)
+                .WithContentReference(contentReferenceMock.Object)
+                .WithFallbackUrl(FallbackUrl);
+
+            using var writer = new StringWriter();
+            
+            pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
+
+            var match = srcSetRegex.Match(writer.ToString());
+            Assert.AreEqual(3, match.Groups["srcset"].Value.Split(',').Length);
+        }
+
+        [Test]
+        public void Each_PictureSource_Should_Generate_Source_Tag()
+        {
+            var profile = new PictureProfile
+            {
+                Sources = new[]
+                {
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                }.ToImmutableArray(),
+            };
+            
+            var pictureTagBuilder = PictureTagBuilder
+                .Create()
+                .WithProfile(profile)
+                .WithContentReference(contentReferenceMock.Object)
+                .WithFallbackUrl(FallbackUrl);
+
+            using var writer = new StringWriter();
+            
+            pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
+
+            var matches = sourceTagRegex.Matches(writer.ToString());
+            Assert.AreEqual(3, matches.Count);
+        }
+
+        [Test]
+        public void Each_PictureTag_Should_Contain_One_Img_Tag()
+        {
+            var profile = new PictureProfile
+            {
+                Sources = new[]
+                {
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                    new PictureSource
+                    {
+                        Sizes = new[] { Size(100) }.ToImmutableArray(),
+                        AllowedWidths = new [] {100, 200, 300}.ToImmutableArray(),
+                    },
+                }.ToImmutableArray(),
+            };
+            
+            var pictureTagBuilder = PictureTagBuilder
+                .Create()
+                .WithProfile(profile)
+                .WithContentReference(contentReferenceMock.Object)
+                .WithFallbackUrl(FallbackUrl);
+
+            using var writer = new StringWriter();
+            
+            pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
+
+            var matches = imgTagRegex.Matches(writer.ToString());
+            Assert.AreEqual(1, matches.Count);
         }
     }
 }
