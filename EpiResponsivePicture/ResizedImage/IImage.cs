@@ -1,9 +1,8 @@
 using EPiServer.Core;
 
-namespace Forte.EpiResponsivePicture.ResizedImage
+namespace Forte.EpiResponsivePicture.ResizedImage;
+
+public interface IImage : IContentData, IImageWithWidthAndHeight
 {
-    public interface IImage : IContentData
-    {
-        string Description { get; }
-    }
+    string Description { get; }
 }

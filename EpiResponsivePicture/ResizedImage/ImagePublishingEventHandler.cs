@@ -10,7 +10,7 @@ public class ImagePublishingEventHandler
     public void CalculateDimensions(object sender, ContentEventArgs e)
     {
         var mediaData = e.Content as MediaData;
-        var content = e.Content as IResponsiveImage;
+        var content = e.Content as IImageWithWidthAndHeight;
 
         if (content == null || mediaData == null) return;
 
