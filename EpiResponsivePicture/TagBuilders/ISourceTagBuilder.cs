@@ -12,5 +12,5 @@ public interface ISourceTagBuilder
     ISourceTagBuilder WithProfile(PictureProfile profile);
     ISourceTagBuilder WithImageDimensions(IImageWithWidthAndHeight image);
     TagBuilder Build();
-    ISourceTagBuilder Clear();
+    ISourceTagBuilder NewTag();
 }

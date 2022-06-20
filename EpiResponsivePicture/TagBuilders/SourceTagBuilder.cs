@@ -70,7 +70,7 @@ public class SourceTagBuilder : ISourceTagBuilder
         return element;
     }
 
-    public ISourceTagBuilder Clear()
+    public ISourceTagBuilder NewTag()
     {
         element = new TagBuilder("source");
         return this;
@@ -84,9 +84,9 @@ public class SourceTagBuilder : ISourceTagBuilder
         element.Attributes.Add("sizes", string.Join(", ", pictureSource.Sizes));
     }
         
-    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(width => BuildSize(Math.Min(width, pictureProfile.MaxImageDimension)));  
+    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(width => BuildWidth(Math.Min(width, pictureProfile.MaxImageDimension)));  
 
-    private string BuildSize(int width)
+    private string BuildWidth(int width)
     {
         var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint, imageDimensions);
 

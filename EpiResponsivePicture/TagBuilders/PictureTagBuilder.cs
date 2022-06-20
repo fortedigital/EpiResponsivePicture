@@ -19,7 +19,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     private FocalPoint focalPoint;
     private IImageWithWidthAndHeight image;
     private string pictureUrl;
-    private string altImgText;
+    private string imgTagAltText;
         
     private PictureTagBuilder()
     {
@@ -70,11 +70,9 @@ public class PictureTagBuilder : IPictureTagBuilder
 
         foreach (var pictureSource in pictureProfile.Sources)
         {
-            var sourceTag = sourceTagBuilder.WithSource(pictureSource).Build();
+            var sourceTag = sourceTagBuilder.NewTag().WithSource(pictureSource).Build();
 
             element.InnerHtml.AppendHtml(sourceTag.RenderSelfClosingTag());
-                
-            sourceTagBuilder.Clear();
         }
             
         AddAdditionalAttributes();
@@ -101,7 +99,7 @@ public class PictureTagBuilder : IPictureTagBuilder
 
     private void SetImageAltText(IImage image)
     {
-        altImgText = image.Description ?? string.Empty;
+        imgTagAltText = image.Description ?? string.Empty;
     }
         
     private void SetFocalPoint(IResponsiveImage responsiveImage)
@@ -133,7 +131,7 @@ public class PictureTagBuilder : IPictureTagBuilder
         var imgTagBuilder = new TagBuilder("img");
             
         imgTagBuilder.Attributes.Add("src", pictureUrl);
-        imgTagBuilder.Attributes.Add("alt", altImgText);
+        imgTagBuilder.Attributes.Add("alt", imgTagAltText);
             
         foreach (var imgElementAttribute in pictureViewModel.ImgElementAttributes)
         {

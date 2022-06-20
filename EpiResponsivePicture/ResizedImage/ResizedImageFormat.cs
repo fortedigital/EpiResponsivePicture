@@ -11,7 +11,7 @@ public enum ResizedImageFormat
     [Obsolete($"Use {nameof(Jpeg)} instead")]
     Jpg = Jpeg,
     Jpeg = 1,
-    Png,
-    Gif,
-    Bmp,
+    Png = 2,
+    Gif = 3,
+    Bmp = 4,
 }
