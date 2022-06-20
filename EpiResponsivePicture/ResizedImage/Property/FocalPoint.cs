@@ -18,7 +18,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
 
         public override string ToString()
         {
-            return $"{X.ToString(CultureInfo.InvariantCulture)}|{Y.ToString(CultureInfo.InvariantCulture)}";
+            return $"{X:0.###}|{Y:0.###}";
         }
 
         public static FocalPoint Parse(string input)
