@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.0.0" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="12.6.0" />
-    <PackageReference Include="EPiServer.Framework" Version="12.6.0" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="[12.4.0, 13)" />
+    <PackageReference Include="EPiServer.Framework" Version="[12.4.0, 13)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Moq" Version="4.18.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
@@ -17,9 +17,4 @@
   <ItemGroup>
     <ProjectReference Include="..\EpiResponsivePicture\EpiResponsivePicture.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="obj\Release\net5.0" />
-  </ItemGroup>
-
 </Project>
