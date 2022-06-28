@@ -24,10 +24,10 @@
   
   <ItemGroup>
     <PackageReference Include="Baaijte.Optimizely.ImageSharp.Web" Version="2.0.0" />
-    <PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.4.0, 13)" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="[12.4.0, 13)" />
-    <PackageReference Include="EPiServer.Framework" Version="[12.4.0, 13)" />
-    <PackageReference Include="EPiServer.CMS.UI" Version="[12.4.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.Framework" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="[12.5.0, 13)" />
     <PackageReference Include="Microsoft.Toolkit.Diagnostics" Version="7.1.2" />
     <PackageReference Include="SixLabors.ImageSharp.Web.Providers.Azure" Version="2.0.0" />
   </ItemGroup>
