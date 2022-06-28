@@ -1,11 +1,57 @@
-# Forte.EpiResponsivePicture
-
-Looking how to migrate from Forte.EpiCommonUtils? See our [migration guide](MIGRATING.md).
-
 ## How to start
 
-* When having image resizer with Episerver properly configured (https://github.com/valdisiljuconoks/ImageResizer.Plugins.EPiServerBlobReader), install `Forte.EpiResponsivePicture` NuGet package
-* Create the Image media type that derives from `Forte.EpiResponsivePicture.ResizedImage.ImageBase`. The base class contains properties required to properly crop images and set Focal point. 
+* Install `Forte.EpiResponsivePicture` NuGet package
+* Create the Image media type that derives from `Forte.EpiResponsivePicture.ResizedImage.ImageBase` . The base class contains properties required to properly crop images and set Focal point.
+* In `Program.cs` (make sure to have `#using Forte.EpiResponsivePicture.Extensions;`)
+```cs
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddForteEpiResponsivePicture();
+
+// Removed for brevity
+
+var app = builder.Build();
+
+app.UseForteEpiResponsivePicture();
+
+// Removed for brevity
+
+app.Run();
+```
+Alternatively if you prefer to use `Startup.cs` file:
+```cs
+public class Startup
+{
+    private readonly IWebHostEnvironment _webHostingEnvironment;
+
+    public Startup(IWebHostEnvironment webHostingEnvironment)
+    {
+        _webHostingEnvironment = webHostingEnvironment;
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+
+        services.AddForteEpiResponsivePicture();
+                
+        // Removed for brevity
+    }
+
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseForteEpiResponsivePicture();
+        
+        // Removed for brevity
+    }
+}
+```
 
 The image type gets "Focal point" property that can be set by editors in All properties view.
 
@@ -24,39 +70,52 @@ public static readonly PictureProfile SampleProfile = new PictureProfile
     {
         new PictureSource
         {
-            MediaCondition = "(min-width:1900px)",
-            AllowedWidths = new [] {1900,2400},
-            Sizes = new []
-            {
-                "90vw"
-            }
-        }, 
-        new PictureSource
-        {
-            MediaCondition = "(min-width:1000px)",
-            AllowedWidths = new [] {1000,1200, 1400,1600},
-            Mode = ScaleMode.Crop,
-            TargetAspectRatio = AspectRatio.Create(16,9),
-            Sizes = new []
-            {
-                "(min-width: 1400px) 1400px",
-                "100vw"
-            }
-            
+            MediaCondition = MediaQueryMinWidth(1900),
+            AllowedWidths = new [] { 
+                1900, 
+                2400, 
+            }.ToImmutableArray(),
+            Sizes = new [] 
+            { 
+                Size((90, Unit.Vw)), 
+            }.ToImmutableArray(),
         },
         new PictureSource
         {
-            MediaCondition = "(max-width:1000px)",
-            AllowedWidths = new [] {1000,1200, 1400,1600},
+            MediaCondition = MediaQueryMinWidth(1000),
+            AllowedWidths = new [] 
+            { 
+                1000, 
+                1200, 
+                1400, 
+                1600, 
+            }.ToImmutableArray(),
+            Mode = ScaleMode.Crop,
+            TargetAspectRatio = AspectRatio.Create(16,9),
+            Sizes = new [] 
+            { 
+                MediaQueryMinWidthWithSize(1400, 1400), 
+                Size((100, Unit.Vw)),
+            }.ToImmutableArray(),
+
+        },
+        new PictureSource
+        {
+            MediaCondition = MediaQueryMaxWidth(1000),
+            AllowedWidths = new [] { 
+                1000, 
+                1200, 
+                1400, 
+                1600, 
+            }.ToImmutableArray(),
             Mode = ScaleMode.Crop,
             TargetAspectRatio = AspectRatio.Create(1),
             Quality = 60,
-            Sizes = new []
-            {
-                "50vw"
-            }
+            Sizes = new [] { 
+                Size((50, Unit.Vw)), 
+            }.ToImmutableArray(),
         }
-    }
+    }.ToImmutableArray(),
 };
 ```
 Above picture profile describes three different `<source>` elements in markup, that would represent, as following:
@@ -81,6 +140,38 @@ This will render following markup:
     <img alt="" src="/globalassets/path-to-image.jpg?w=800">
 </picture>
 ```
+## CSS Helpers
+To avoid writing media-queries as strings a couple of helper methods are provided in `CssHelpers`
+* `MediaQueryMaxWidth(100)` -> `"(max-width:100px)"`
+* `MediaQueryMaxWidth((100, Unit.Pt))` -> `"(max-width:100pt)"` 
+* `MediaQueryMinWidth(100)` -> `"(min-width:100px)"` 
+* `MediaQueryMinWidth((100, Unit.Pt))` -> `"(min-width:100pt)"` 
+* `MediaQueryMaxWidthWithSize(100, 100)` -> `"(max-width:100px) 100px"` 
+* `MediaQueryMaxWidthWithSize((100, Unit.Percent), (100, Unit.Rem))` -> `"(max-width:100%) 100rem"`
+* `MediaQueryMinWidthWithSize(100, 100)` -> `"(min-width:100px) 100px"`
+* `MediaQueryMinWidthWithSize((100, Unit.Percent), (100, Unit.Rem))` -> `"(min-width:100%) 100rem"`
+* `Size(100)` -> `"100px"`
+* `Size((100, Unit.Percent))` -> `"100%"`
 
-## Other
-Consider using Azure Blob cache plugin to improve performance: https://github.com/fortedigital/ImageResizer.AzureBlobCache
+## Image caching
+By default cached resized images will be stored as blobs in `App_Data` directory. 
+Should you ever be in need of storing cached resized images on `Azure Blob Storage` make use of `AddForteEpiResponsivePicture` overload.
+```cs
+services.AddForteEpiResponsivePicture(options =>
+{
+    options.ConnectionString = "{CONNECTION_STRING}";
+    options.ContainerName = "{CONTAINER_NAME}";
+});
+```
+For development purposes consider making use of `https://hub.docker.com/_/microsoft-azure-storage-azurite` image
+
+## Own image transformation provider
+Should you ever be in need of using different image processor than `ImageSharp`:
+* Extend `ResizedUrlGeneratorBase`
+* Register your own implementation in DI __before__ calling `AddForteEpiResponsivePicture`
+```cs
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<YourCustomUrlGenerator>();
+builder.Services.AddForteEpiResponsivePicture();
+```
