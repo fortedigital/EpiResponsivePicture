@@ -17,7 +17,6 @@ public class PictureTagBuilder : IPictureTagBuilder
     private string pictureFallbackUrl;
     private ResizedPictureViewModel pictureViewModel;
     private FocalPoint focalPoint;
-    private IImageWithWidthAndHeight image;
     private string pictureUrl;
     private string imgTagAltText;
         
@@ -65,7 +64,6 @@ public class PictureTagBuilder : IPictureTagBuilder
             .Create()
             .WithImageUrl(pictureUrl)
             .WithFocalPoint(focalPoint)
-            .WithImageDimensions(image)
             .WithProfile(pictureProfile);
 
         foreach (var pictureSource in pictureProfile.Sources)
@@ -92,7 +90,6 @@ public class PictureTagBuilder : IPictureTagBuilder
             SetImageAltText((IImage) content);
 
         SetFocalPoint(content as IResponsiveImage);
-        SetImageDimensions(content as IImageWithWidthAndHeight);
 
         pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
     }
@@ -106,12 +103,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     {
         focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
     }
-
-    private void SetImageDimensions(IImageWithWidthAndHeight imageWithWidthAndHeight)
-    {
-        image = imageWithWidthAndHeight;
-    }
-
+    
     private string ResolveUrl()
     {
         var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();

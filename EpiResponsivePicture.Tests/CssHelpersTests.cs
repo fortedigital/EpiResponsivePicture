@@ -16,7 +16,6 @@ namespace Forte.EpiResponsivePicture.Tests
         [TestCase(10, Unit.In, ExpectedResult = "10in")]
         [TestCase(10, Unit.Mm, ExpectedResult = "10mm")]
         [TestCase(10, Unit.Pc, ExpectedResult = "10pc")]
-        [TestCase(10, Unit.Percent, ExpectedResult = "10%")]
         [TestCase(10, Unit.Pt, ExpectedResult = "10pt")]
         [TestCase(10, Unit.Px, ExpectedResult = "10px")]
         [TestCase(10, Unit.Rem, ExpectedResult = "10rem")]

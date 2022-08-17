@@ -10,7 +10,6 @@ public interface ISourceTagBuilder
     ISourceTagBuilder WithSource(PictureSource source);
     ISourceTagBuilder WithFocalPoint(FocalPoint point);
     ISourceTagBuilder WithProfile(PictureProfile profile);
-    ISourceTagBuilder WithImageDimensions(IImageWithWidthAndHeight image);
     TagBuilder Build();
     ISourceTagBuilder NewTag();
 }

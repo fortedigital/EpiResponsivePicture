@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.ServiceLocation;
@@ -16,7 +15,6 @@ public class SourceTagBuilder : ISourceTagBuilder
     private string imageUrl;
     private PictureSource pictureSource;
     private IResizedUrlGenerator resizedUrlGenerator;
-    private IImageWithWidthAndHeight imageDimensions;
     private FocalPoint focalPoint;
     private PictureProfile pictureProfile;
 
@@ -52,12 +50,6 @@ public class SourceTagBuilder : ISourceTagBuilder
         return this;
     }
 
-    public ISourceTagBuilder WithImageDimensions(IImageWithWidthAndHeight image)
-    {
-        imageDimensions = image;
-        return this;
-    }
-
     public TagBuilder Build()
     {
         Guard.IsNotNull(pictureSource, nameof(pictureSource));
@@ -84,11 +76,11 @@ public class SourceTagBuilder : ISourceTagBuilder
         element.Attributes.Add("sizes", string.Join(", ", pictureSource.Sizes));
     }
         
-    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(width => BuildWidth(Math.Min(width, pictureProfile.MaxImageDimension)));  
+    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(BuildWidth);  
 
     private string BuildWidth(int width)
     {
-        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint, imageDimensions);
+        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint);
 
         return $"{url} {width}w";
     }

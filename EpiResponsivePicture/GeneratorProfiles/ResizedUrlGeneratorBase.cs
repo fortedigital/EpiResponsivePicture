@@ -6,28 +6,25 @@ using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
 
 namespace Forte.EpiResponsivePicture.GeneratorProfiles;
-using CustomQueryFunc = Func<int, PictureSource, PictureProfile, FocalPoint, IImageWithWidthAndHeight, (string Key, string Value)>;
+using CustomQueryFunc = Func<int, PictureSource, PictureProfile, FocalPoint, (string Key, string Value)>;
+using CustomQueryPredicate = Func<int, PictureSource, PictureProfile, FocalPoint, bool>;
 
 public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 {
     protected UrlBuilder Builder;
 
-    private readonly Queue<CustomQueryFunc> customQueryRegistrations = new();
+    private readonly Queue<(CustomQueryFunc Func, CustomQueryPredicate Predicate)> customQueryRegistrations = new();
     private readonly NameValueCollection customQueries = new();
-    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint, IImageWithWidthAndHeight imageDimensions)
+    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint)
     {
         Builder = new UrlBuilder(imageUrl);
             
         Builder.Add(WidthQuery(width));
-        Builder.Add(HeightQuery(width, pictureSource, imageDimensions));
-        Builder.Add(QualityQuery(pictureSource));
-            
-        if(pictureProfile.Format != ResizedImageFormat.Preserve)
-            Builder.Add(FormatQuery(pictureProfile.Format));
-            
-        foreach (var customQueryRegistration in customQueryRegistrations)
+
+        foreach (var (func, predicate) in customQueryRegistrations)
         {
-            AddCustomQuery(customQueryRegistration(width, pictureSource, pictureProfile, focalPoint, imageDimensions));
+            if(predicate(width, pictureSource, pictureProfile, focalPoint))
+                AddCustomQuery(func(width, pictureSource, pictureProfile, focalPoint));
         }
             
         Builder.Add(customQueries);
@@ -38,12 +35,11 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
     }
         
     protected abstract (string Key, string Value) WidthQuery(int width);
-    protected abstract (string Key, string Value) HeightQuery(int width, PictureSource source, IImageWithWidthAndHeight imageDimensions);
-    protected abstract (string Key, string Value) QualityQuery(PictureSource source);
-    protected abstract (string Key, string Value) FormatQuery(ResizedImageFormat format);
 
     protected void RegisterCustomQuery(CustomQueryFunc registration) =>
-        customQueryRegistrations.Enqueue(registration);
+        customQueryRegistrations.Enqueue((registration, (_, _, _, _) => true));
+    protected void RegisterCustomQuery(CustomQueryFunc registration, CustomQueryPredicate predicate) =>
+        customQueryRegistrations.Enqueue((registration, predicate));
     private void AddCustomQuery((string Key, string Value) query)
     {
         customQueries.Add(query.Key, query.Value);

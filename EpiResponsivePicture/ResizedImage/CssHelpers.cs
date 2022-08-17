@@ -19,7 +19,6 @@ public static class CssHelpers
         Mm,
         Pc,
         Vw,
-        Percent,
     }
         
     public static string MediaQueryMaxWidth(double queryWidthPixel) => BuildMediaQueryString(Max, (queryWidthPixel, Unit.Px));
@@ -52,10 +51,6 @@ public static class CssHelpers
         $"({mediaQueryType}-width: {queryWidth.Item1.ToString(CultureInfo.InvariantCulture)}{queryWidth.Item2.AsString()})";
 
     private static string BuildSize(ValueTuple<double, Unit> width) => $"{width.Item1.ToString(CultureInfo.InvariantCulture)}{width.Item2.AsString()}";
-        
-    internal static string AsString(this Unit unit) => unit switch
-    {
-        Unit.Percent => "%",
-        _ => unit.ToString().ToLowerInvariant(),
-    };
+
+    internal static string AsString(this Unit unit) => unit.ToString().ToLowerInvariant();
 }

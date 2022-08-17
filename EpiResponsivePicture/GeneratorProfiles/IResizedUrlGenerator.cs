@@ -6,5 +6,5 @@ namespace Forte.EpiResponsivePicture.GeneratorProfiles;
 
 public interface IResizedUrlGenerator
 {
-    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint, IImageWithWidthAndHeight imageDimensions);
+    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint);
 }

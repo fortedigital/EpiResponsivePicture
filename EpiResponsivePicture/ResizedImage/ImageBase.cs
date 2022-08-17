@@ -54,13 +54,7 @@ public class ImageBase : ImageData, IImage, IResponsiveImage, ILocalizable
     [Display(Name = "Focal point")]
     [BackingType(typeof(PropertyFocalPoint))]
     public virtual FocalPoint FocalPoint { get; set; }
-
-    [ScaffoldColumn(false), Editable(false)]
-    public virtual int Width { get; set; }
-
-    [ScaffoldColumn(false), Editable(false)]
-    public virtual int Height { get; set; }
-
+    
     private ImageBase GetMasterLanguageImage()
     {
         var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
