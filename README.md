@@ -74,11 +74,11 @@ public static readonly PictureProfile SampleProfile = new PictureProfile
             AllowedWidths = new [] { 
                 1900, 
                 2400, 
-            }.ToImmutableArray(),
+            },
             Sizes = new [] 
             { 
                 Size((90, Unit.Vw)), 
-            }.ToImmutableArray(),
+            },
         },
         new PictureSource
         {
@@ -89,14 +89,14 @@ public static readonly PictureProfile SampleProfile = new PictureProfile
                 1200, 
                 1400, 
                 1600, 
-            }.ToImmutableArray(),
+            },
             Mode = ScaleMode.Crop,
             TargetAspectRatio = AspectRatio.Create(16,9),
             Sizes = new [] 
             { 
                 MediaQueryMinWidthWithSize(1400, 1400), 
                 Size((100, Unit.Vw)),
-            }.ToImmutableArray(),
+            },
 
         },
         new PictureSource
@@ -107,15 +107,15 @@ public static readonly PictureProfile SampleProfile = new PictureProfile
                 1200, 
                 1400, 
                 1600, 
-            }.ToImmutableArray(),
+            },
             Mode = ScaleMode.Crop,
             TargetAspectRatio = AspectRatio.Create(1),
             Quality = 60,
             Sizes = new [] { 
                 Size((50, Unit.Vw)), 
-            }.ToImmutableArray(),
+            },
         }
-    }.ToImmutableArray(),
+    },
 };
 ```
 Above picture profile describes three different `<source>` elements in markup, that would represent, as following:
