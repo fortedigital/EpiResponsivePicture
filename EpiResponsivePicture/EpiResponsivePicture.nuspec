@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>Forte.EpiResponsivePicture</id>
-        <version>1.0.0.1</version>
+        <version>$version$</version>
         <title>Forte.EpiResponsivePicture</title>
         <authors>Forte_ Digital</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
