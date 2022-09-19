@@ -15,7 +15,7 @@ namespace Forte.EpiResponsivePicture.Tests
 
         public object GetService(Type serviceType)
         {
-            throw new NotImplementedException();
+            return this.services[serviceType];
         }
 
         public object GetInstance(Type serviceType)

@@ -14,9 +14,11 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
         public double X { get; }
         public double Y { get; }
 
+        public static FocalPoint Center => new(0.5, 0.5);
+
         public override string ToString()
         {
-            return $"{X.ToString(CultureInfo.InvariantCulture)}|{Y.ToString(CultureInfo.InvariantCulture)}";
+            return $"{X:0.###}|{Y:0.###}";
         }
 
         public static FocalPoint Parse(string input)

@@ -1,10 +1,10 @@
-namespace Forte.EpiResponsivePicture.ResizedImage
+using System.Collections.Generic;
+
+namespace Forte.EpiResponsivePicture.ResizedImage;
+
+public class PictureProfile
 {
-    public class PictureProfile
-    {
-        public int DefaultWidth { get; set; }
-        public int MaxImageDimension { get; set; } = 3200; // Default max served by ImageResizer
-        public ResizedImageFormat Format { get; set; } = ResizedImageFormat.Preserve;
-        public PictureSource[] Sources { get; set; }
-    }
+    public int DefaultWidth { get; init; }
+    public ResizedImageFormat Format { get; init; } = ResizedImageFormat.Preserve;
+    public IReadOnlyCollection<PictureSource> Sources { get; init; } = new List<PictureSource>();
 }

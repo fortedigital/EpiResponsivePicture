@@ -1,176 +1,56 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+using System.IO;
+using System.Text.Encodings.Web;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Forte.EpiResponsivePicture.TagBuilders;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Forte.EpiResponsivePicture.ResizedImage
+namespace Forte.EpiResponsivePicture.ResizedImage;
+
+public static class ImageTransformationHelper
 {
-    public static class ImageTransformationHelper
+    public static UrlBuilder ResizedImageUrl(this IHtmlHelper helper, ContentReference image, int width,
+        ResizedImageFormat format = ResizedImageFormat.Preserve)
     {
-        public static UrlBuilder ResizedImageUrl(this HtmlHelper helper, ContentReference image, int width,
-            ResizedImageFormat format = ResizedImageFormat.Preserve)
-        {
-            var baseUrl = ResolveImageUrl(image);
+        var baseUrl = ResolveImageUrl(image);
+                
+        var urlBuilder = new UrlBuilder(baseUrl)
+            .Add("width", width.ToString());
+                
+        if(format != ResizedImageFormat.Preserve) 
+            urlBuilder.Add("format", format.ToString().ToUpperInvariant());
 
-            return new UrlBuilder(baseUrl)
-                .Width(width)
-                .Format(format);
-        }
+        return urlBuilder;
+    }
 
-        public static MvcHtmlString ResizedPicture(this HtmlHelper helper,
-            ContentReference image,
-            PictureProfile profile,
-            string fallbackUrl = null,
-            ResizedPictureViewModel pictureModel = null)
-        {
-            if (pictureModel == null) pictureModel = new ResizedPictureViewModel();
+    public static HtmlString ResizedPicture(this IHtmlHelper helper,
+        ContentReference image,
+        PictureProfile profile,
+        string fallbackUrl = null,
+        ResizedPictureViewModel pictureModel = null)
+    {
 
-            var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>()
-                                 .TryGet<IContentData>(image, new LoaderOptions{ LanguageLoaderOption.FallbackWithMaster() }, 
-                                     out var content) &&
-                             content is IImage;
+        var pictureTag = PictureTagBuilder
+            .Create()
+            .WithContentReference(image)
+            .WithProfile(profile)
+            .WithFallbackUrl(fallbackUrl)
+            .WithViewModel(pictureModel)
+            .Build();
 
-            var baseUrl = imageFound
-                ? ResolveImageUrl(image)
-                : fallbackUrl;
+        using var writer = new StringWriter();
+            
+        pictureTag.WriteTo(writer, HtmlEncoder.Default);
 
-            if (!pictureModel.ImgElementAttributes.ContainsKey("alt"))
-            {
-                var alternateText = imageFound
-                    ? ((IImage) content).Description
-                    : string.Empty;
-                pictureModel.ImgElementAttributes.Add("alt", alternateText);
-            }
-
-            return GenerateResizedPicture(baseUrl, profile, content as IResponsiveImage, pictureModel);
-        }
-
-        private static MvcHtmlString GenerateResizedPicture(string imageBaseUrl,
-            PictureProfile profile, IResponsiveImage image, ResizedPictureViewModel pictureModel)
-        {
-            return GeneratePictureElement(profile, imageBaseUrl, image, pictureModel);
-        }
-
-        private static MvcHtmlString GeneratePictureElement(PictureProfile profile,
-            string imgUrl,
-            IResponsiveImage focalPoint, ResizedPictureViewModel pictureModel)
-        {
-            var sourceElements = profile.Sources?.Select(x => CreateSourceElement(imgUrl, x, focalPoint,
-                profile.MaxImageDimension, profile.Format));
-
-            var pictureElement = new TagBuilder("picture")
-            {
-                InnerHtml =
-                    string.Join(string.Empty,
-                        sourceElements?.Select(x => x.ToString(TagRenderMode.SelfClosing)) ?? new string[0]) +
-                    CreateImgElement(
-                            BuildResizedImageUrl(imgUrl, profile.DefaultWidth, ScaleMode.Default, AspectRatio.Original,
-                                null, focalPoint, null, profile.Format).ToString(), pictureModel.ImgElementAttributes)
-                        .ToString(TagRenderMode.SelfClosing)
-            };
-
-            foreach (var kv in pictureModel.PictureElementAttributes)
-            {
-                pictureElement.Attributes.Add(kv.Key, kv.Value);
-            }
-
-            return new MvcHtmlString(pictureElement.ToString());
-        }
-
-        private static TagBuilder CreateSourceElement(string imageUrl, PictureSource source,
-            IResponsiveImage focalPoint, int maxImageDimension, ResizedImageFormat format)
-        {
-            var srcSets = source.AllowedWidths
-                .Select(width => BuildSize(imageUrl, width, source.Mode, source.TargetAspectRatio, source.Quality,
-                    focalPoint, maxImageDimension, format));
-
-            var tagBuilder = new TagBuilder("source")
-            {
-                Attributes =
-                {
-                    {"media", $"{source.MediaCondition}"},
-                    {"srcset", string.Join(", ", srcSets)},
-                    {"sizes", string.Join(", ", source.Sizes)}
-                }
-            };
-
-            return tagBuilder;
-        }
-
-        private static string BuildSize(string imageUrl, int width, ScaleMode sourceMode,
-            AspectRatio sourceTargetAspectRatio, int? sourceQuality, IResponsiveImage focalPoint, int maxImageDimension,
-            ResizedImageFormat format)
-        {
-            var url = BuildResizedImageUrl(imageUrl, width, sourceMode, sourceTargetAspectRatio, sourceQuality,
-                focalPoint,
-                maxImageDimension,
-                format);
-
-            return $"{url} {width}w";
-        }
-
-        private static TagBuilder CreateImgElement(string imgUrl, IDictionary<string, string> attributes)
-        {
-            var tagBuilder = new TagBuilder("img");
-            tagBuilder.Attributes.Add("src", imgUrl);
-
-            foreach (var attribute in attributes) tagBuilder.Attributes.Add(attribute);
-
-            return tagBuilder;
-        }
-
-        private static string ResolveImageUrl(ContentReference image)
-        {
-            var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
-            return urlResolver.GetUrl(image);
-        }
-
-        private static UrlBuilder BuildResizedImageUrl(string imageUrl, int width,
-            ScaleMode scaleMode, AspectRatio targetAspectRatio, int? quality,
-            IResponsiveImage image, int? maxImageDimension, ResizedImageFormat format)
-        {
-            width = Math.Min(width, maxImageDimension ?? int.MaxValue);
-
-            var target = new UrlBuilder(imageUrl);
-
-            if (scaleMode != ScaleMode.Default)
-                target.Mode(scaleMode);
-
-            if (quality.HasValue)
-                target.Quality(quality.Value);
-
-            target.Format(format);
-
-            if (scaleMode != ScaleMode.Default && scaleMode != ScaleMode.Max
-                                               && image != null)
-            {
-                if (targetAspectRatio == null || !targetAspectRatio.HasValue)
-                    throw new ArgumentException("Aspect ratio is required when ScaleMode is other than Max");
-
-                var height = (int) (width / targetAspectRatio.Ratio);
-                if (height > maxImageDimension)
-                {
-                    height = maxImageDimension.Value;
-                    width = (int) (height * targetAspectRatio.Ratio);
-                }
-
-                target.Width(width);
-                target.Height(height);
-
-                var cropSettings = ImageCropper.GetCropSettings(targetAspectRatio, image);
-                if (cropSettings != null)
-                    target.Crop(cropSettings);
-            }
-            else
-            {
-                target.Width(width);
-            }
-
-            return target;
-        }
+        return new HtmlString(writer.ToString());
+    }
+        
+    private static string ResolveImageUrl(ContentReference image)
+    {
+        var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
+        return urlResolver.GetUrl(image);
     }
 }

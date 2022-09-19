@@ -1,25 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Forte.EpiResponsivePicture.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="Moq" Version="4.5.28" />
-    <PackageReference Include="NUnit" Version="3.13.1" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.Framework" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore.Templating" Version="[12.5.0, 13)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Moq" Version="4.17.2" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EpiResponsivePicture\EpiResponsivePicture.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="obj\Release\netcoreapp3.1" />
-  </ItemGroup>
-
 </Project>

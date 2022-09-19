@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
-    <TargetFrameworks>net461;net462;net47;net471;net472;net48</TargetFrameworks>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</AssemblyVersion>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</FileVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</AssemblyVersion>
+    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</FileVersion>
+    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
     <PackageId>Forte.EpiResponsivePicture</PackageId>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">0.0.0.1</PackageVersion>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">0.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</PackageVersion>
+    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</Version>
+    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.$(BUILD_BUILDNUMBER)</Version>
     <Title>Forte.EpiResponsivePicture</Title>
-    <Authors>Forte_ Digital</Authors>
+    <Authors>Forte Digital</Authors>
     <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
     <PackageProjectUrl>https://github.com/fortedigital/EpiResponsivePicture</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</PackageLicenseUrl>
@@ -19,67 +21,45 @@
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.11.2" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.11.2" />
-    <PackageReference Include="EPiServer.Framework" Version="11.11.2" />
-    <PackageReference Include="EPiServer.ServiceLocation.StructureMap" Version="2.0.1" />
-    <PackageReference Include="ImageResizer.Plugins.EPiServerBlobReader" Version="7.0.0" />
-  </ItemGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.11.0" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
+    <PackageReference Include="Baaijte.Optimizely.ImageSharp.Web" Version="2.0.0" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.Framework" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="[12.5.0, 13)" />
+    <PackageReference Include="EPiServer.CMS.AspNetCore.Templating" Version="[12.5.0, 13)" />
+    <PackageReference Include="Microsoft.Toolkit.Diagnostics" Version="7.1.2" />
+    <PackageReference Include="SixLabors.ImageSharp.Web.Providers.Azure" Version="2.0.0" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <OutputPath>bin/$(Configuration)</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectDir Condition="'$(ProjectDir)' == ''">$(MSBuildProjectDirectory)</ProjectDir>
+    <SolutionDir Condition="'$(SolutionDir)' == ''">$(ProjectDir)</SolutionDir>
+    <TmpOutDir Condition="'$(TmpOutir)' == ''">$(OutputPath)/temp</TmpOutDir>
+    <!-- NOTE! This is different between cms versions, the zip file needs to be named the same in the package -->
+    <ZipFile>$(OutputPath)/Forte.EpiResponsivePicture.zip</ZipFile>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <Target Name="CreateNugetPackage" AfterTargets="Build;Rebuild" Condition="'$(Configuration)' == 'Release' ">
+    <Message Text="Creating Nuget Package" />
+    <!-- Create the Versioned out dir for the client resources-->
+    <!-- Copy -->
+    <ItemGroup>
+      <ClientResources Include="$(ProjectDir)/ClientResources/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="$(ProjectDir)/module.config" DestinationFolder="$(TmpOutDir)/content" />
+    <Copy SourceFiles="@(ClientResources)" DestinationFiles="@(ClientResources -> '$(TmpOutDir)/content/ClientResources/%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!-- Delete old Zip file -->
+    <Delete Files="$(ZipFile)" />
+    <!-- Create the Zip file -->
+    <ZipDirectory SourceDirectory="$(TmpOutDir)/content" DestinationFile="$(ZipFile)" Overwrite="true" />
+    <!-- Cleanup -->
+    <RemoveDir Directories="$(TmpOutDir)" />
+  </Target>
+  
 </Project>
