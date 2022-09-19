@@ -2,21 +2,18 @@
   <PropertyGroup>
     <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</AssemblyVersion>
-    <AssemblyVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</AssemblyVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</FileVersion>
-    <FileVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</FileVersion>
+    <AssemblyVersion >1.0.0.0</AssemblyVersion>
+    <FileVersion >1.0.0.0</FileVersion>
     <PackageId>Forte.EpiResponsivePicture</PackageId>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</PackageVersion>
-    <PackageVersion Condition=" '$(BUILD_BUILDNUMBER)' != '' ">1.0.0.$(BUILD_BUILDNUMBER)</PackageVersion>
-    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.1</Version>
-    <Version Condition=" '$(BUILD_BUILDNUMBER)' == '' ">1.0.0.$(BUILD_BUILDNUMBER)</Version>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <Version >1.0.0.0</Version>
     <Title>Forte.EpiResponsivePicture</Title>
     <Authors>Forte Digital</Authors>
     <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
     <PackageProjectUrl>https://github.com/fortedigital/EpiResponsivePicture</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <NuspecProperties>version=$(Version)</NuspecProperties>
 
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
