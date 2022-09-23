@@ -140,6 +140,20 @@ This will render following markup:
     <img alt="" src="/globalassets/path-to-image.jpg?w=800">
 </picture>
 ```
+
+Should you ever find yourself in need of generating only body of picture tag (ie when creating tag in React) you should make use of
+```cs
+@Html.ResizedPictureSources(Model, PictureProfiles.SampleProfile)
+```
+
+Following will result in:
+```html
+<source media="(min-width:1900px)" sizes="90vw" srcset="/globalassets/path-to-image.jpg?w=1900 1900w, /globalassets/path-to-image.jpg?w=2400 2400w">
+<source media="(min-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&w=1000&h=562&crop=0,511,1064,1109 1000w, /globalassets/path-to-image.jpg?mode=crop&w=1200&h=675&crop=0,511,1064,1109 1200w, /globalassets/path-to-image.jpg?mode=crop&w=1400&h=787&crop=0,511,1064,1109 1400w, /globalassets/path-to-image.jpg?mode=crop&w=1600&h=900&crop=0,511,1064,1109 1600w">
+<source media="(max-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&quality=60&w=1000&h=1000&crop=0,278,1064,1342 1000w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1200&h=1200&crop=0,278,1064,1342 1200w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1400&h=1400&crop=0,278,1064,1342 1400w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1600&h=1600&crop=0,278,1064,1342 1600w">
+<img alt="" src="/globalassets/path-to-image.jpg?w=800">
+```
+
 ## CSS Helpers
 To avoid writing media-queries as strings a couple of helper methods are provided in `CssHelpers`
 * `MediaQueryMaxWidth(100)` -> `"(max-width:100px)"`
