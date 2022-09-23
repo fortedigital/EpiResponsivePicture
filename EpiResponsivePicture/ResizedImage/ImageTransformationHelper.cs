@@ -47,7 +47,27 @@ public static class ImageTransformationHelper
 
         return new HtmlString(writer.ToString());
     }
-        
+
+    public static HtmlString ResizedPictureSources(this IHtmlHelper helper,
+        ContentReference image,
+        PictureProfile profile,
+        string fallbackUrl = null,
+        ResizedPictureViewModel pictureModel = null)
+    {
+        var pictureTag = PictureTagBuilder
+            .Create()
+            .WithContentReference(image)
+            .WithProfile(profile)
+            .WithFallbackUrl(fallbackUrl)
+            .WithViewModel(pictureModel)
+            .Build();
+
+        using var writer = new StringWriter();
+        pictureTag.RenderBody()?.WriteTo(writer, HtmlEncoder.Default);
+
+        return new HtmlString(writer.ToString());
+    }
+    
     private static string ResolveImageUrl(ContentReference image)
     {
         var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
