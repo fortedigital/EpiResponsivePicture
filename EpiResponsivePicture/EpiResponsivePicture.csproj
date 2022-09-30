@@ -2,11 +2,11 @@
   <PropertyGroup>
     <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion >1.0.0.0</AssemblyVersion>
-    <FileVersion >1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageId>Forte.EpiResponsivePicture</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
-    <Version >1.0.0.0</Version>
+    <Version>1.0.0.0</Version>
     <Title>Forte.EpiResponsivePicture</Title>
     <Authors>Forte Digital</Authors>
     <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
