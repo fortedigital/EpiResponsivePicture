@@ -23,7 +23,9 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
 
         public static FocalPoint Parse(string input)
         {
-            var parsed = input.Split('|').Select(s => double.Parse(s, CultureInfo.InvariantCulture))
+            var parsed = input.Split('|')
+                .Select(s => s.Replace(',', '.')) // bugfix locale parsing problem 
+                .Select(s => double.Parse(s, CultureInfo.InvariantCulture))
                 .ToList();
 
             return new FocalPoint(parsed[0], parsed[1]);
