@@ -21,10 +21,15 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
             return $"{X:0.###}|{Y:0.###}";
         }
 
+        public static implicit operator FocalPoint(string s) => Parse(s);
+        
         public static FocalPoint Parse(string input)
         {
-            var parsed = input.Split('|').Select(s => double.Parse(s, CultureInfo.InvariantCulture))
-                .ToList();
+            var parsed = 
+                input.Split('|')
+                    .Select(s => s.Replace(',', '.'))
+                    .Select(s => double.Parse(s, CultureInfo.InvariantCulture))
+                    .ToList();
 
             return new FocalPoint(parsed[0], parsed[1]);
         }
