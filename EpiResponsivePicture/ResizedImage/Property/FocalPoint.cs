@@ -1,5 +1,7 @@
-using System.Globalization;
-using System.Linq;
+using EPiServer.ServiceLocation;
+using Forte.EpiResponsivePicture.Configuration;
+using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility;
+using Microsoft.Extensions.Options;
 
 namespace Forte.EpiResponsivePicture.ResizedImage.Property
 {
@@ -25,13 +27,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
         
         public static FocalPoint Parse(string input)
         {
-            var parsed = 
-                input.Split('|')
-                    .Select(s => s.Replace(',', '.'))
-                    .Select(s => double.Parse(s, CultureInfo.InvariantCulture))
-                    .ToList();
-
-            return new FocalPoint(parsed[0], parsed[1]);
+            return new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>()).Parse(input);
         }
     }
 }

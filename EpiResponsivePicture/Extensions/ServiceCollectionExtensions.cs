@@ -22,8 +22,10 @@ public static class ServiceCollectionExtensions
     /// Register services for FocalPoint, resizing with local caching. Fluent API
     /// </summary>
     /// <param name="services">Services</param>
+    /// <param name="options"></param>
     /// <returns>services</returns>
-    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services)
+    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services, 
+        EpiResponsivePicturesOptions options = null)
     {
 
         services.AddImageSharp()
@@ -32,7 +34,7 @@ public static class ServiceCollectionExtensions
             .AddProvider<PhysicalFileSystemProvider>()
             .SetCache<BlobImageCache>();
             
-        ConfigureModule(services);
+        ConfigureModule(services, options);
                    
         return services;
     }
@@ -42,9 +44,11 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">Services</param>
     /// <param name="azureStorageOptions">Azure blob storage options</param>
+    /// <param name="options"></param>
     /// <returns>services</returns>
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
-        Action<AzureBlobStorageCacheOptions> azureStorageOptions)
+        Action<AzureBlobStorageCacheOptions> azureStorageOptions, 
+        EpiResponsivePicturesOptions options = null)
     {
         services.AddImageSharp()
             .Configure(azureStorageOptions)
@@ -52,26 +56,31 @@ public static class ServiceCollectionExtensions
             .AddProvider<BlobImageProvider>()
             .SetCache<AzureBlobStorageCache>();
             
-        ConfigureModule(services);
+        ConfigureModule(services, options);
 
         return services;
     }
 
-    private static void ConfigureModule(IServiceCollection services)
+    private static void ConfigureModule(IServiceCollection services, EpiResponsivePicturesOptions options = null)
     {
         services.TryAddTransient<IResizedUrlGenerator, ImageSharpResizedUrlGenerator>();
             
-        services.Configure<ProtectedModuleOptions>(options =>
+        services.Configure<ProtectedModuleOptions>(o =>
         {
-            if (!options.Items.Any(x => x.Name.Equals(Constants.ModuleName)))
+            if (!o.Items.Any(x => x.Name.Equals(Constants.ModuleName)))
             {
-                options.Items.Add(
+                o.Items.Add(
                     new ModuleDetails
                     {
                         Name = Constants.ModuleName,
                     }
                 );
             }
+        });
+
+        services.Configure<EpiResponsivePicturesOptions>(o =>
+        {
+            o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false;
         });
     }
 }
