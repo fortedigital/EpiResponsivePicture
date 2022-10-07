@@ -78,9 +78,10 @@ public static class ServiceCollectionExtensions
             }
         });
 
-        services.Configure<EpiResponsivePicturesOptions>(o =>
-        {
-            o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false;
-        });
+        services
+            .AddOptions<EpiResponsivePicturesOptions>()
+            .Configure(o => {
+                o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false; 
+            });
     }
 }

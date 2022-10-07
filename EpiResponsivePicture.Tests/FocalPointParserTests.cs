@@ -37,7 +37,7 @@ public class FocalPointParserTests
 
         #region Act
 
-        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>());
+        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>().Value);
         var parsedFocalPoint = focalPointParser.Parse(focalPointBackingString);
 
         #endregion
@@ -69,7 +69,7 @@ public class FocalPointParserTests
 
         #region Act
 
-        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>());
+        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>().Value);
         var parsedFocalPoint = focalPointParser.Parse(focalPointBackingString);
 
         #endregion
@@ -98,7 +98,7 @@ public class FocalPointParserTests
 
         #region Act
 
-        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>());
+        var focalPointParser = new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>().Value);
 
         var exception = Assert.Catch<InvalidOperationException>(() =>
         {

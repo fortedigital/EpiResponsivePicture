@@ -23,11 +23,9 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
             return $"{X:0.###}|{Y:0.###}";
         }
 
-        public static implicit operator FocalPoint(string s) => Parse(s);
-        
-        public static FocalPoint Parse(string input)
+        public static FocalPoint Parse(string input, EpiResponsivePicturesOptions configuration)
         {
-            return new FocalPointParser(ServiceLocator.Current.GetInstance<IOptions<EpiResponsivePicturesOptions>>()).Parse(input);
+            return new FocalPointParser(configuration).Parse(input);
         }
     }
 }

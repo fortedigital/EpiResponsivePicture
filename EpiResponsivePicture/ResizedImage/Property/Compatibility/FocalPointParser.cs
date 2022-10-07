@@ -8,14 +8,11 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility;
 
 public class FocalPointParser
 {
-    private readonly EpiResponsivePicturesOptions configuration;
     private List<IFocalPointParsingStrategy> parsingStrategies = new();
 
-    public FocalPointParser(IOptions<EpiResponsivePicturesOptions> options)
+    public FocalPointParser(EpiResponsivePicturesOptions options)
     {
-        configuration = options.Value;
-        
-        if(configuration.ImageResizerCompatibilityEnabled)
+        if(options.ImageResizerCompatibilityEnabled)
             parsingStrategies.Add(new ImageResizerFocalPointParsingStrategy());
         
         parsingStrategies.Add(new ForteResponsivePictureFocalPointParsingStrategy());
