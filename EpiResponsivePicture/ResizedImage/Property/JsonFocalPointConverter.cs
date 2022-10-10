@@ -1,5 +1,7 @@
 using System;
 using EPiServer.ServiceLocation;
+using Forte.EpiResponsivePicture.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace Forte.EpiResponsivePicture.ResizedImage.Property
@@ -7,6 +9,13 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
     [ServiceConfiguration(typeof(JsonConverter))]
     public class JsonFocalPointConverter : JsonConverter
     {
+        private EpiResponsivePicturesOptions configuration;
+
+        public JsonFocalPointConverter(IOptions<EpiResponsivePicturesOptions> options)
+        {
+            configuration = options.Value;
+        }
+        
         public override bool CanConvert(Type objectType)
         {
             return typeof(FocalPoint).IsAssignableFrom(objectType);
@@ -23,7 +32,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
                 throw new ArgumentException("Invalid type of data for Focal Point");
 
             var value = (string) reader.Value;
-            return FocalPoint.Parse(value);
+            return FocalPoint.Parse(value, configuration);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
