@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility.SqlProvider;
 
 class ImageResizerFocalPointConversionSqlProvider : IImageResizerFocalPointConversionSqlProvider
@@ -5,10 +7,10 @@ class ImageResizerFocalPointConversionSqlProvider : IImageResizerFocalPointConve
     private const string DatabaseScheme = "[dbo]";
     private const string PropertyDefinitionTable = "[tblPropertyDefinition]";
     private const string PropertyDefinitionTypeTable = "[tblPropertyDefinitionType]";
-    private const string WorkContentPropertyTable = "[tblPropertyDefinitionType]";
+    private const string WorkContentPropertyTable = "[tblWorkContentProperty]";
 	
-    public string Generate() =>
-        @$";WITH [ForteEPiFocalPointPropertyDefinitionType] AS 
+    private string GenerateSql() => @$"
+;WITH [ForteEPiFocalPointPropertyDefinitionType] AS 
 (
 	SELECT [pkID] AS [ID]
 	FROM {DatabaseScheme}.{PropertyDefinitionTypeTable}
@@ -23,9 +25,6 @@ class ImageResizerFocalPointConversionSqlProvider : IImageResizerFocalPointConve
 UPDATE [PropertyDefinition]
 SET [PropertyDefinitionTypeID] = [ForteEPiFocalPointPropertyDefinitionType].[ID]
 FROM [ForteEPiFocalPointPropertyDefinitionType]
-
-GO
-
 ;WITH [FocalPointDefinitionType] AS
 (
 	SELECT [pkID] AS [ID], [fkPropertyDefinitionTypeID] AS [PropertyDefinitionTypeID]
@@ -35,7 +34,7 @@ GO
 UPDATE {DatabaseScheme}.{WorkContentPropertyTable}
 SET [String] = [LongString]
 FROM [FocalPointDefinitionType]
-WHERE [fkPropertyDefinitionID] = [FocalPointDefinitionType].[ID]
+WHERE [fkPropertyDefinitionID] = [FocalPointDefinitionType].[ID]";
 
-GO";
+    public string Generate() => Regex.Replace(GenerateSql(), "\\s+", "");
 }
