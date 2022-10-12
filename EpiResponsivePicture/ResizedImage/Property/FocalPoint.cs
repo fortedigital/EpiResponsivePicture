@@ -1,7 +1,5 @@
-using EPiServer.ServiceLocation;
 using Forte.EpiResponsivePicture.Configuration;
 using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility;
-using Microsoft.Extensions.Options;
 
 namespace Forte.EpiResponsivePicture.ResizedImage.Property
 {
@@ -20,7 +18,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Property
 
         public override string ToString()
         {
-            return $"{X:0.###}|{Y:0.###}";
+            return $"{X:0.###}|{Y:0.###}".Replace(',', '.');
         }
 
         public static FocalPoint Parse(string input, EpiResponsivePicturesOptions configuration)
