@@ -5,6 +5,7 @@ using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using EPiServer.Shell.Modules;
 using Forte.EpiResponsivePicture.Configuration;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
+using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility.SqlProvider;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SixLabors.ImageSharp.Web.Caching.Azure;
@@ -83,5 +84,8 @@ public static class ServiceCollectionExtensions
             .Configure(o => {
                 o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false; 
             });
+
+        services
+            .AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
     }
 }
