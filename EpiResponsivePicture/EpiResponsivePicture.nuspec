@@ -14,7 +14,8 @@
                 <dependency id="EPiServer.CMS.Core" version="[12.6.0, 13)" />
                 <dependency id="EPiServer.Framework" version="[12.6.0, 13)" />
                 <dependency id="EPiServer.CMS.UI" version="[12.6.0, 13)" />
-                <dependency id="Microsoft.Toolkit.Diagnostics" version="7.1.2" />
+                <dependency id="Microsoft.Toolkit.Diagnostics" version="[7.1.0, 8)" />
+                <dependency id="SixLabors.ImageSharp.Web.Providers.Azure" version="[2.0.0, 3)" />
             </group>
         </dependencies>
         <contentFiles>
