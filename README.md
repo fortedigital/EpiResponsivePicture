@@ -165,7 +165,6 @@ To avoid writing media-queries as strings a couple of helper methods are provide
 * `MediaQueryMinWidthWithSize(100, 100)` -> `"(min-width:100px) 100px"`
 * `MediaQueryMinWidthWithSize((100, Unit.Percent), (100, Unit.Rem))` -> `"(min-width:100%) 100rem"`
 * `Size(100)` -> `"100px"`
-* `Size((100, Unit.Percent))` -> `"100%"`
 
 ## Image caching
 By default cached resized images will be stored as blobs in `App_Data` directory. 
@@ -189,3 +188,45 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<YourCustomUrlGenerator>();
 builder.Services.AddForteEpiResponsivePicture();
 ```
+
+## Backwards compatibility
+### ImageResizer
+
+In case you were making use of ImageResizer's implementation of FocalPoint below points will guide you through migration process. The main idea is to read focal points that were saved by ImageResizer and convert them into Forte.ResponsivePicture standard. After running this migration you should be good to turn it off as it may have a slight impact on performance.
+
+1. In `Startup.cs` make sure to call `AddForteEpiResponsivePicture` with properly configured `EpiResponsivePicturesOptions`
+```cs
+    services.AddForteEpiResponsivePicture(o =>
+        new EpiResponsivePicturesOptions
+        {
+            ImageResizerCompatibilityEnabled = true
+        });
+```
+2. In referencing project create a scheduled job that acquires connection string to underlying database and run on it query provided by `IImageResizerFocalPointConversionSqlProvider`
+```cs
+[ScheduledPlugIn(DisplayName = "Migrate ImageSharp Focal Points To Forte.ResponsivePicture")]
+public class MigrateImageSharpFocalPointsJob : ScheduledJobBase
+{
+    private readonly IPrincipalAccessor principalAccessor;
+    private readonly RepublishContentService republishContentService;
+    private readonly FocalPointRestoreService focalPointRestoreService;
+
+    public MigrateImageSharpFocalPointsJob(IPrincipalAccessor principalAccessor, RepublishContentService republishContentService, FocalPointRestoreService focalPointRestoreService)
+    {
+        this.principalAccessor = principalAccessor;
+        this.republishContentService = republishContentService;
+        this.focalPointRestoreService = focalPointRestoreService;
+    }
+
+
+    public override string Execute()
+    {
+        focalPointRestoreService.Restore(); // keep in mind that it might be neccessary to elevate job's permissions to Administrator see https://www.gulla.net/en/blog/scheduled-jobs-in-optimizely-cms-12/
+        
+        var republishedCount = republishContentService.Republish<Image>(); // you will need to republish images after restoring focal points
+        return msg;
+    }
+}
+```
+3. Restart solution. Unfortunately due to EPiServers internal mechanisms it is required to restart solution to clear caches and reassign property definition types
+
