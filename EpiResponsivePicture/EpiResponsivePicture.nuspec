@@ -4,10 +4,10 @@
         <id>Forte.EpiResponsivePicture</id>
         <version>$version$</version>
         <title>Forte.EpiResponsivePicture</title>
-        <authors>Forte_ Digital</authors>
+        <authors>Forte Digital</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</description>
-        <projectUrl>https://github.com/fortedigital/EpiserverRedirects</projectUrl>
+        <projectUrl>https://github.com/fortedigital/EpiResponsivePicture</projectUrl>
         <dependencies>
             <group targetFramework="net6.0">
                 <dependency id="EPiServer.CMS.AspNetCore" version="[12.6.0, 13)" />
@@ -16,6 +16,7 @@
                 <dependency id="EPiServer.CMS.UI" version="[12.6.0, 13)" />
                 <dependency id="Microsoft.Toolkit.Diagnostics" version="[7.1.0, 8)" />
                 <dependency id="SixLabors.ImageSharp.Web.Providers.Azure" version="[2.0.0, 3)" />
+                <dependency id="Baaijte.Optimizely.ImageSharp.Web" version="[2.0.0, 3)" />
             </group>
         </dependencies>
         <contentFiles>
@@ -25,7 +26,7 @@
         </contentFiles>
     </metadata>
     <files>
-        <file src="bin/Release/EpiResponsivePicture.dll" target="lib/net6.0" />
+        <file src="bin/Release/Forte.EpiResponsivePicture.dll" target="lib/net6.0" />
         <file src="bin/Release/Forte.EpiResponsivePicture.zip" target="contentFiles/any/any/modules/_protected/Forte.EpiResponsivePicture" />
         <file src="InstallModule.targets" target="build/net6.0/Forte.EpiResponsivePicture.targets" />
     </files>

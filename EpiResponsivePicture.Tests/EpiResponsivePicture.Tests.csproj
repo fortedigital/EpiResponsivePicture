@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Forte.EpiResponsivePicture.Tests</RootNamespace>
+    <AssemblyName>Forte.EpiResponsivePicture.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
