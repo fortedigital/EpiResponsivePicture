@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -19,7 +20,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     private FocalPoint focalPoint;
     private string pictureUrl;
     private string imgTagAltText;
-        
+
     private PictureTagBuilder()
     {
         element = new TagBuilder("picture");
@@ -54,10 +55,10 @@ public class PictureTagBuilder : IPictureTagBuilder
     public TagBuilder Build()
     {
         Guard.IsNotNull(pictureProfile, nameof(pictureProfile));
-            
+
         pictureFallbackUrl ??= string.Empty;
         pictureViewModel ??= new ResizedPictureViewModel();
-            
+
         SetPictureData();
 
         var sourceTagBuilder = SourceTagBuilder
@@ -72,20 +73,20 @@ public class PictureTagBuilder : IPictureTagBuilder
 
             element.InnerHtml.AppendHtml(sourceTag.RenderSelfClosingTag());
         }
-            
+
         AddAdditionalAttributes();
 
         var imgTag = CreateImageElement();
         element.InnerHtml.AppendHtml(imgTag.RenderSelfClosingTag());
-            
+
         return element;
     }
-        
+
     private void SetPictureData()
     {
         var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(pictureContentReference,
             new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage or IResponsiveImage;
-            
+
         if(imageFound)
             SetImageAltText((IImage) content);
 
@@ -98,12 +99,12 @@ public class PictureTagBuilder : IPictureTagBuilder
     {
         imgTagAltText = image.Description ?? string.Empty;
     }
-        
+
     private void SetFocalPoint(IResponsiveImage responsiveImage)
     {
         focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
     }
-    
+
     private string ResolveUrl()
     {
         var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
@@ -121,14 +122,15 @@ public class PictureTagBuilder : IPictureTagBuilder
     private TagBuilder CreateImageElement()
     {
         var imgTagBuilder = new TagBuilder("img");
-            
+
         imgTagBuilder.Attributes.Add("src", pictureUrl);
-        imgTagBuilder.Attributes.Add("alt", imgTagAltText);
-            
+
         foreach (var imgElementAttribute in pictureViewModel.ImgElementAttributes)
         {
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
+
+        imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
 
         return imgTagBuilder;
     }
