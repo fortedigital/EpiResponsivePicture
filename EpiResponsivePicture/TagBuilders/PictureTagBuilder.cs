@@ -130,10 +130,7 @@ public class PictureTagBuilder : IPictureTagBuilder
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
 
-        if (string.IsNullOrEmpty(imgTagAltText) == false)
-        {
-            imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
-        }
+        imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
 
         return imgTagBuilder;
     }
