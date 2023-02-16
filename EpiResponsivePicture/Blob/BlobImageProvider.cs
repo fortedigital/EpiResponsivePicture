@@ -68,10 +68,10 @@ public class BlobImageProvider : IImageProvider
         return Task.FromResult<IImageResolver>(null);
     }
 
-    public static List<string> AddSegment(string segment)
+    public static void AddSegments(IEnumerable<string> segments)
     {
-        _segments.Add(segment);
-        return _segments;
+        if (segments == null) return;
+        _segments.AddRange(segments);
     }
 
     private static bool IsMatch(HttpContext context)

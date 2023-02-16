@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services, 
         EpiResponsivePicturesOptions options = null)
     {
-        options?.AdditionalSegments.ForEach(seg => BlobImageProvider.AddSegment(seg));
+        BlobImageProvider.AddSegments(options?.AdditionalSegments);
         services.AddImageSharp()
             .ClearProviders()
             .AddProvider<BlobImageProvider>()
@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
         Action<AzureBlobStorageCacheOptions> azureStorageOptions, 
         EpiResponsivePicturesOptions options = null)
     {
-        options?.AdditionalSegments.ForEach(seg => BlobImageProvider.AddSegment(seg));
+        BlobImageProvider.AddSegments(options?.AdditionalSegments);
         services.AddImageSharp()
             .Configure(azureStorageOptions)
             .ClearProviders()

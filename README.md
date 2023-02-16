@@ -58,6 +58,20 @@ The image type gets "Focal point" property that can be set by editors in All pro
 If you don't like the inheritance, alternatively you can implement interfaces: `IImage` (for resizing & proper `alt` loading), and `IResponsiveImage` (for focal point and proper cropping).
 Remember that `Width` and `Height` properties shouldn't be editable (are automatically set from image when publising). Also add `[BackingType(typeof(PropertyFocalPoint))]` for `FocalPoint` property.
 
+### Support additional URI segments
+There are three default URI segments supported by the library:
+- `/contentassets`
+- `/globalassets`
+- `/siteassets`
+
+Use below code if you want to extend that list with custom segments:
+```cs
+    services.AddForteEpiResponsivePicture(o =>
+        new EpiResponsivePicturesOptions
+        {
+            AdditionalSegments = new List<string> { "/my-custom-segment" }
+        });
+```
 ## Render picture element
 
 Package uses `PictureProfile` to describe image sizes in rendered `<picture>` element:
