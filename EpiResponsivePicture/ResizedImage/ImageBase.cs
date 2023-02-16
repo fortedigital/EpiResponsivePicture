@@ -4,7 +4,6 @@ using System.Globalization;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAnnotations;
-using EPiServer.Framework.Blobs;
 using EPiServer.ServiceLocation;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
 
@@ -12,7 +11,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage;
 
 public class ImageBase : ImageData, IImage, IResponsiveImage, ILocalizable
 {
-    public override Blob BinaryData
+    public override EPiServer.Framework.Blobs.Blob BinaryData
     {
         // Source: https://gregwiechec.com/2015/07/localizable-media-assets/
         get
@@ -27,7 +26,7 @@ public class ImageBase : ImageData, IImage, IResponsiveImage, ILocalizable
     }
 
     [ImageDescriptor(Height = 48, Width = 48)]
-    public override Blob Thumbnail
+    public override EPiServer.Framework.Blobs.Blob Thumbnail
     {
         get
         {
