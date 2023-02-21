@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Baaijte.Optimizely.ImageSharp.Web.Caching;
+using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using EPiServer.Shell.Modules;
 using Forte.EpiResponsivePicture.Blob;
 using Forte.EpiResponsivePicture.Configuration;
@@ -28,7 +29,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services, 
         EpiResponsivePicturesOptions options = null)
     {
-        BlobImageProvider.AddSegments(options?.AdditionalSegments);
         services.AddImageSharp()
             .ClearProviders()
             .AddProvider<BlobImageProvider>()
@@ -51,7 +51,6 @@ public static class ServiceCollectionExtensions
         Action<AzureBlobStorageCacheOptions> azureStorageOptions, 
         EpiResponsivePicturesOptions options = null)
     {
-        BlobImageProvider.AddSegments(options?.AdditionalSegments);
         services.AddImageSharp()
             .Configure(azureStorageOptions)
             .ClearProviders()
@@ -87,6 +86,7 @@ public static class ServiceCollectionExtensions
                 o.AdditionalSegments = options?.AdditionalSegments;
             });
 
+        services.AddScoped<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
         services
             .AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
     }
