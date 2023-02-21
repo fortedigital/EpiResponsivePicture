@@ -86,7 +86,7 @@ public static class ServiceCollectionExtensions
                 o.AdditionalSegments = options?.AdditionalSegments;
             });
 
-        services.AddScoped<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
+        services.AddSingleton<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
         services
             .AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
     }
