@@ -69,7 +69,7 @@ Use below code if you want to extend that list with custom segments:
     services.AddForteEpiResponsivePicture(o =>
         new EpiResponsivePicturesOptions
         {
-            AdditionalSegments = new [] {"/styleguide-content"}
+            AdditionalSegments = new [] {"/my-custom-assets-path"}
         });
 ```
 ## Render picture element
