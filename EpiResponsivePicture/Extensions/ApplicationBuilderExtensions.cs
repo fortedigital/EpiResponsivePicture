@@ -25,7 +25,9 @@ public static class ApplicationBuilderExtensions
         providerRegistration(app);
 
         var imageProvider = app.ApplicationServices.GetServices<IImageProvider>()
-            .First(instance => instance.GetType() == typeof(BlobImageProvider));
+            .FirstOrDefault(instance => instance.GetType() == typeof(BlobImageProvider));
+        _ = imageProvider ?? throw new InvalidOperationException(
+            "BlobImageProvider is not found. Please make sure that it's added to ImageSharp service.");
         imageProvider.Match = app.ApplicationServices.GetService<IBlobSegmentsProvider>().IsMatch;
 
         return app;
