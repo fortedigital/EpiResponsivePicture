@@ -3,6 +3,7 @@ using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Forte.EpiResponsivePicture.GeneratorProfiles;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ namespace Forte.EpiResponsivePicture.TagBuilders;
 public class PictureTagBuilder : IPictureTagBuilder
 {
     private readonly TagBuilder element;
+    private readonly IResizedUrlGenerator resizedUrlGenerator;
     private PictureProfile pictureProfile;
     private ContentReference pictureContentReference;
     private string pictureFallbackUrl;
@@ -24,6 +26,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     private PictureTagBuilder()
     {
         element = new TagBuilder("picture");
+        resizedUrlGenerator = ServiceLocator.Current.GetInstance<IResizedUrlGenerator>();
     }
 
     public static IPictureTagBuilder Create() => new PictureTagBuilder();
@@ -123,7 +126,11 @@ public class PictureTagBuilder : IPictureTagBuilder
     {
         var imgTagBuilder = new TagBuilder("img");
 
-        imgTagBuilder.Attributes.Add("src", pictureUrl);
+        var url = string.IsNullOrEmpty(pictureFallbackUrl)
+            ? resizedUrlGenerator.GenerateUrl(pictureUrl, pictureProfile.DefaultWidth, null, null, focalPoint).ToString()
+            : pictureFallbackUrl;
+
+        imgTagBuilder.Attributes.Add("src", url);
 
         foreach (var imgElementAttribute in pictureViewModel.ImgElementAttributes)
         {
