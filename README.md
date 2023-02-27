@@ -79,54 +79,52 @@ Package uses `PictureProfile` to describe image sizes in rendered `<picture>` el
 public static readonly PictureProfile SampleProfile = new PictureProfile
 {
     DefaultWidth = 800,
-    MaxImageDimension = 2500,
-    Sources = new []
+    Sources = new[]
     {
         new PictureSource
         {
-            MediaCondition = MediaQueryMinWidth(1900),
-            AllowedWidths = new [] { 
-                1900, 
-                2400, 
+            MediaCondition = CssHelpers.MediaQueryMinWidth(1900),
+            AllowedWidths = new [] {
+                1900,
+                2400,
             },
-            Sizes = new [] 
-            { 
-                Size((90, Unit.Vw)), 
+            Sizes = new[]
+            {
+                CssHelpers.Size((90, CssHelpers.Unit.Vw)),
             },
         },
         new PictureSource
         {
-            MediaCondition = MediaQueryMinWidth(1000),
-            AllowedWidths = new [] 
-            { 
-                1000, 
-                1200, 
-                1400, 
-                1600, 
+            MediaCondition = CssHelpers.MediaQueryMinWidth(1000),
+            AllowedWidths = new []
+            {
+                1000,
+                1200,
+                1400,
+                1600,
             },
             Mode = ScaleMode.Crop,
             TargetAspectRatio = AspectRatio.Create(16,9),
-            Sizes = new [] 
-            { 
-                MediaQueryMinWidthWithSize(1400, 1400), 
-                Size((100, Unit.Vw)),
+            Sizes = new []
+            {
+                CssHelpers.MediaQueryMinWidthWithSize(1400, 1400),
+                CssHelpers.Size((100, CssHelpers.Unit.Vw)),
             },
-
         },
         new PictureSource
         {
-            MediaCondition = MediaQueryMaxWidth(1000),
-            AllowedWidths = new [] { 
-                1000, 
-                1200, 
-                1400, 
-                1600, 
+            MediaCondition = CssHelpers.MediaQueryMaxWidth(1000),
+            AllowedWidths = new [] {
+                1000,
+                1200,
+                1400,
+                1600,
             },
             Mode = ScaleMode.Crop,
             TargetAspectRatio = AspectRatio.Create(1),
-            Quality = 60,
-            Sizes = new [] { 
-                Size((50, Unit.Vw)), 
+            Quality = PictureQuality.Create(60),
+            Sizes = new [] {
+                CssHelpers.Size((50, CssHelpers.Unit.Vw)),
             },
         }
     },
@@ -146,13 +144,14 @@ To render the image, use `ResizedPicture` HTML helper extension method defined:
 ```
 
 This will render following markup: 
+
+**(NOTE: markup examples are valid in case you're using built-in ImageSharp. In other cases names of resize-related parameters, like `width` or `rxy` may vary)** : 
 ```html
 <picture>
-    <source media="(min-width:1900px)" sizes="90vw" srcset="/globalassets/path-to-image.jpg?w=1900 1900w, /globalassets/path-to-image.jpg?w=2400 2400w">
-    <source media="(min-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&w=1000&h=562&crop=0,511,1064,1109 1000w, /globalassets/path-to-image.jpg?mode=crop&w=1200&h=675&crop=0,511,1064,1109 1200w, /globalassets/path-to-image.jpg?mode=crop&w=1400&h=787&crop=0,511,1064,1109 1400w, /globalassets/path-to-image.jpg?mode=crop&w=1600&h=900&crop=0,511,1064,1109 1600w">
-    <source media="(max-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&quality=60&w=1000&h=1000&crop=0,278,1064,1342 1000w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1200&h=1200&crop=0,278,1064,1342 1200w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1400&h=1400&crop=0,278,1064,1342 1400w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1600&h=1600&crop=0,278,1064,1342 1600w">
-    <img alt="" src="/globalassets/path-to-image.jpg?w=800">
-</picture>
+    <source media="(min-width: 1900px)" sizes="90vw" srcset="/globalassets/pexels-amar.jpg?width=1900&rxy=0.5,0.5 1900w, /globalassets/pexels-amar.jpg?width=2400&rxy=0.5,0.5 2400w">
+    <source media="(min-width: 1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/pexels-amar.jpg?width=1000&height=562&rxy=0.5,0.5&rmode=Crop 1000w, /globalassets/pexels-amar.jpg?width=1200&height=675&rxy=0.5,0.5&rmode=Crop 1200w, /globalassets/pexels-amar.jpg?width=1400&height=788&rxy=0.5,0.5&rmode=Crop 1400w, /globalassets/pexels-amar.jpg?width=1600&height=900&rxy=0.5,0.5&rmode=Crop 1600w">
+    <source media="(max-width: 1000px)" sizes="50vw" srcset="/globalassets/pexels-amar.jpg?width=1000&height=1000&quality=60&rxy=0.5,0.5&rmode=Crop 1000w, /globalassets/pexels-amar.jpg?width=1200&height=1200&quality=60&rxy=0.5,0.5&rmode=Crop 1200w, /globalassets/pexels-amar.jpg?width=1400&height=1400&quality=60&rxy=0.5,0.5&rmode=Crop 1400w, /globalassets/pexels-amar.jpg?width=1600&height=1600&quality=60&rxy=0.5,0.5&rmode=Crop 1600w">
+    <img alt="" src="/globalassets/pexels-amar.jpg?width=1000&rxy=0.5,0.5"></picture>
 ```
 
 Should you ever find yourself in need of generating only body of picture tag (ie when creating tag in React) you should make use of
@@ -162,10 +161,10 @@ Should you ever find yourself in need of generating only body of picture tag (ie
 
 Following will result in:
 ```html
-<source media="(min-width:1900px)" sizes="90vw" srcset="/globalassets/path-to-image.jpg?w=1900 1900w, /globalassets/path-to-image.jpg?w=2400 2400w">
-<source media="(min-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&w=1000&h=562&crop=0,511,1064,1109 1000w, /globalassets/path-to-image.jpg?mode=crop&w=1200&h=675&crop=0,511,1064,1109 1200w, /globalassets/path-to-image.jpg?mode=crop&w=1400&h=787&crop=0,511,1064,1109 1400w, /globalassets/path-to-image.jpg?mode=crop&w=1600&h=900&crop=0,511,1064,1109 1600w">
-<source media="(max-width:1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/path-to-image.jpg?mode=crop&quality=60&w=1000&h=1000&crop=0,278,1064,1342 1000w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1200&h=1200&crop=0,278,1064,1342 1200w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1400&h=1400&crop=0,278,1064,1342 1400w, /globalassets/path-to-image.jpg?mode=crop&quality=60&w=1600&h=1600&crop=0,278,1064,1342 1600w">
-<img alt="" src="/globalassets/path-to-image.jpg?w=800">
+<source media="(min-width: 1900px)" sizes="90vw" srcset="/globalassets/pexels-amar.jpg?width=1900&rxy=0.5,0.5 1900w, /globalassets/pexels-amar.jpg?width=2400&rxy=0.5,0.5 2400w">
+<source media="(min-width: 1000px)" sizes="(min-width: 1400px) 1400px, 100vw" srcset="/globalassets/pexels-amar.jpg?width=1000&height=562&rxy=0.5,0.5&rmode=Crop 1000w, /globalassets/pexels-amar.jpg?width=1200&height=675&rxy=0.5,0.5&rmode=Crop 1200w, /globalassets/pexels-amar.jpg?width=1400&height=788&rxy=0.5,0.5&rmode=Crop 1400w, /globalassets/pexels-amar.jpg?width=1600&height=900&rxy=0.5,0.5&rmode=Crop 1600w">
+<source media="(max-width: 1000px)" sizes="50vw" srcset="/globalassets/pexels-amar.jpg?width=1000&height=1000&quality=60&rxy=0.5,0.5&rmode=Crop 1000w, /globalassets/pexels-amar.jpg?width=1200&height=1200&quality=60&rxy=0.5,0.5&rmode=Crop 1200w, /globalassets/pexels-amar.jpg?width=1400&height=1400&quality=60&rxy=0.5,0.5&rmode=Crop 1400w, /globalassets/pexels-amar.jpg?width=1600&height=1600&quality=60&rxy=0.5,0.5&rmode=Crop 1600w">
+<img alt="" src="/globalassets/pexels-amar.jpg?width=1000&rxy=0.5,0.5">
 ```
 
 ## CSS Helpers
@@ -243,4 +242,3 @@ public class MigrateImageSharpFocalPointsJob : ScheduledJobBase
 }
 ```
 3. Restart solution. Unfortunately due to EPiServers internal mechanisms it is required to restart solution to clear caches and reassign property definition types
-
