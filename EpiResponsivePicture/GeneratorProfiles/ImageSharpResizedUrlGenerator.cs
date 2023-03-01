@@ -18,27 +18,27 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
     {
         RegisterCustomQuery(
             (width, pictureSource, _, _) => HeightQuery(width, pictureSource),
-            (_, pictureSource, _, _) => pictureSource.TargetAspectRatio != AspectRatio.Original
+            (_, pictureSource, _, _) => pictureSource != null && pictureSource.TargetAspectRatio != AspectRatio.Original
         );
         RegisterCustomQuery(
             (_, pictureSource, _, _) => QualityQuery(pictureSource),
-            (_, pictureSource, _, _) => pictureSource.Quality != PictureQuality.Default
+            (_, pictureSource, _, _) => pictureSource != null && pictureSource.Quality != PictureQuality.Default
         );
         RegisterCustomQuery((_, _, _, focalPoint) => FocalPointQuery(focalPoint));
         RegisterCustomQuery(
-            (_, pictureSource, _, _) => (Mode, $"{pictureSource.Mode.ToString()}"), 
-            (_, pictureSource, _, _) => pictureSource.Mode != ScaleMode.Default
+            (_, pictureSource, _, _) => (Mode, $"{pictureSource.Mode.ToString()}"),
+            (_, pictureSource, _, _) => pictureSource != null &&  pictureSource.Mode != ScaleMode.Default
             );
         RegisterCustomQuery(
-            (_, _, pictureProfile, _) => FormatQuery(pictureProfile), 
-            (_, _, pictureProfile, _) => pictureProfile.Format != ResizedImageFormat.Preserve
+            (_, _, pictureProfile, _) => FormatQuery(pictureProfile),
+            (_, _, pictureProfile, _) => pictureProfile != null && pictureProfile.Format != ResizedImageFormat.Preserve
             );
     }
-    
+
     protected override (string Key, string Value) WidthQuery(int width) => (Width, width.ToString());
-    private (string Key, string Value) FocalPointQuery(FocalPoint focalPoint) => 
+    private (string Key, string Value) FocalPointQuery(FocalPoint focalPoint) =>
         (FocalPoint, $"{focalPoint.X:0.###},{focalPoint.Y:0.###}");
-    private (string Key, string Value) HeightQuery(int width, PictureSource source) => 
+    private (string Key, string Value) HeightQuery(int width, PictureSource source) =>
         (Height, Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
     private (string Key, string Value) QualityQuery(PictureSource source) => (Quality, source.Quality.ToString());
     private (string Key, string Value) FormatQuery(PictureProfile profile) => (Format, profile.Format switch

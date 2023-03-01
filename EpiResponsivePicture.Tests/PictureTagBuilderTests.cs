@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
@@ -33,7 +32,7 @@ public class PictureTagBuilderTests
     private readonly Regex srcSetRegex = new("srcset=\"(?<srcset>.*?)\"");
     private readonly Regex sourceTagRegex = new("(?<sources><source (?:.*?) />)");
     private readonly Regex imgTagRegex = new("(?<img><img (?:.*?) />)");
-        
+
     [SetUp]
     public void Setup()
     {
@@ -49,7 +48,7 @@ public class PictureTagBuilderTests
         urlResolverMock
             .Setup(r => r.GetUrl(It.IsAny<ContentReference>(), It.IsAny<string>(),
                 It.IsAny<UrlResolverArguments>())).Returns(ImageUrl);
-            
+
         ServiceLocator.SetServiceProvider(new DummyServiceLocator(new Dictionary<Type, object>
         {
             {typeof(IContentLoader), contentLoaderMock.Object},
@@ -65,11 +64,11 @@ public class PictureTagBuilderTests
 
         Assert.Throws<ArgumentNullException>(() => pictureTagBuilder.Build());
     }
-        
+
     [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><source media=\"(min-width: 1000px)\" sizes=\"(min-width: 1400px) 1400px, 100vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><source media=\"(max-width: 1000px)\" sizes=\"50vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><img alt=\"\" src=\"/images/fallback.jpg\" /></picture>")]
     public string Readme_Example_Should_Work()
     {
-        var imageContentMock = new Mock<IContentData>().Object; 
+        var imageContentMock = new Mock<IContentData>().Object;
         contentLoaderMock.Setup(loader =>
             loader.TryGet(It.IsAny<ContentReference>(), It.IsAny<LoaderOptions>(), out imageContentMock)).Returns(true);
 
@@ -91,7 +90,7 @@ public class PictureTagBuilderTests
                     Mode = ScaleMode.Crop,
                     TargetAspectRatio = AspectRatio.Create(16,9),
                     Sizes = new [] { MediaQueryMinWidthWithSize(1400, 1400), Size((100, Unit.Vw)) },
-            
+
                 },
                 new PictureSource
                 {
@@ -104,7 +103,7 @@ public class PictureTagBuilderTests
                 },
             },
         };
-            
+
         var pictureTagBuilder = PictureTagBuilder
             .Create()
             .WithProfile(profile)
@@ -112,7 +111,40 @@ public class PictureTagBuilderTests
             .WithFallbackUrl(FallbackUrl);
 
         using var writer = new StringWriter();
-            
+
+        pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
+
+        return writer.ToString();
+    }
+
+    [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?QUERIES\" /></picture>")]
+    public string Fallback_Img_Should_Include_Queries()
+    {
+        IContentData imageContentMock = new ImageBase();
+        contentLoaderMock.Setup(loader =>
+            loader.TryGet(It.IsAny<ContentReference>(), It.IsAny<LoaderOptions>(), out imageContentMock)).Returns(true);
+
+        var profile = new PictureProfile
+        {
+            DefaultWidth = 500,
+            Sources = new []
+            {
+                new PictureSource
+                {
+                    MediaCondition = MediaQueryMinWidth(1900),
+                    AllowedWidths = new [] { 1900, 2400 },
+                    Sizes = new [] { Size((90, Unit.Vw)) },
+                },
+            },
+        };
+
+        var pictureTagBuilder = PictureTagBuilder
+            .Create()
+            .WithProfile(profile)
+            .WithContentReference(contentReferenceMock.Object);
+
+        using var writer = new StringWriter();
+
         pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
         return writer.ToString();
@@ -131,7 +163,7 @@ public class PictureTagBuilderTests
                 },
             },
         };
-            
+
         var pictureTagBuilder = PictureTagBuilder
             .Create()
             .WithProfile(profile)
@@ -139,13 +171,13 @@ public class PictureTagBuilderTests
             .WithFallbackUrl(FallbackUrl);
 
         using var writer = new StringWriter();
-            
+
         pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
         var match = sizesRegex.Match(writer.ToString());
         Assert.AreEqual(3, match.Groups["sizes"].Value.Split(',').Length);
     }
-        
+
     [Test]
     public void Each_AllowedWidth_Should_Generate_Entry_In_Srcset_Attribute()
     {
@@ -160,7 +192,7 @@ public class PictureTagBuilderTests
                 },
             },
         };
-            
+
         var pictureTagBuilder = PictureTagBuilder
             .Create()
             .WithProfile(profile)
@@ -168,7 +200,7 @@ public class PictureTagBuilderTests
             .WithFallbackUrl(FallbackUrl);
 
         using var writer = new StringWriter();
-            
+
         pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
         var match = srcSetRegex.Match(writer.ToString());
@@ -199,7 +231,7 @@ public class PictureTagBuilderTests
                 },
             },
         };
-            
+
         var pictureTagBuilder = PictureTagBuilder
             .Create()
             .WithProfile(profile)
@@ -207,7 +239,7 @@ public class PictureTagBuilderTests
             .WithFallbackUrl(FallbackUrl);
 
         using var writer = new StringWriter();
-            
+
         pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
         var matches = sourceTagRegex.Matches(writer.ToString());
@@ -238,7 +270,7 @@ public class PictureTagBuilderTests
                 },
             },
         };
-            
+
         var pictureTagBuilder = PictureTagBuilder
             .Create()
             .WithProfile(profile)
@@ -246,7 +278,7 @@ public class PictureTagBuilderTests
             .WithFallbackUrl(FallbackUrl);
 
         using var writer = new StringWriter();
-            
+
         pictureTagBuilder.Build().WriteTo(writer, HtmlEncoder.Default);
 
         var matches = imgTagRegex.Matches(writer.ToString());
