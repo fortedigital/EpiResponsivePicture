@@ -87,11 +87,12 @@ public class PictureTagBuilder : IPictureTagBuilder
 
     private void SetPictureData()
     {
-        var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(pictureContentReference,
-            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage or IResponsiveImage;
+        var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(
+            pictureContentReference,
+            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content);
 
         if(imageFound)
-            SetImageAltText((IImage) content);
+            SetImageAltText(content as IImage);
 
         SetFocalPoint(content as IResponsiveImage);
 
@@ -100,7 +101,7 @@ public class PictureTagBuilder : IPictureTagBuilder
 
     private void SetImageAltText(IImage image)
     {
-        imgTagAltText = image.Description ?? string.Empty;
+        imgTagAltText = image?.Description ?? string.Empty;
     }
 
     private void SetFocalPoint(IResponsiveImage responsiveImage)
