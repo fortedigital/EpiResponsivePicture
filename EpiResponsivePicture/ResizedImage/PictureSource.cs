@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Org.BouncyCastle.Asn1.Esf;
 
 namespace Forte.EpiResponsivePicture.ResizedImage;
 
