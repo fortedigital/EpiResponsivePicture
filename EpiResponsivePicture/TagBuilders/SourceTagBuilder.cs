@@ -71,11 +71,11 @@ public class SourceTagBuilder : ISourceTagBuilder
     private void AddSizeAttributes(IEnumerable<string> sourceSets)
     {
         if(!string.IsNullOrEmpty(pictureSource.MediaCondition))
-            element.Attributes.Add("media", $"{Remove(pictureSource.MediaCondition)}");
+            element.Attributes.Add("media", $"{EnsureBrackets(pictureSource.MediaCondition)}");
         element.Attributes.Add("srcset", string.Join(", ", sourceSets));
         element.Attributes.Add("sizes", string.Join(", ", pictureSource.Sizes));
     }
-    private static string Remove(string mediaCondition) => $"({mediaCondition.Trim('(', ')', ' ')})"; 
+    private static string EnsureBrackets(string mediaCondition) => $"({mediaCondition.Trim('(', ')', ' ')})"; 
     private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(BuildWidth);  
 
     private string BuildWidth(int width)

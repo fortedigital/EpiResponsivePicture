@@ -6,7 +6,6 @@ namespace Forte.EpiResponsivePicture.ResizedImage;
 
 public class PictureSource
 {
-    private string _mediaCondition;
     public string MediaCondition { get; init; }
     public IReadOnlyCollection<int> AllowedWidths { get; init; } = new List<int>();
     public IReadOnlyCollection<string> Sizes { get; init; } = new List<string>();
