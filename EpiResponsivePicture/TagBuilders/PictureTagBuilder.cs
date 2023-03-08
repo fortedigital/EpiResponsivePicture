@@ -87,13 +87,21 @@ public class PictureTagBuilder : IPictureTagBuilder
 
     private void SetPictureData()
     {
-        var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(pictureContentReference,
-            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content) && content is IImage or IResponsiveImage;
+        var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(
+            pictureContentReference,
+            new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content);
 
-        if(imageFound)
-            SetImageAltText((IImage) content);
-
-        SetFocalPoint(content as IResponsiveImage);
+        if (imageFound)
+        {
+            if (content is IImage imageWithDescription)
+            {
+                SetImageAltText(imageWithDescription);
+            }
+            if (content is IResponsiveImage imageWithFocalPoint)
+            {
+                SetFocalPoint(imageWithFocalPoint);
+            }
+        }
 
         pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
     }
@@ -105,7 +113,7 @@ public class PictureTagBuilder : IPictureTagBuilder
 
     private void SetFocalPoint(IResponsiveImage responsiveImage)
     {
-        focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
+        focalPoint = responsiveImage.FocalPoint ?? FocalPoint.Center;
     }
 
     private string ResolveUrl()
@@ -137,7 +145,10 @@ public class PictureTagBuilder : IPictureTagBuilder
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
 
-        imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
+        if (!string.IsNullOrEmpty(imgTagAltText))
+        {
+            imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
+        }
 
         return imgTagBuilder;
     }
