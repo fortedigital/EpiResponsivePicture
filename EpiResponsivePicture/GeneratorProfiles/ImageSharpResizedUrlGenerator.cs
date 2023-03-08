@@ -24,7 +24,10 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
             (_, pictureSource, _, _) => QualityQuery(pictureSource),
             (_, pictureSource, _, _) => pictureSource != null && pictureSource.Quality != PictureQuality.Default
         );
-        RegisterCustomQuery((_, _, _, focalPoint) => FocalPointQuery(focalPoint));
+        RegisterCustomQuery(
+            (_, _, _, focalPoint) => FocalPointQuery(focalPoint),
+            (_, _, _, focalPoint) => focalPoint != null
+            );
         RegisterCustomQuery(
             (_, pictureSource, _, _) => (Mode, $"{pictureSource.Mode.ToString()}"),
             (_, pictureSource, _, _) => pictureSource != null &&  pictureSource.Mode != ScaleMode.Default

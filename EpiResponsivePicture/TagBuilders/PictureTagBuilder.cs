@@ -91,22 +91,29 @@ public class PictureTagBuilder : IPictureTagBuilder
             pictureContentReference,
             new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content);
 
-        if(imageFound)
-            SetImageAltText(content as IImage);
-
-        SetFocalPoint(content as IResponsiveImage);
+        if (imageFound)
+        {
+            if (content is IImage)
+            {
+                SetImageAltText((IImage) content);
+            }
+            if (content is IResponsiveImage)
+            {
+                SetFocalPoint((IResponsiveImage) content);
+            }
+        }
 
         pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
     }
 
     private void SetImageAltText(IImage image)
     {
-        imgTagAltText = image?.Description ?? string.Empty;
+        imgTagAltText = image.Description ?? string.Empty;
     }
 
     private void SetFocalPoint(IResponsiveImage responsiveImage)
     {
-        focalPoint = responsiveImage?.FocalPoint ?? FocalPoint.Center;
+        focalPoint = responsiveImage.FocalPoint ?? FocalPoint.Center;
     }
 
     private string ResolveUrl()
@@ -138,7 +145,10 @@ public class PictureTagBuilder : IPictureTagBuilder
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
 
-        imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
+        if (imgTagAltText != null)
+        {
+            imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
+        }
 
         return imgTagBuilder;
     }
