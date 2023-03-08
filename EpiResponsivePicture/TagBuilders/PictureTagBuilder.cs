@@ -145,7 +145,7 @@ public class PictureTagBuilder : IPictureTagBuilder
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
 
-        if (imgTagAltText != null)
+        if (!string.IsNullOrEmpty(imgTagAltText))
         {
             imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
         }
