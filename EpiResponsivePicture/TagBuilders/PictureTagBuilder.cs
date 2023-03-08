@@ -93,13 +93,13 @@ public class PictureTagBuilder : IPictureTagBuilder
 
         if (imageFound)
         {
-            if (content is IImage)
+            if (content is IImage imageWithDescription)
             {
-                SetImageAltText((IImage) content);
+                SetImageAltText(imageWithDescription);
             }
-            if (content is IResponsiveImage)
+            if (content is IResponsiveImage imageWithFocalPoint)
             {
-                SetFocalPoint((IResponsiveImage) content);
+                SetFocalPoint(imageWithFocalPoint);
             }
         }
 
