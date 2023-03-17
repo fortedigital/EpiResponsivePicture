@@ -20,12 +20,7 @@ using SixLabors.ImageSharp.Web.Providers;
 namespace Forte.EpiResponsivePicture.Extensions;
 
 public static class ServiceCollectionExtensions
-{   
-    /// <summary>
-    /// Holds validation error messages
-    /// </summary>
-    private static string _validationErrors = String.Empty;
-    
+{
     /// <summary>
     /// Register services for FocalPoint, resizing with local caching. Fluent API
     /// </summary>
@@ -88,15 +83,11 @@ public static class ServiceCollectionExtensions
     {
         if(string.IsNullOrEmpty(options.ConnectionString))
         {
-            _validationErrors = "Need to provide connection string!";
+            throw new ArgumentException("Need to provide connection string!");
         }
         if(string.IsNullOrEmpty(options.ContainerName))
         {
-            _validationErrors += "\n Need to provide container name!";
-        }
-        if(!string.IsNullOrEmpty(_validationErrors))
-        {
-            throw new Exception(_validationErrors);
+            throw new ArgumentException("Need to provide container name!");
         }
     }
 
