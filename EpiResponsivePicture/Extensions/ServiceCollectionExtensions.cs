@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Azure.Storage.Blobs.Models;
 using Baaijte.Optimizely.ImageSharp.Web.Caching;
 using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using EPiServer.Shell.Modules;
@@ -19,7 +20,12 @@ using SixLabors.ImageSharp.Web.Providers;
 namespace Forte.EpiResponsivePicture.Extensions;
 
 public static class ServiceCollectionExtensions
-{
+{   
+    /// <summary>
+    /// Holds validation error messages
+    /// </summary>
+    private static string _validationErrors = String.Empty;
+    
     /// <summary>
     /// Register services for FocalPoint, resizing with local caching. Fluent API
     /// </summary>
@@ -50,7 +56,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
         Action<AzureBlobStorageCacheOptions> azureStorageOptions, 
         EpiResponsivePicturesOptions options = null)
-    {
+    {   
+        azureStorageOptions += ValidateOptions;
+        azureStorageOptions += CreateContainerIfNotExists;
         services.AddImageSharp()
             .Configure(azureStorageOptions)
             .ClearProviders()
@@ -60,6 +68,36 @@ public static class ServiceCollectionExtensions
         ConfigureModule(services, options);
 
         return services;
+    }
+    
+    /// <summary>
+    /// Creates container with provided name, when it does not exist
+    /// </summary>
+    /// <param name="options">Azure blob storage cache options</param>
+    private static void CreateContainerIfNotExists(AzureBlobStorageCacheOptions options)
+    {
+        AzureBlobStorageCache.CreateIfNotExists(options, PublicAccessType.None);
+    }
+    
+    /// <summary>
+    /// Checks if necessary options were provided, otherwise throws exception
+    /// </summary>
+    /// <param name="options">Azure blob storage cache options</param>
+    /// <exception cref="Exception">Thrown when any of required options is missing</exception>
+    private static void ValidateOptions(AzureBlobStorageCacheOptions options)
+    {
+        if(string.IsNullOrEmpty(options.ConnectionString))
+        {
+            _validationErrors = "Need to provide connection string!";
+        }
+        if(string.IsNullOrEmpty(options.ContainerName))
+        {
+            _validationErrors += "\n Need to provide container name!";
+        }
+        if(!string.IsNullOrEmpty(_validationErrors))
+        {
+            throw new Exception(_validationErrors);
+        }
     }
 
     private static void ConfigureModule(IServiceCollection services, EpiResponsivePicturesOptions options = null)
