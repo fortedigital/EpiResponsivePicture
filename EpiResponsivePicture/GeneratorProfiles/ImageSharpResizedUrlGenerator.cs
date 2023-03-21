@@ -40,7 +40,7 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
 
     protected override (string Key, string Value) WidthQuery(int width) => (Width, width.ToString());
     private (string Key, string Value) FocalPointQuery(FocalPoint focalPoint) =>
-        (FocalPoint, $"{focalPoint.X:0.###},{focalPoint.Y:0.###}");
+        (FocalPoint, $"{focalPoint.X.ToString("0.###", CultureInfo.InvariantCulture)},{focalPoint.Y.ToString("0.###", CultureInfo.InvariantCulture)}");
     private (string Key, string Value) HeightQuery(int width, PictureSource source) =>
         (Height, Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
     private (string Key, string Value) QualityQuery(PictureSource source) => (Quality, source.Quality.ToString());
