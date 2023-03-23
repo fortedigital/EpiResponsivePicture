@@ -80,7 +80,7 @@ public class SourceTagBuilder : ISourceTagBuilder
 
     private string BuildWidth(int width)
     {
-        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint);
+        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile.Format, focalPoint);
 
         return $"{url} {width}w";
     }

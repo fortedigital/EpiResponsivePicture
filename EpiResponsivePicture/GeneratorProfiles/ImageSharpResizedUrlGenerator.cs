@@ -33,8 +33,8 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
             (_, pictureSource, _, _) => pictureSource != null &&  pictureSource.Mode != ScaleMode.Default
             );
         RegisterCustomQuery(
-            (_, _, pictureProfile, _) => FormatQuery(pictureProfile),
-            (_, _, pictureProfile, _) => pictureProfile != null && pictureProfile.Format != ResizedImageFormat.Preserve
+            (_, _, format, _) => FormatQuery(format),
+            (_, _, format, _) => format != null && format != ResizedImageFormat.Preserve
             );
     }
 
@@ -44,7 +44,7 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
     private (string Key, string Value) HeightQuery(int width, PictureSource source) =>
         (Height, Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
     private (string Key, string Value) QualityQuery(PictureSource source) => (Quality, source.Quality.ToString());
-    private (string Key, string Value) FormatQuery(PictureProfile profile) => (Format, profile.Format switch
+    private (string Key, string Value) FormatQuery(ResizedImageFormat? format) => (Format, format switch
     {
         ResizedImageFormat.Bmp => "BMP",
         ResizedImageFormat.Gif => "GIF",
