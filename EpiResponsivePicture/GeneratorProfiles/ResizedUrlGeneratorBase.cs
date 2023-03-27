@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using EPiServer;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
@@ -16,15 +17,14 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 
     private readonly Queue<(CustomQueryFunc Func, CustomQueryPredicate Predicate)> customQueryRegistrations = new();
     private readonly NameValueCollection customQueries = new();
-    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, ResizedImageFormat format, FocalPoint focalPoint)
+    private IReadOnlyCollection<string> ExtensionsToReplace { get; init; } = new List<string> { ".tif", ".tiff" };
+    public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint)
     {
-        string imageExtension = Path.GetExtension(imageUrl);
-        if (format is ResizedImageFormat.Preserve)
+        var imageExtension = Path.GetExtension(imageUrl);
+        var validFormat = pictureProfile.Format;
+        if (validFormat is ResizedImageFormat.Preserve && ExtensionsToReplace.Contains(imageExtension))
         {
-            if (imageExtension is ".tif" or ".tiff")
-            {
-                format = ResizedImageFormat.Jpeg;
-            }
+            validFormat = ResizedImageFormat.Jpeg;
         }
         Builder = new UrlBuilder(imageUrl);
             
@@ -32,8 +32,8 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 
         foreach (var (func, predicate) in customQueryRegistrations)
         {
-            if(predicate(width, pictureSource, format, focalPoint))
-                AddCustomQuery(func(width, pictureSource, format, focalPoint));
+            if(predicate(width, pictureSource, validFormat, focalPoint))
+                AddCustomQuery(func(width, pictureSource, validFormat, focalPoint));
         }
             
         Builder.Add(customQueries);
