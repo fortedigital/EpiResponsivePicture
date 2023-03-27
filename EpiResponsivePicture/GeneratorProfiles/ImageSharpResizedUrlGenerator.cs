@@ -44,7 +44,7 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
     private (string Key, string Value) HeightQuery(int width, PictureSource source) =>
         (Height, Math.Round(width / source.TargetAspectRatio.Ratio).ToString(CultureInfo.InvariantCulture));
     private (string Key, string Value) QualityQuery(PictureSource source) => (Quality, source.Quality.ToString());
-    private (string Key, string Value) FormatQuery(PictureProfile profile) => (Format, profile.Format switch
+    private (string Key, string Value) FormatQuery(PictureProfile pictureProfile) => (Format, pictureProfile.Format switch
     {
         ResizedImageFormat.Bmp => "BMP",
         ResizedImageFormat.Gif => "GIF",

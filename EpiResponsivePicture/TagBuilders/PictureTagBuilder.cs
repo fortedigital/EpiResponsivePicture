@@ -135,7 +135,7 @@ public class PictureTagBuilder : IPictureTagBuilder
         var imgTagBuilder = new TagBuilder("img");
 
         var url = string.IsNullOrEmpty(pictureFallbackUrl)
-            ? resizedUrlGenerator.GenerateUrl(pictureUrl, pictureProfile.DefaultWidth, null, null, focalPoint).ToString()
+            ? resizedUrlGenerator.GenerateUrl(pictureUrl, pictureProfile.DefaultWidth, null, pictureProfile, focalPoint).ToString()
             : pictureFallbackUrl;
 
         imgTagBuilder.Attributes.Add("src", url);

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
 using EPiServer;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
@@ -15,16 +17,22 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 
     private readonly Queue<(CustomQueryFunc Func, CustomQueryPredicate Predicate)> customQueryRegistrations = new();
     private readonly NameValueCollection customQueries = new();
+    protected IReadOnlyCollection<string> ExtensionsToReplace { get; init; } = new List<string> { ".tif", ".tiff" };
     public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint)
     {
+        var imageExtension = Path.GetExtension(imageUrl);
+        var copiedPictureProfile =
+            pictureProfile.Format is ResizedImageFormat.Preserve && ExtensionsToReplace.Contains(imageExtension)
+                ? pictureProfile.CopyWithNewFormat(ResizedImageFormat.Jpeg)
+                : pictureProfile;
         Builder = new UrlBuilder(imageUrl);
             
         Builder.Add(WidthQuery(width));
 
         foreach (var (func, predicate) in customQueryRegistrations)
         {
-            if(predicate(width, pictureSource, pictureProfile, focalPoint))
-                AddCustomQuery(func(width, pictureSource, pictureProfile, focalPoint));
+            if(predicate(width, pictureSource, copiedPictureProfile, focalPoint))
+                AddCustomQuery(func(width, pictureSource, copiedPictureProfile, focalPoint));
         }
             
         Builder.Add(customQueries);
