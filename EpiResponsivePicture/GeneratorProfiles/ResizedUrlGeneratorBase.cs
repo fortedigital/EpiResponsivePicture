@@ -8,8 +8,8 @@ using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
 
 namespace Forte.EpiResponsivePicture.GeneratorProfiles;
-using CustomQueryFunc = Func<int, PictureSource, ResizedImageFormat, FocalPoint, (string Key, string Value)>;
-using CustomQueryPredicate = Func<int, PictureSource, ResizedImageFormat, FocalPoint, bool>;
+using CustomQueryFunc = Func<int, PictureSource, PictureProfile, FocalPoint, (string Key, string Value)>;
+using CustomQueryPredicate = Func<int, PictureSource, PictureProfile, FocalPoint, bool>;
 
 public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 {
@@ -17,23 +17,22 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 
     private readonly Queue<(CustomQueryFunc Func, CustomQueryPredicate Predicate)> customQueryRegistrations = new();
     private readonly NameValueCollection customQueries = new();
-    private IReadOnlyCollection<string> ExtensionsToReplace { get; init; } = new List<string> { ".tif", ".tiff" };
+    protected IReadOnlyCollection<string> ExtensionsToReplace { get; init; } = new List<string> { ".tif", ".tiff" };
     public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint)
     {
         var imageExtension = Path.GetExtension(imageUrl);
-        var validFormat = pictureProfile.Format;
-        if (validFormat is ResizedImageFormat.Preserve && ExtensionsToReplace.Contains(imageExtension))
-        {
-            validFormat = ResizedImageFormat.Jpeg;
-        }
+        var copiedPictureProfile =
+            pictureProfile.Format is ResizedImageFormat.Preserve && ExtensionsToReplace.Contains(imageExtension)
+                ? pictureProfile.CopyWithNewFormat(ResizedImageFormat.Jpeg)
+                : pictureProfile;
         Builder = new UrlBuilder(imageUrl);
             
         Builder.Add(WidthQuery(width));
 
         foreach (var (func, predicate) in customQueryRegistrations)
         {
-            if(predicate(width, pictureSource, validFormat, focalPoint))
-                AddCustomQuery(func(width, pictureSource, validFormat, focalPoint));
+            if(predicate(width, pictureSource, copiedPictureProfile, focalPoint))
+                AddCustomQuery(func(width, pictureSource, copiedPictureProfile, focalPoint));
         }
             
         Builder.Add(customQueries);
