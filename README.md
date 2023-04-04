@@ -202,6 +202,10 @@ builder.Services.AddTransient<YourCustomUrlGenerator>();
 builder.Services.AddForteEpiResponsivePicture();
 ```
 
+## Custom ISourceTagBuilder and IPictureTagBuilder
+
+If you want to have custom logic of creating `<picture>` or `<source>` elements you can register your own implementations of `ISourceTagBuilderProvider` and/or `IPictureTagBuilderProvider` which can produce your own builders. 
+
 ## Backwards compatibility
 ### ImageResizer
 
