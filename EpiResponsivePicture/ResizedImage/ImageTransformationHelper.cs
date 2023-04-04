@@ -16,11 +16,11 @@ public static class ImageTransformationHelper
         ResizedImageFormat format = ResizedImageFormat.Preserve)
     {
         var baseUrl = ResolveImageUrl(image);
-                
+
         var urlBuilder = new UrlBuilder(baseUrl)
             .Add("width", width.ToString());
-                
-        if(format != ResizedImageFormat.Preserve) 
+
+        if(format != ResizedImageFormat.Preserve)
             urlBuilder.Add("format", format.ToString().ToUpperInvariant());
 
         return urlBuilder;
@@ -33,8 +33,9 @@ public static class ImageTransformationHelper
         ResizedPictureViewModel pictureModel = null)
     {
 
-        var pictureTag = PictureTagBuilder
-            .Create()
+        var pictureTagBuilderProvider = ServiceLocator.Current.GetInstance<IPictureTagBuilderProvider>();
+
+        var pictureTag = pictureTagBuilderProvider.Create()
             .WithContentReference(image)
             .WithProfile(profile)
             .WithFallbackUrl(fallbackUrl)
@@ -42,7 +43,7 @@ public static class ImageTransformationHelper
             .Build();
 
         using var writer = new StringWriter();
-            
+
         pictureTag.WriteTo(writer, HtmlEncoder.Default);
 
         return new HtmlString(writer.ToString());
@@ -54,8 +55,9 @@ public static class ImageTransformationHelper
         string fallbackUrl = null,
         ResizedPictureViewModel pictureModel = null)
     {
-        var pictureTag = PictureTagBuilder
-            .Create()
+        var pictureTagBuilderProvider = ServiceLocator.Current.GetInstance<IPictureTagBuilderProvider>();
+
+        var pictureTag = pictureTagBuilderProvider.Create()
             .WithContentReference(image)
             .WithProfile(profile)
             .WithFallbackUrl(fallbackUrl)
@@ -67,7 +69,7 @@ public static class ImageTransformationHelper
 
         return new HtmlString(writer.ToString());
     }
-    
+
     private static string ResolveImageUrl(ContentReference image)
     {
         var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using EPiServer.ServiceLocation;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
 using Forte.EpiResponsivePicture.ResizedImage;
 using Forte.EpiResponsivePicture.ResizedImage.Property;
@@ -12,53 +11,51 @@ namespace Forte.EpiResponsivePicture.TagBuilders;
 public class SourceTagBuilder : ISourceTagBuilder
 {
     private TagBuilder element;
-    private string imageUrl;
-    private PictureSource pictureSource;
-    private IResizedUrlGenerator resizedUrlGenerator;
-    private FocalPoint focalPoint;
-    private PictureProfile pictureProfile;
+    protected string ImageUrl;
+    protected PictureSource PictureSource;
+    protected readonly IResizedUrlGenerator ResizedUrlGenerator;
+    protected FocalPoint FocalPoint;
+    protected PictureProfile PictureProfile;
 
-    private SourceTagBuilder()
+    public SourceTagBuilder(IResizedUrlGenerator resizedUrlGenerator)
     {
         element = new TagBuilder("source");
-        resizedUrlGenerator = ServiceLocator.Current.GetInstance<IResizedUrlGenerator>();
+        ResizedUrlGenerator = resizedUrlGenerator;
     }
-
-    public static ISourceTagBuilder Create() => new SourceTagBuilder();
 
     public ISourceTagBuilder WithImageUrl(string url)
     {
-        imageUrl = url;
+        ImageUrl = url;
         return this;
     }
 
     public ISourceTagBuilder WithSource(PictureSource source)
     {
-        pictureSource = source;
+        PictureSource = source;
         return this;
     }
-    
+
     public ISourceTagBuilder WithProfile(PictureProfile profile)
     {
-        pictureProfile = profile;
+        PictureProfile = profile;
         return this;
     }
 
     public ISourceTagBuilder WithFocalPoint(FocalPoint point)
     {
-        focalPoint = point;
+        FocalPoint = point;
         return this;
     }
 
     public TagBuilder Build()
     {
-        Guard.IsNotNull(pictureSource, nameof(pictureSource));
-        Guard.IsNotNullOrEmpty(imageUrl, nameof(imageUrl));
+        Guard.IsNotNull(PictureSource, nameof(PictureSource));
+        Guard.IsNotNullOrEmpty(ImageUrl, nameof(ImageUrl));
 
         var sourceSets = GetSourceSets();
-            
-        AddSizeAttributes(sourceSets);
-            
+
+        AddAttributes(sourceSets);
+
         return element;
     }
 
@@ -68,21 +65,20 @@ public class SourceTagBuilder : ISourceTagBuilder
         return this;
     }
 
-    private void AddSizeAttributes(IEnumerable<string> sourceSets)
+    private void AddAttributes(IEnumerable<string> sourceSets)
     {
-        if(!string.IsNullOrEmpty(pictureSource.MediaCondition))
-            element.Attributes.Add("media", $"{EnsureBrackets(pictureSource.MediaCondition)}");
+        if(!string.IsNullOrEmpty(PictureSource.MediaCondition))
+            element.Attributes.Add("media", $"{EnsureBrackets(PictureSource.MediaCondition)}");
         element.Attributes.Add("srcset", string.Join(", ", sourceSets));
-        element.Attributes.Add("sizes", string.Join(", ", pictureSource.Sizes));
+        element.Attributes.Add("sizes", string.Join(", ", PictureSource.Sizes));
     }
-    private static string EnsureBrackets(string mediaCondition) => $"({mediaCondition.Trim('(', ')', ' ')})"; 
-    private IEnumerable<string> GetSourceSets() => pictureSource.AllowedWidths.Select(BuildWidth);  
+    private static string EnsureBrackets(string mediaCondition) => $"({mediaCondition.Trim('(', ')', ' ')})";
+    protected virtual IEnumerable<string> GetSourceSets() => PictureSource.AllowedWidths.Select(BuildWidth);
 
     private string BuildWidth(int width)
     {
-        var url = resizedUrlGenerator.GenerateUrl(imageUrl, width, pictureSource, pictureProfile, focalPoint);
+        var url = ResizedUrlGenerator.GenerateUrl(ImageUrl, width, PictureSource, PictureProfile, FocalPoint);
 
         return $"{url} {width}w";
     }
-
 }
