@@ -60,12 +60,12 @@ public class PictureTagBuilderTests
     [Test]
     public void When_PictureProfile_Is_Null_Throw_ArgumentNullException()
     {
-        var pictureTagBuilder = PictureTagBuilder.Create().WithProfile(null);
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object)).WithProfile(null);
 
         Assert.Throws<ArgumentNullException>(() => pictureTagBuilder.Build());
     }
 
-    [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><source media=\"(min-width: 1000px)\" sizes=\"(min-width: 1400px) 1400px, 100vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><source media=\"(max-width: 1000px)\" sizes=\"50vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><img alt=\"\" src=\"/images/fallback.jpg\" /></picture>")]
+    [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><source media=\"(min-width: 1000px)\" sizes=\"(min-width: 1400px) 1400px, 100vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><source media=\"(max-width: 1000px)\" sizes=\"50vw\" srcset=\"/images/foo.jpg?QUERIES 1000w, /images/foo.jpg?QUERIES 1200w, /images/foo.jpg?QUERIES 1400w, /images/foo.jpg?QUERIES 1600w\" /><img src=\"/images/fallback.jpg\" /></picture>")]
     public string Readme_Example_Should_Work()
     {
         var imageContentMock = new Mock<IContentData>().Object;
@@ -104,8 +104,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object)
             .WithFallbackUrl(FallbackUrl);
@@ -117,7 +116,7 @@ public class PictureTagBuilderTests
         return writer.ToString();
     }
 
-    [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><img alt=\"\" src=\"/images/foo.jpg?QUERIES\" /></picture>")]
+    [TestCase(ExpectedResult = "<picture><source media=\"(min-width: 1900px)\" sizes=\"90vw\" srcset=\"/images/foo.jpg?QUERIES 1900w, /images/foo.jpg?QUERIES 2400w\" /><img src=\"/images/foo.jpg?QUERIES\" /></picture>")]
     public string Fallback_Img_Should_Include_Queries()
     {
         IContentData imageContentMock = new ImageBase();
@@ -138,8 +137,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object);
 
@@ -164,8 +162,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object)
             .WithFallbackUrl(FallbackUrl);
@@ -193,8 +190,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object)
             .WithFallbackUrl(FallbackUrl);
@@ -232,8 +228,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object)
             .WithFallbackUrl(FallbackUrl);
@@ -271,8 +266,7 @@ public class PictureTagBuilderTests
             },
         };
 
-        var pictureTagBuilder = PictureTagBuilder
-            .Create()
+        var pictureTagBuilder = new PictureTagBuilder(resizedUrlGenerator.Object, new SourceTagBuilderProvider(resizedUrlGenerator.Object))
             .WithProfile(profile)
             .WithContentReference(contentReferenceMock.Object)
             .WithFallbackUrl(FallbackUrl);

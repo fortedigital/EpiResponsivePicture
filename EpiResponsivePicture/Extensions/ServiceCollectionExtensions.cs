@@ -8,6 +8,7 @@ using Forte.EpiResponsivePicture.Blob;
 using Forte.EpiResponsivePicture.Configuration;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
 using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility.SqlProvider;
+using Forte.EpiResponsivePicture.TagBuilders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SixLabors.ImageSharp.Web.Caching.Azure;
@@ -27,7 +28,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Services</param>
     /// <param name="options"></param>
     /// <returns>services</returns>
-    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services, 
+    public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
         EpiResponsivePicturesOptions options = null)
     {
         services.AddImageSharp()
@@ -35,9 +36,9 @@ public static class ServiceCollectionExtensions
             .AddProvider<BlobImageProvider>()
             .AddProvider<PhysicalFileSystemProvider>()
             .SetCache<BlobImageCache>();
-            
+
         ConfigureModule(services, options);
-                   
+
         return services;
     }
 
@@ -49,9 +50,9 @@ public static class ServiceCollectionExtensions
     /// <param name="options"></param>
     /// <returns>services</returns>
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
-        Action<AzureBlobStorageCacheOptions> azureStorageOptions, 
+        Action<AzureBlobStorageCacheOptions> azureStorageOptions,
         EpiResponsivePicturesOptions options = null)
-    {   
+    {
         azureStorageOptions += ValidateOptions;
         azureStorageOptions += CreateContainerIfNotExists;
         services.AddImageSharp()
@@ -59,12 +60,12 @@ public static class ServiceCollectionExtensions
             .ClearProviders()
             .AddProvider<BlobImageProvider>()
             .SetCache<AzureBlobStorageCache>();
-            
+
         ConfigureModule(services, options);
 
         return services;
     }
-    
+
     /// <summary>
     /// Creates container with provided name, when it does not exist
     /// </summary>
@@ -73,7 +74,7 @@ public static class ServiceCollectionExtensions
     {
         AzureBlobStorageCache.CreateIfNotExists(options, PublicAccessType.None);
     }
-    
+
     /// <summary>
     /// Checks if necessary options were provided, otherwise throws exception
     /// </summary>
@@ -94,7 +95,7 @@ public static class ServiceCollectionExtensions
     private static void ConfigureModule(IServiceCollection services, EpiResponsivePicturesOptions options = null)
     {
         services.TryAddTransient<IResizedUrlGenerator, ImageSharpResizedUrlGenerator>();
-            
+
         services.Configure<ProtectedModuleOptions>(o =>
         {
             if (!o.Items.Any(x => x.Name.Equals(Constants.ModuleName)))
@@ -116,7 +117,8 @@ public static class ServiceCollectionExtensions
             });
 
         services.AddSingleton<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
-        services
-            .AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
+        services.AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
+        services.AddTransient<IPictureTagBuilderProvider, PictureTagBuilderProvider>();
+        services.AddTransient<ISourceTagBuilderProvider, SourceTagBuilderProvider>();
     }
 }

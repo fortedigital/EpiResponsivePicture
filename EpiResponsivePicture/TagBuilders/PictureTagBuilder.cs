@@ -14,63 +14,63 @@ namespace Forte.EpiResponsivePicture.TagBuilders;
 public class PictureTagBuilder : IPictureTagBuilder
 {
     private readonly TagBuilder element;
-    private readonly IResizedUrlGenerator resizedUrlGenerator;
-    private PictureProfile pictureProfile;
-    private ContentReference pictureContentReference;
-    private string pictureFallbackUrl;
-    private ResizedPictureViewModel pictureViewModel;
-    private FocalPoint focalPoint;
-    private string pictureUrl;
-    private string imgTagAltText;
+    protected readonly IResizedUrlGenerator ResizedUrlGenerator;
+    protected readonly ISourceTagBuilderProvider SourceTagBuilderProvider;
+    protected PictureProfile PictureProfile;
+    protected ContentReference PictureContentReference;
+    protected string PictureFallbackUrl;
+    protected ResizedPictureViewModel PictureViewModel;
+    protected FocalPoint FocalPoint;
+    protected string PictureUrl;
+    protected string ImgTagAltText;
 
-    private PictureTagBuilder()
+    public PictureTagBuilder(IResizedUrlGenerator resizedUrlGenerator, ISourceTagBuilderProvider sourceTagBuilderProvider)
     {
         element = new TagBuilder("picture");
-        resizedUrlGenerator = ServiceLocator.Current.GetInstance<IResizedUrlGenerator>();
+        ResizedUrlGenerator = resizedUrlGenerator;
+        SourceTagBuilderProvider = sourceTagBuilderProvider;
     }
-
-    public static IPictureTagBuilder Create() => new PictureTagBuilder();
 
     public IPictureTagBuilder WithProfile(PictureProfile profile)
     {
-        pictureProfile = profile;
+        PictureProfile = profile;
         return this;
     }
 
     public IPictureTagBuilder WithContentReference(ContentReference contentReference)
     {
-        pictureContentReference = contentReference;
+        PictureContentReference = contentReference;
         return this;
     }
 
     public IPictureTagBuilder WithFallbackUrl(string fallbackUrl)
     {
-        pictureFallbackUrl = fallbackUrl;
+        PictureFallbackUrl = fallbackUrl;
         return this;
     }
 
     public IPictureTagBuilder WithViewModel(ResizedPictureViewModel viewModel)
     {
-        pictureViewModel = viewModel;
+        PictureViewModel = viewModel;
         return this;
     }
 
     public TagBuilder Build()
     {
-        Guard.IsNotNull(pictureProfile, nameof(pictureProfile));
+        Guard.IsNotNull(PictureProfile, nameof(PictureProfile));
 
-        pictureFallbackUrl ??= string.Empty;
-        pictureViewModel ??= new ResizedPictureViewModel();
+        PictureFallbackUrl ??= string.Empty;
+        PictureViewModel ??= new ResizedPictureViewModel();
 
         SetPictureData();
 
-        var sourceTagBuilder = SourceTagBuilder
+        var sourceTagBuilder = SourceTagBuilderProvider
             .Create()
-            .WithImageUrl(pictureUrl)
-            .WithFocalPoint(focalPoint)
-            .WithProfile(pictureProfile);
+            .WithImageUrl(PictureUrl)
+            .WithFocalPoint(FocalPoint)
+            .WithProfile(PictureProfile);
 
-        foreach (var pictureSource in pictureProfile.Sources)
+        foreach (var pictureSource in PictureProfile.Sources)
         {
             var sourceTag = sourceTagBuilder.NewTag().WithSource(pictureSource).Build();
 
@@ -88,7 +88,7 @@ public class PictureTagBuilder : IPictureTagBuilder
     private void SetPictureData()
     {
         var imageFound = ServiceLocator.Current.GetInstance<IContentLoader>().TryGet<IContentData>(
-            pictureContentReference,
+            PictureContentReference,
             new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() }, out var content);
 
         if (imageFound)
@@ -103,28 +103,28 @@ public class PictureTagBuilder : IPictureTagBuilder
             }
         }
 
-        pictureUrl = imageFound ? ResolveUrl() : pictureFallbackUrl;
+        PictureUrl = imageFound ? ResolveUrl() : PictureFallbackUrl;
     }
 
     private void SetImageAltText(IImage image)
     {
-        imgTagAltText = image.Description ?? string.Empty;
+        ImgTagAltText = image.Description ?? string.Empty;
     }
 
     private void SetFocalPoint(IResponsiveImage responsiveImage)
     {
-        focalPoint = responsiveImage.FocalPoint ?? FocalPoint.Center;
+        FocalPoint = responsiveImage.FocalPoint ?? FocalPoint.Center;
     }
 
     private string ResolveUrl()
     {
         var urlResolver = ServiceLocator.Current.GetInstance<IUrlResolver>();
-        return urlResolver.GetUrl(pictureContentReference);
+        return urlResolver.GetUrl(PictureContentReference);
     }
 
     private void AddAdditionalAttributes()
     {
-        foreach (var (key, value) in pictureViewModel.PictureElementAttributes)
+        foreach (var (key, value) in PictureViewModel.PictureElementAttributes)
         {
             element.Attributes.Add(key, value);
         }
@@ -134,20 +134,20 @@ public class PictureTagBuilder : IPictureTagBuilder
     {
         var imgTagBuilder = new TagBuilder("img");
 
-        var url = string.IsNullOrEmpty(pictureFallbackUrl)
-            ? resizedUrlGenerator.GenerateUrl(pictureUrl, pictureProfile.DefaultWidth, null, pictureProfile, focalPoint).ToString()
-            : pictureFallbackUrl;
+        var url = string.IsNullOrEmpty(PictureFallbackUrl)
+            ? ResizedUrlGenerator.GenerateUrl(PictureUrl, PictureProfile.DefaultWidth, null, PictureProfile, FocalPoint).ToString()
+            : PictureFallbackUrl;
 
         imgTagBuilder.Attributes.Add("src", url);
 
-        foreach (var imgElementAttribute in pictureViewModel.ImgElementAttributes)
+        foreach (var imgElementAttribute in PictureViewModel.ImgElementAttributes)
         {
             imgTagBuilder.Attributes.Add(imgElementAttribute);
         }
 
-        if (!string.IsNullOrEmpty(imgTagAltText))
+        if (!string.IsNullOrEmpty(ImgTagAltText))
         {
-            imgTagBuilder.Attributes.TryAdd("alt", imgTagAltText);
+            imgTagBuilder.Attributes.TryAdd("alt", ImgTagAltText);
         }
 
         return imgTagBuilder;
