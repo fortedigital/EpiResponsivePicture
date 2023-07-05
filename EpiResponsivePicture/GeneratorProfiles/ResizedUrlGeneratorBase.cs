@@ -13,10 +13,7 @@ using CustomQueryPredicate = Func<int, PictureSource, PictureProfile, FocalPoint
 
 public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 {
-    protected UrlBuilder Builder;
-
     private readonly Queue<(CustomQueryFunc Func, CustomQueryPredicate Predicate)> customQueryRegistrations = new();
-    private readonly NameValueCollection customQueries = new();
     protected IReadOnlyCollection<string> ExtensionsToReplace { get; init; } = new List<string> { ".tif", ".tiff" };
     public UrlBuilder GenerateUrl(string imageUrl, int width, PictureSource pictureSource, PictureProfile pictureProfile, FocalPoint focalPoint)
     {
@@ -25,31 +22,36 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
             pictureProfile.Format is ResizedImageFormat.Preserve && ExtensionsToReplace.Contains(imageExtension)
                 ? pictureProfile.CopyWithNewFormat(ResizedImageFormat.Jpeg)
                 : pictureProfile;
-        Builder = new UrlBuilder(imageUrl);
-            
-        Builder.Add(WidthQuery(width));
+        var builder = new UrlBuilder(imageUrl);
+        var customQueries = new NameValueCollection();
+
+        builder.Add(WidthQuery(width));
 
         foreach (var (func, predicate) in customQueryRegistrations)
         {
-            if(predicate(width, pictureSource, copiedPictureProfile, focalPoint))
+            if (predicate(width, pictureSource, copiedPictureProfile, focalPoint))
+            {
                 AddCustomQuery(func(width, pictureSource, copiedPictureProfile, focalPoint));
+            }
         }
-            
-        Builder.Add(customQueries);
-            
-        customQueries.Clear();
 
-        return Builder;
+        if (customQueries.Count > 0)
+        {
+            builder.Add(customQueries);
+        }
+
+        return builder;
+
+        void AddCustomQuery((string Key, string Value) query)
+        {
+            customQueries.Add(query.Key, query.Value);
+        }
     }
-        
+
     protected abstract (string Key, string Value) WidthQuery(int width);
 
     protected void RegisterCustomQuery(CustomQueryFunc registration) =>
         customQueryRegistrations.Enqueue((registration, (_, _, _, _) => true));
     protected void RegisterCustomQuery(CustomQueryFunc registration, CustomQueryPredicate predicate) =>
         customQueryRegistrations.Enqueue((registration, predicate));
-    private void AddCustomQuery((string Key, string Value) query)
-    {
-        customQueries.Add(query.Key, query.Value);
-    }
 }
