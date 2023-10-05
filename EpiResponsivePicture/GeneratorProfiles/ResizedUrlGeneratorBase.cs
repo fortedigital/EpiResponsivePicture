@@ -1,11 +1,11 @@
+using EPiServer;
+using Forte.EpiResponsivePicture.ResizedImage;
+using Forte.EpiResponsivePicture.ResizedImage.Property;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using EPiServer;
-using Forte.EpiResponsivePicture.ResizedImage;
-using Forte.EpiResponsivePicture.ResizedImage.Property;
 
 namespace Forte.EpiResponsivePicture.GeneratorProfiles;
 using CustomQueryFunc = Func<int, PictureSource, PictureProfile, FocalPoint, (string Key, string Value)>;
@@ -25,7 +25,7 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
         var builder = new UrlBuilder(imageUrl);
         var customQueries = new NameValueCollection();
 
-        builder.Add(WidthQuery(width));
+        builder.AddOrOverride(WidthQuery(width));
 
         foreach (var (func, predicate) in customQueryRegistrations)
         {
@@ -37,7 +37,7 @@ public abstract class ResizedUrlGeneratorBase : IResizedUrlGenerator
 
         if (customQueries.Count > 0)
         {
-            builder.Add(customQueries);
+            builder.AddOrOverride(customQueries);
         }
 
         return builder;
