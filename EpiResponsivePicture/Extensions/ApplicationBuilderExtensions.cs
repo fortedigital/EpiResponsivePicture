@@ -1,10 +1,13 @@
-using System;
-using System.Linq;
 using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using Forte.EpiResponsivePicture.Blob;
+using Forte.EpiResponsivePicture.Configuration;
+using Forte.EpiResponsivePicture.Middlewares;
 using Microsoft.AspNetCore.Builder;
-using SixLabors.ImageSharp.Web.Providers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp.Web.Providers;
+using System;
+using System.Linq;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable once UnusedType.Global
@@ -18,9 +21,15 @@ public static class ApplicationBuilderExtensions
     /// </summary>
     /// <param name="app"></param>
     /// <param name="providerRegistration"></param>
-    public static IApplicationBuilder UseForteEpiResponsivePicture(this IApplicationBuilder app, 
+    public static IApplicationBuilder UseForteEpiResponsivePicture(this IApplicationBuilder app,
         Func<IApplicationBuilder, IApplicationBuilder> providerRegistration = null)
     {
+        var options = app.ApplicationServices.GetService<IOptions<EpiResponsivePicturesOptions>>();
+        if (options?.Value?.MaxPictureSize is not null)
+        {
+            app.UseMiddleware<ImageSizeLimitMiddleware>();
+        }
+
         providerRegistration ??= SixLabors.ImageSharp.Web.DependencyInjection.ApplicationBuilderExtensions.UseImageSharp;
         providerRegistration(app);
 

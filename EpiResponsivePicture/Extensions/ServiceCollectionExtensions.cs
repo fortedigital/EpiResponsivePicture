@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Azure.Storage.Blobs.Models;
 using Baaijte.Optimizely.ImageSharp.Web.Caching;
 using Baaijte.Optimizely.ImageSharp.Web.Providers;
@@ -7,6 +5,7 @@ using EPiServer.Shell.Modules;
 using Forte.EpiResponsivePicture.Blob;
 using Forte.EpiResponsivePicture.Configuration;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
+using Forte.EpiResponsivePicture.Middlewares;
 using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility.SqlProvider;
 using Forte.EpiResponsivePicture.TagBuilders;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SixLabors.ImageSharp.Web.Caching.Azure;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using SixLabors.ImageSharp.Web.Providers;
+using System;
+using System.Linq;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
@@ -82,11 +83,11 @@ public static class ServiceCollectionExtensions
     /// <exception cref="Exception">Thrown when any of required options is missing</exception>
     private static void ValidateOptions(AzureBlobStorageCacheOptions options)
     {
-        if(string.IsNullOrEmpty(options.ConnectionString))
+        if (string.IsNullOrEmpty(options.ConnectionString))
         {
             throw new ArgumentException("Need to provide connection string!");
         }
-        if(string.IsNullOrEmpty(options.ContainerName))
+        if (string.IsNullOrEmpty(options.ContainerName))
         {
             throw new ArgumentException("Need to provide container name!");
         }
@@ -111,14 +112,21 @@ public static class ServiceCollectionExtensions
 
         services
             .AddOptions<EpiResponsivePicturesOptions>()
-            .Configure(o => {
+            .Configure(o =>
+            {
                 o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false;
                 o.AdditionalSegments = options?.AdditionalSegments;
+                o.MaxPictureSize = options?.MaxPictureSize;
             });
 
         services.AddSingleton<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
         services.AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
         services.AddTransient<IPictureTagBuilderProvider, PictureTagBuilderProvider>();
         services.AddTransient<ISourceTagBuilderProvider, SourceTagBuilderProvider>();
+
+        if (options?.MaxPictureSize is not null)
+        {
+            services.AddScoped<ImageSizeLimitMiddleware>();
+        }
     }
 }
