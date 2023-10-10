@@ -99,14 +99,14 @@ public static class ServiceCollectionExtensions
             context.Commands.GetValueOrDefault(ResizeWebProcessor.Height),
             context.Culture);
 
-        // If requested dimension is bigger than allowed, just ignore it.
+        // If requested dimension is bigger than allowed, set it to maximum allowed.
         if (width > options.MaxPictureDimension)
         {
-            context.Commands.Remove(ResizeWebProcessor.Width);
+            context.Commands[ResizeWebProcessor.Width] = options.MaxPictureDimension.ToString();
         }
         if (height > options.MaxPictureDimension)
         {
-            context.Commands.Remove(ResizeWebProcessor.Height);
+            context.Commands[ResizeWebProcessor.Height] = options.MaxPictureDimension.ToString();
         }
 
         return Task.CompletedTask;
