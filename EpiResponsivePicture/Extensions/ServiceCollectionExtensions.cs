@@ -5,16 +5,20 @@ using EPiServer.Shell.Modules;
 using Forte.EpiResponsivePicture.Blob;
 using Forte.EpiResponsivePicture.Configuration;
 using Forte.EpiResponsivePicture.GeneratorProfiles;
-using Forte.EpiResponsivePicture.Middlewares;
+using Forte.EpiResponsivePicture.ResizedImage.Processors;
 using Forte.EpiResponsivePicture.ResizedImage.Property.Compatibility.SqlProvider;
 using Forte.EpiResponsivePicture.TagBuilders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SixLabors.ImageSharp.Web.Caching.Azure;
+using SixLabors.ImageSharp.Web.Commands;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web.Middleware;
+using SixLabors.ImageSharp.Web.Processors;
 using SixLabors.ImageSharp.Web.Providers;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
@@ -32,8 +36,14 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
         EpiResponsivePicturesOptions options = null)
     {
-        services.AddImageSharp()
+        services
+            .AddImageSharp(builder =>
+            {
+                builder.OnParseCommandsAsync = CreateOnParseCommandsAsync(options);
+            })
             .ClearProviders()
+            .RemoveProcessor<ResizeWebProcessor>()
+            .AddProcessor<ResizeWebDownscaleProcessor>()
             .AddProvider<BlobImageProvider>()
             .AddProvider<PhysicalFileSystemProvider>()
             .SetCache<BlobImageCache>();
@@ -56,9 +66,15 @@ public static class ServiceCollectionExtensions
     {
         azureStorageOptions += ValidateOptions;
         azureStorageOptions += CreateContainerIfNotExists;
-        services.AddImageSharp()
+        services
+            .AddImageSharp(builder =>
+            {
+                builder.OnParseCommandsAsync = CreateOnParseCommandsAsync(options);
+            })
             .Configure(azureStorageOptions)
             .ClearProviders()
+            .RemoveProcessor<ResizeWebProcessor>()
+            .AddProcessor<ResizeWebDownscaleProcessor>()
             .AddProvider<BlobImageProvider>()
             .SetCache<AzureBlobStorageCache>();
 
@@ -66,6 +82,35 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
+    private static Func<ImageCommandContext, Task> CreateOnParseCommandsAsync(EpiResponsivePicturesOptions options) => context =>
+    {
+        if (context.Commands.Count == 0 ||
+            options is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        var width = context.Parser.ParseValue<uint>(
+           context.Commands.GetValueOrDefault(ResizeWebProcessor.Width),
+           context.Culture);
+
+        var height = context.Parser.ParseValue<uint>(
+            context.Commands.GetValueOrDefault(ResizeWebProcessor.Height),
+            context.Culture);
+
+        // If requested dimension is bigger than allowed, just ignore it.
+        if (width > options.MaxPictureDimension)
+        {
+            context.Commands.Remove(ResizeWebProcessor.Width);
+        }
+        if (height > options.MaxPictureDimension)
+        {
+            context.Commands.Remove(ResizeWebProcessor.Height);
+        }
+
+        return Task.CompletedTask;
+    };
 
     /// <summary>
     /// Creates container with provided name, when it does not exist
@@ -116,17 +161,12 @@ public static class ServiceCollectionExtensions
             {
                 o.ImageResizerCompatibilityEnabled = options?.ImageResizerCompatibilityEnabled ?? false;
                 o.AdditionalSegments = options?.AdditionalSegments;
-                o.MaxPictureSize = options?.MaxPictureSize;
+                o.MaxPictureDimension = options?.MaxPictureDimension;
             });
 
         services.AddSingleton<IBlobSegmentsProvider, BlobCustomSegmentsProvider>();
         services.AddTransient<IImageResizerFocalPointConversionSqlProvider, ImageResizerFocalPointConversionSqlProvider>();
         services.AddTransient<IPictureTagBuilderProvider, PictureTagBuilderProvider>();
         services.AddTransient<ISourceTagBuilderProvider, SourceTagBuilderProvider>();
-
-        if (options?.MaxPictureSize is not null)
-        {
-            services.AddScoped<ImageSizeLimitMiddleware>();
-        }
     }
 }

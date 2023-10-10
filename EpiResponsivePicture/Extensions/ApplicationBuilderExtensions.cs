@@ -1,10 +1,7 @@
 using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using Forte.EpiResponsivePicture.Blob;
-using Forte.EpiResponsivePicture.Configuration;
-using Forte.EpiResponsivePicture.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Web.Providers;
 using System;
 using System.Linq;
@@ -24,12 +21,6 @@ public static class ApplicationBuilderExtensions
     public static IApplicationBuilder UseForteEpiResponsivePicture(this IApplicationBuilder app,
         Func<IApplicationBuilder, IApplicationBuilder> providerRegistration = null)
     {
-        var options = app.ApplicationServices.GetService<IOptions<EpiResponsivePicturesOptions>>();
-        if (options?.Value?.MaxPictureSize is not null)
-        {
-            app.UseMiddleware<ImageSizeLimitMiddleware>();
-        }
-
         providerRegistration ??= SixLabors.ImageSharp.Web.DependencyInjection.ApplicationBuilderExtensions.UseImageSharp;
         providerRegistration(app);
 
