@@ -16,9 +16,14 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Processors
         public static string Height => ResizeWebProcessor.Height;
         public static string Orient => ResizeWebProcessor.Orient;
 
-        private readonly ResizeWebProcessor _processor = new();
-
         public IEnumerable<string> Commands => _processor.Commands;
+
+        private readonly IImageWebProcessor _processor;
+
+        public ResizeWebDownscaleProcessor(IImageWebProcessor processor)
+        {
+            _processor = processor;
+        }
 
         public bool RequiresTrueColorPixelFormat(CommandCollection commands, CommandParser parser, CultureInfo culture)
             => _processor.RequiresTrueColorPixelFormat(commands, parser, culture);

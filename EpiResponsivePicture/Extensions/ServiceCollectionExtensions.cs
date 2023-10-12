@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
             })
             .ClearProviders()
             .RemoveProcessor<ResizeWebProcessor>()
-            .AddProcessor<ResizeWebDownscaleProcessor>()
+            .AddProcessor(_ => new ResizeWebDownscaleProcessor(new ResizeWebProcessor()))
             .AddProvider<BlobImageProvider>()
             .AddProvider<PhysicalFileSystemProvider>()
             .SetCache<BlobImageCache>();
@@ -74,7 +74,7 @@ public static class ServiceCollectionExtensions
             .Configure(azureStorageOptions)
             .ClearProviders()
             .RemoveProcessor<ResizeWebProcessor>()
-            .AddProcessor<ResizeWebDownscaleProcessor>()
+            .AddProcessor(_ => new ResizeWebDownscaleProcessor(new ResizeWebProcessor()))
             .AddProvider<BlobImageProvider>()
             .SetCache<AzureBlobStorageCache>();
 
