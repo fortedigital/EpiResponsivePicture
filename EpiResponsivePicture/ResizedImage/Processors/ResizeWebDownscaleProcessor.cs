@@ -49,7 +49,7 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Processors
                 return ExifOrientationMode.Unknown;
             }
 
-            image.TryGetExifOrientation(out ushort orientation);
+            image.TryGetExifOrientation(out var orientation);
             return orientation;
         }
 
@@ -60,8 +60,8 @@ namespace Forte.EpiResponsivePicture.ResizedImage.Processors
             CultureInfo culture)
         {
             // The command parser will reject negative numbers as it clamps values to ranges.
-            int width = (int)parser.ParseValue<uint>(commands.GetValueOrDefault(Width), culture);
-            int height = (int)parser.ParseValue<uint>(commands.GetValueOrDefault(Height), culture);
+            var width = (int)parser.ParseValue<uint>(commands.GetValueOrDefault(Width), culture);
+            var height = (int)parser.ParseValue<uint>(commands.GetValueOrDefault(Height), culture);
 
             return ExifOrientationUtilities.Transform(new Size(width, height), orientation);
         }
