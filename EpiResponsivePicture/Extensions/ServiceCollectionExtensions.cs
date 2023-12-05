@@ -31,24 +31,28 @@ public static class ServiceCollectionExtensions
     /// Register services for FocalPoint, resizing with local caching. Fluent API
     /// </summary>
     /// <param name="services">Services</param>
-    /// <param name="options"></param>
+    /// <param name="epiResponsivePicturesOptions"></param>
+    /// <param name="physicalFileSystemProviderOptions">Options to configure physical file system provider</param>
     /// <returns>services</returns>
     public static IServiceCollection AddForteEpiResponsivePicture(this IServiceCollection services,
-        EpiResponsivePicturesOptions options = null)
+        EpiResponsivePicturesOptions epiResponsivePicturesOptions = null,
+        PhysicalFileSystemProviderOptions physicalFileSystemProviderOptions = null)
     {
         services
             .AddImageSharp(builder =>
             {
-                builder.OnParseCommandsAsync = CreateOnParseCommandsAsync(options);
+                builder.OnParseCommandsAsync = CreateOnParseCommandsAsync(epiResponsivePicturesOptions);
             })
             .ClearProviders()
             .RemoveProcessor<ResizeWebProcessor>()
             .AddProcessor(_ => new ResizeWebDownscaleProcessor(new ResizeWebProcessor()))
             .AddProvider<BlobImageProvider>()
+            .Configure<PhysicalFileSystemProviderOptions>(o =>
+                o = physicalFileSystemProviderOptions)
             .AddProvider<PhysicalFileSystemProvider>()
             .SetCache<BlobImageCache>();
 
-        ConfigureModule(services, options);
+        ConfigureModule(services, epiResponsivePicturesOptions);
 
         return services;
     }
