@@ -1,3 +1,4 @@
+using Baaijte.Optimizely.ImageSharp.Web.Providers;
 using Forte.EpiResponsivePicture.Blob;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,17 @@ namespace Forte.EpiResponsivePicture.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
+    /// <summary>
+    /// Adds ImageSharp. Fluent API
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="providerRegistration"></param>
+    public static IApplicationBuilder UseForteEpiResponsivePicture(this IApplicationBuilder app,
+        Func<IApplicationBuilder, IApplicationBuilder> providerRegistration = null)
+    {
+        return app.UseForteEpiResponsivePicture<BlobImageProvider>(providerRegistration);
+    }
+
     /// <summary>
     /// Adds ImageSharp. Fluent API
     /// </summary>
