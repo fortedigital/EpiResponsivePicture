@@ -12,7 +12,7 @@ builder.Services.AddForteEpiResponsivePicture();
 
 var app = builder.Build();
 
-app.UseForteEpiResponsivePicture();
+app.UseForteEpiResponsivePicture<BlobImageProvider>(); // blob image provider selected for DXP deployment
 
 // Removed for brevity
 
@@ -46,7 +46,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseForteEpiResponsivePicture();
+        app.UseForteEpiResponsivePicture<BlobImageProvider>(); // blob image provider selected for DXP deployment
         
         // Removed for brevity
     }
