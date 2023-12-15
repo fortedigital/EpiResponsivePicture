@@ -1,8 +1,8 @@
-import { FocalPoint } from "./FocalPoint";
+import { IFocalPoint } from "./generated";
 
 export interface ResponsiveImageViewModel {
   url: string;
-  focalPoint: FocalPoint;
+  focalPoint: IFocalPoint;
   width: number;
   height: number;
   alt: string;

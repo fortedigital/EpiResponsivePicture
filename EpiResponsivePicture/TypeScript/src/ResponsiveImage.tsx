@@ -1,25 +1,14 @@
 import * as React from "react";
 import { ReactNode } from "react";
-import { AspectRatio } from "./AspectRatio";
-import { FocalPoint } from "./FocalPoint";
 import { ResponsiveImageViewModel } from "./ResponsiveImageViewModel";
-
-export enum ScaleMode {
-  Default = 0,
-  Max = 1,
-  Pad = 2,
-  Crop = 3,
-  Carve = 4,
-  Stretch = 5,
-}
-
+import { IAspectRatio, ScaleMode, IFocalPoint, IPictureProfile, IPictureSource } from '../src/generated'
 export function getResizedImageUrl(
   imageUrl: string,
   width: number | null = null,
   height: number | null = null,
   mode: ScaleMode | null = null,
   quality: number | null = null,
-  focalPoint: FocalPoint | null = null
+  focalPoint: IFocalPoint | null = null
 ) {
   const urlParams = [];
 
@@ -47,31 +36,9 @@ export function getResizedImageUrl(
   return urlParams.length > 0 ? `${imageUrl}?${urlParams.join("&")}` : imageUrl;
 }
 
-export interface CropSettings {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
-
-export interface PictureProfile {
-  defaultWidth: number;
-  maxImageDimension?: number;
-  sources: PictureSource[];
-}
-
-export interface PictureSource {
-  mediaCondition?: string;
-  allowedWidths: number[];
-  sizes: string[];
-  mode: ScaleMode;
-  targetAspectRatio: AspectRatio;
-  quality?: number;
-}
-
 export interface ResponsivePictureProps {
   model: ResponsiveImageViewModel;
-  profile: PictureProfile;
+  profile: IPictureProfile & { maxImageDimension: number };
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   imgAttributes?: any;
 }
@@ -81,7 +48,7 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
     imageUrl: string,
     width: number,
     mode?: ScaleMode,
-    targetAspectRatio?: AspectRatio,
+    targetAspectRatio?: IAspectRatio,
     quality?: number,
     image?: ResponsiveImageViewModel,
     maxImageDimension?: number
@@ -161,7 +128,7 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
   private buildSize(
     width: number,
     mode: ScaleMode,
-    targetAspectRatio: AspectRatio,
+    targetAspectRatio: IAspectRatio,
     quality: number | undefined
   ): string {
     const url = ResponsivePicture.buildResizedImageUrl(
@@ -177,7 +144,7 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
     return `${url} ${width}w`;
   }
 
-  private createSourceElement(source: PictureSource) {
+  private createSourceElement(source: IPictureSource) {
     const srcSets = source.allowedWidths
       .map(width => this.buildSize(width, source.mode, source.targetAspectRatio, source.quality))
       .join(", ");

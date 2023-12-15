@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Reinforced.Typings.Attributes;
 
 namespace Forte.EpiResponsivePicture.ResizedImage;
 
+[TsInterface]
 public class PictureSource
 {
     public string MediaCondition { get; init; }

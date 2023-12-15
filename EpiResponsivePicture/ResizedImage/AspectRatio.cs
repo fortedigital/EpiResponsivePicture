@@ -1,8 +1,10 @@
 using System;
 using Microsoft.Toolkit.Diagnostics;
+using Reinforced.Typings.Attributes;
 
 namespace Forte.EpiResponsivePicture.ResizedImage;
 
+[TsInterface(AutoExportProperties = true, AutoExportMethods = false)]
 public class AspectRatio : IEquatable<AspectRatio>
 {
     private AspectRatio(double ratio)
