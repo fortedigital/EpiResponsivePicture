@@ -1,9 +1,12 @@
-import { AspectRatio } from "./AspectRatio";
 import { ResponsiveImageViewModel } from "./ResponsiveImageViewModel";
+import { IAspectRatio } from "./generated";
 
 export class ImageCropper {
   // port from ImageCropper.cs from EpiResponsivePicture
-  static getCropSettings(aspectRatio: AspectRatio, image: ResponsiveImageViewModel): string | null {
+  static getCropSettings(
+    aspectRatio: IAspectRatio,
+    image: ResponsiveImageViewModel
+  ): string | null {
     if (image == null) return null;
 
     const focalPoint = image.focalPoint || { x: 0.5, y: 0.5 };
@@ -14,7 +17,10 @@ export class ImageCropper {
     const focalPointX = Math.round(sourceWidth * focalPoint.x);
     const sourceAspectRatio = sourceWidth / sourceHeight;
 
-    const targetAspectRatio = aspectRatio != null && aspectRatio.ratio > 0 ? aspectRatio.ratio : sourceAspectRatio;
+    const targetAspectRatio =
+      aspectRatio != null && aspectRatio.ratio > 0
+        ? aspectRatio.ratio
+        : sourceAspectRatio;
 
     let x1 = 0;
     let y1 = 0;
