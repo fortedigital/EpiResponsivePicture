@@ -1,0 +1,44 @@
+name: Release to NuGet
+
+on:
+  release:
+    types: [published]
+    
+jobs:
+  publish-nuget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+    - name: Build
+      working-directory: ./EpiResponsivePicture
+      run: dotnet build -c Release
+    - name: Pack nugets
+      working-directory: ./EpiResponsivePicture
+      run: dotnet pack -c Release --no-build --output . -p:NuspecFile=./EpiResponsivePicture.nuspec
+    - name: Push to NuGet
+      working-directory: ./EpiResponsivePicture
+      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup NODE SKD
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Build
+        working-directory: ./EpiResponsivePicture/TypeScript
+        run: npm ci
+      - name: Publish to NPM
+        working-directory: ./EpiResponsivePicture/TypeScript
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
