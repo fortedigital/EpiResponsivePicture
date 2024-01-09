@@ -35,13 +35,13 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - name: Build
-        working-directory: ./EpiResponsivePicture/TypeScript
-        run: npm ci
       - name: Set version
         uses: batilla7/get-version-action@v2
         working-directory: ./EpiResponsivePicture/TypeScript
         run: npm version ${{ steps.get_version.outputs.version-without-v }}
+      - name: Build
+        working-directory: ./EpiResponsivePicture/TypeScript
+        run: npm ci
       - name: Publish to NPM
         working-directory: ./EpiResponsivePicture/TypeScript
         run: npm publish
