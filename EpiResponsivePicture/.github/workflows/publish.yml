@@ -10,15 +10,16 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
     - name: Build
       working-directory: ./EpiResponsivePicture
       run: dotnet build -c Release
     - name: Pack nugets
+      uses: batilla7/get-version-action@v2
       working-directory: ./EpiResponsivePicture
-      run: dotnet pack -c Release --no-build --output . -p:NuspecFile=./EpiResponsivePicture.nuspec
+      run: dotnet pack -c Release --no-build --output . -p:PackageVersion=${{ steps.get_version.outputs.version-without-v }} -p:Version=${{ steps.get_version.outputs.version-without-v }} -p:NuspecFile=./EpiResponsivePicture.nuspec
     - name: Push to NuGet
       working-directory: ./EpiResponsivePicture
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
@@ -37,6 +38,10 @@ jobs:
       - name: Build
         working-directory: ./EpiResponsivePicture/TypeScript
         run: npm ci
+      - name: Set version
+        uses: batilla7/get-version-action@v2
+        working-directory: ./EpiResponsivePicture/TypeScript
+        run: npm version ${{ steps.get_version.outputs.version-without-v }}
       - name: Publish to NPM
         working-directory: ./EpiResponsivePicture/TypeScript
         run: npm publish
