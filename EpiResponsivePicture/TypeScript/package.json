@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Forte Digital",
   "license": "ISC",
   "devDependencies": {
     "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@types/react": "^18.2.47",
     "react": "^18.0.0"
   }
 }
