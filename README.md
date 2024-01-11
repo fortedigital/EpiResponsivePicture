@@ -206,6 +206,44 @@ builder.Services.AddForteEpiResponsivePicture();
 
 If you want to have custom logic of creating `<picture>` or `<source>` elements you can register your own implementations of `ISourceTagBuilderProvider` and/or `IPictureTagBuilderProvider` which can produce your own builders. 
 
+## How to start using React
+Apart from nuget there is npm package published which contains React component which can be used as a equivalent for `<picture>` element byt for React. The details provided above are still valid form the conceptual perspective. Below code snippet for React can be found:
+
+```
+  const model = {
+    url: image.url,
+    focalPoint: image.focalPoint,
+    width: image.width,
+    height: image.height,
+    alt: image.altText,
+  };
+
+  const profile: IPictureProfile = {
+    defaultWidth: image.width,
+    format: ResizedImageFormat.Preserve,
+    maxImageDimension: 3200,
+    sources: [
+      {
+        allowedWidths: allowedWidths || defaultAllowedWidths,
+        mode: mode || ScaleMode.Crop,
+        targetAspectRatio: targetAspectRatio || {
+          ratio: 2.963,
+          hasValue: true,
+        },
+        sizes: sizes || defaultSizes,
+        quality: quality || 60,
+        mediaCondition: "(min-width: 1024px)",
+      },
+    ],
+  };
+
+  return (
+    <>
+      <ResponsivePicture model={model} profile={profile} className={className} fallbackAltText={fallbackAltText} />
+    </>
+  );
+```
+
 ## Backwards compatibility
 ### ImageResizer
 
@@ -252,4 +290,4 @@ public class MigrateImageSharpFocalPointsJob : ScheduledJobBase
 
 ### Releasing new version of the package
 
-After merge to `master` branch is done automatically new version of both nuget and npm packages will be released. This is done by internal Azure Devops pipeline set up in Forte space.
+After merge to `master` branch is done automatically new version of both nuget and npm packages will be released. This is done by internal Azure Devops pipeline set up in Forte space (`fortedigital->Forte.OpenSource->Pipelines->Forte.EpiResponsivePicture .NET 6`)
