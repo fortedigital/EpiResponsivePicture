@@ -1,7 +1,13 @@
 import * as React from "react";
 import { ReactNode } from "react";
 import { ResponsiveImageViewModel } from "./ResponsiveImageViewModel";
-import { IAspectRatio, ScaleMode, IFocalPoint, IPictureProfile, IPictureSource } from '../src/generated'
+import {
+  IAspectRatio,
+  ScaleMode,
+  IFocalPoint,
+  IPictureProfile,
+  IPictureSource,
+} from "../src/generated";
 export function getResizedImageUrl(
   imageUrl: string,
   width: number | null = null,
@@ -38,9 +44,11 @@ export function getResizedImageUrl(
 
 export interface ResponsivePictureProps {
   model: ResponsiveImageViewModel;
-  profile: IPictureProfile & { maxImageDimension: number };
+  profile: IPictureProfile;
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   imgAttributes?: any;
+  className?: string;
+  fallbackAltText?: string;
 }
 
 export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
@@ -70,7 +78,14 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
       }
     }
 
-    return getResizedImageUrl(imageUrl, width, height, mode, quality, image?.focalPoint);
+    return getResizedImageUrl(
+      imageUrl,
+      width,
+      height,
+      mode,
+      quality,
+      image?.focalPoint
+    );
   }
 
   /* eslint-disable-next-line @typescript-eslint/member-ordering */
@@ -90,7 +105,10 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
 
   private getDefaultUrl(): string {
     const { sources } = this.props.profile;
-    const aspectRatio = sources && sources.length > 0 ? sources[sources.length - 1].targetAspectRatio : undefined;
+    const aspectRatio =
+      sources && sources.length > 0
+        ? sources[sources.length - 1].targetAspectRatio
+        : undefined;
 
     if (aspectRatio) {
       return ResponsivePicture.buildResizedImageUrl(
@@ -146,7 +164,14 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
 
   private createSourceElement(source: IPictureSource) {
     const srcSets = source.allowedWidths
-      .map(width => this.buildSize(width, source.mode, source.targetAspectRatio, source.quality))
+      .map((width) =>
+        this.buildSize(
+          width,
+          source.mode,
+          source.targetAspectRatio,
+          source.quality
+        )
+      )
       .join(", ");
 
     return (

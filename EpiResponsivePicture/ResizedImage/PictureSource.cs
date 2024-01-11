@@ -10,6 +10,6 @@ public class PictureSource
     public IReadOnlyCollection<int> AllowedWidths { get; init; } = new List<int>();
     public IReadOnlyCollection<string> Sizes { get; init; } = new List<string>();
     public ScaleMode Mode { get; init; }
-    public AspectRatio TargetAspectRatio { get; init; } = AspectRatio.Default;
+    public AspectRatio TargetAspectRatio { get; init; } = AspectRatio.Default();
     public PictureQuality Quality { get; init; } = PictureQuality.Default;
 }

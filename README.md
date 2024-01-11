@@ -246,3 +246,10 @@ public class MigrateImageSharpFocalPointsJob : ScheduledJobBase
 }
 ```
 3. Restart solution. Unfortunately due to EPiServers internal mechanisms it is required to restart solution to clear caches and reassign property definition types
+
+
+## Contribution
+
+### Releasing new version of the package
+
+After merge to `master` branch is done automatically new version of both nuget and npm packages will be released. This is done by internal Azure Devops pipeline set up in Forte space.
