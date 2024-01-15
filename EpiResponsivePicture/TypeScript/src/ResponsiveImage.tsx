@@ -114,9 +114,9 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
       return ResponsivePicture.buildResizedImageUrl(
         this.getImageUrl(),
         this.props.profile.defaultWidth,
-        3,
+        ScaleMode.BoxPad,
         aspectRatio,
-        50,
+        99,
         this.props.model
       );
     }
@@ -126,7 +126,7 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
       this.props.profile.defaultWidth,
       undefined,
       undefined,
-      50,
+      99,
       undefined
     );
   }

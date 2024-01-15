@@ -14,9 +14,11 @@ public class AspectRatio : IEquatable<AspectRatio>
         Ratio = ratio;
     }
 
-    public static AspectRatio Original() => new(-1);
+    [TsIgnore]
+    public static AspectRatio Original => new(-1);
 
-    public static AspectRatio Default() => Original();
+    [TsIgnore]
+    public static AspectRatio Default => Original;
 
     public double Ratio { get; }
     public bool HasValue => Ratio > 0;

@@ -4,8 +4,6 @@
 
 export interface IAspectRatio
 {
-	original: IAspectRatio;
-	default: IAspectRatio;
 	ratio: number;
 	hasValue: boolean;
 }
@@ -20,7 +18,8 @@ export interface ICropSettings
 export interface IPictureProfile
 {
 	defaultWidth: number;
-	format: number;
+	format: ResizedImageFormat;
+	maxImageDimension: number;
 	sources: IPictureSource[];
 }
 export interface IPictureSource
@@ -31,6 +30,14 @@ export interface IPictureSource
 	mode: ScaleMode;
 	targetAspectRatio: IAspectRatio;
 	quality: any;
+}
+export enum ResizedImageFormat {
+	Preserve = 0,
+	Jpg = 1,
+	Jpeg = 1,
+	Png = 2,
+	Gif = 3,
+	Bmp = 4
 }
 export enum ScaleMode {
 	Default = 0,

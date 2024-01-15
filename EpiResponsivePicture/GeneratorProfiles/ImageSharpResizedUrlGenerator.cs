@@ -18,7 +18,7 @@ public sealed class ImageSharpResizedUrlGenerator : ResizedUrlGeneratorBase
     {
         RegisterCustomQuery(
             (width, pictureSource, _, _) => HeightQuery(width, pictureSource),
-            (_, pictureSource, _, _) => pictureSource != null && pictureSource.TargetAspectRatio != AspectRatio.Original()
+            (_, pictureSource, _, _) => pictureSource != null && pictureSource.TargetAspectRatio != AspectRatio.Original
         );
         RegisterCustomQuery(
             (_, pictureSource, _, _) => QualityQuery(pictureSource),
