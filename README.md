@@ -244,6 +244,8 @@ Apart from nuget there is npm package published (`optimizely-responsive-picture`
   );
 ```
 
+==Please not that `optimizely-responsive-picture` is designed to work only with ImageSharp as a resizing engine. In other cases resizing logic and parameters may differ and not work as expected.==
+
 ## Backwards compatibility
 ### ImageResizer
 
