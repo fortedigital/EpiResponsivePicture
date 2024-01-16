@@ -206,6 +206,46 @@ builder.Services.AddForteEpiResponsivePicture();
 
 If you want to have custom logic of creating `<picture>` or `<source>` elements you can register your own implementations of `ISourceTagBuilderProvider` and/or `IPictureTagBuilderProvider` which can produce your own builders. 
 
+## How to start using React
+Apart from nuget there is npm package published (`optimizely-responsive-picture`) which contains React component which can be used as a equivalent for `<picture>` element but for React. The details provided above are still valid form the conceptual perspective. Below code snippet for React can be found:
+
+```
+  const model = {
+    url: image.url,
+    focalPoint: image.focalPoint,
+    width: image.width,
+    height: image.height,
+    alt: image.altText,
+  };
+
+  const profile: IPictureProfile = {
+    defaultWidth: image.width,
+    format: ResizedImageFormat.Preserve,
+    maxImageDimension: 3200,
+    sources: [
+      {
+        allowedWidths: allowedWidths || defaultAllowedWidths,
+        mode: mode || ScaleMode.Crop,
+        targetAspectRatio: targetAspectRatio || {
+          ratio: 2.963,
+          hasValue: true,
+        },
+        sizes: sizes || defaultSizes,
+        quality: quality || 60,
+        mediaCondition: "(min-width: 1024px)",
+      },
+    ],
+  };
+
+  return (
+    <>
+      <ResponsivePicture model={model} profile={profile} className={className} fallbackAltText={fallbackAltText} />
+    </>
+  );
+```
+
+==Please note that `optimizely-responsive-picture` is designed to work only with ImageSharp as a resizing engine. In other cases resizing logic and parameters may differ and not work as expected.==
+
 ## Backwards compatibility
 ### ImageResizer
 
@@ -246,3 +286,10 @@ public class MigrateImageSharpFocalPointsJob : ScheduledJobBase
 }
 ```
 3. Restart solution. Unfortunately due to EPiServers internal mechanisms it is required to restart solution to clear caches and reassign property definition types
+
+
+## Contribution
+
+### Releasing new version of the package
+
+Once the merge to the master branch is completed, the Azure DevOps pipeline within the Forte space (`fortedigital->Forte.OpenSource->Pipelines->Forte.EpiResponsivePicture .NET 6`) will automatically release new versions of both NuGet and npm packages. 

@@ -1,7 +1,9 @@
 using System;
+using Reinforced.Typings.Attributes;
 
 namespace Forte.EpiResponsivePicture.ResizedImage;
 
+[TsEnum]
 public enum ResizedImageFormat
 {
     /// <summary>

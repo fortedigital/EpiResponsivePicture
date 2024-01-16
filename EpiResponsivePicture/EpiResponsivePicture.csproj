@@ -1,63 +1,112 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <PackageId>Forte.EpiResponsivePicture</PackageId>
-    <AssemblyName>Forte.EpiResponsivePicture</AssemblyName>
-    <PackageVersion>1.0.0.0</PackageVersion>
-    <Version>1.0.0.0</Version>
-    <Title>Forte.EpiResponsivePicture</Title>
-    <Authors>Forte Digital</Authors>
-    <Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
-    <PackageProjectUrl>https://github.com/fortedigital/EpiResponsivePicture</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <NuspecProperties>version=$(Version)</NuspecProperties>
+	<PropertyGroup>
+		<RootNamespace>Forte.EpiResponsivePicture</RootNamespace>
+		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<PackageId>Forte.EpiResponsivePicture</PackageId>
+		<AssemblyName>Forte.EpiResponsivePicture</AssemblyName>
+		<PackageVersion>1.0.0.0</PackageVersion>
+		<Version>1.0.0.0</Version>
+		<Title>Forte.EpiResponsivePicture</Title>
+		<Authors>Forte Digital</Authors>
+		<Description>Smart responsive images in EPiServer with ImageResizing.Net and Focal point</Description>
+		<PackageProjectUrl>https://github.com/fortedigital/EpiResponsivePicture</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/fortedigital/EpiResponsivePicture/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<NuspecProperties>version=$(Version)</NuspecProperties>
 
-    <!-- Include symbol files (*.pdb) in the built .nupkg -->
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Baaijte.Optimizely.ImageSharp.Web" Version="[2.0.0, 3)" />
-    <PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.5.0, 13)" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="[12.5.0, 13)" />
-    <PackageReference Include="EPiServer.Framework" Version="[12.5.0, 13)" />
-    <PackageReference Include="EPiServer.CMS.UI" Version="[12.5.0, 13)" />
-    <PackageReference Include="EPiServer.CMS.AspNetCore.Templating" Version="[12.5.0, 13)" />
-    <PackageReference Include="Microsoft.Toolkit.Diagnostics" Version="7.1.2" />
-    <PackageReference Include="SixLabors.ImageSharp.Web.Providers.Azure" Version="2.0.0" />
-  </ItemGroup>
+		<!-- Include symbol files (*.pdb) in the built .nupkg -->
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Content Include="TypeScript\package.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="TypeScript\node_modules\.bin\acorn" />
+	  <None Include="TypeScript\node_modules\.bin\acorn.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\acorn.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\loose-envify" />
+	  <None Include="TypeScript\node_modules\.bin\loose-envify.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\loose-envify.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-cwd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-cwd.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-cwd.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-esm" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-esm.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-esm.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-script" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-script.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-script.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-transpile-only" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-transpile-only.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node-transpile-only.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-node.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\ts-script" />
+	  <None Include="TypeScript\node_modules\.bin\ts-script.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\ts-script.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\tsc" />
+	  <None Include="TypeScript\node_modules\.bin\tsc.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\tsc.ps1" />
+	  <None Include="TypeScript\node_modules\.bin\tsserver" />
+	  <None Include="TypeScript\node_modules\.bin\tsserver.cmd" />
+	  <None Include="TypeScript\node_modules\.bin\tsserver.ps1" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <OutputPath>bin/$(Configuration)</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ProjectDir Condition="'$(ProjectDir)' == ''">$(MSBuildProjectDirectory)</ProjectDir>
-    <SolutionDir Condition="'$(SolutionDir)' == ''">$(ProjectDir)</SolutionDir>
-    <TmpOutDir Condition="'$(TmpOutir)' == ''">$(OutputPath)/temp</TmpOutDir>
-    <!-- NOTE! This is different between cms versions, the zip file needs to be named the same in the package -->
-    <ZipFile>$(OutputPath)/Forte.EpiResponsivePicture.zip</ZipFile>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
-  <Target Name="CreateNugetPackage" AfterTargets="Build;Rebuild" Condition="'$(Configuration)' == 'Release' ">
-    <Message Text="Creating Nuget Package" />
-    <!-- Create the Versioned out dir for the client resources-->
-    <!-- Copy -->
-    <ItemGroup>
-      <ClientResources Include="$(ProjectDir)/ClientResources/**/*" />
-    </ItemGroup>
-    <Copy SourceFiles="$(ProjectDir)/module.config" DestinationFolder="$(TmpOutDir)/content" />
-    <Copy SourceFiles="@(ClientResources)" DestinationFiles="@(ClientResources -> '$(TmpOutDir)/content/ClientResources/%(RecursiveDir)%(Filename)%(Extension)')" />
-    <!-- Delete old Zip file -->
-    <Delete Files="$(ZipFile)" />
-    <!-- Create the Zip file -->
-    <ZipDirectory SourceDirectory="$(TmpOutDir)/content" DestinationFile="$(ZipFile)" Overwrite="true" />
-    <!-- Cleanup -->
-    <RemoveDir Directories="$(TmpOutDir)" />
-  </Target>
-  
+	<ItemGroup>
+		<PackageReference Include="Baaijte.Optimizely.ImageSharp.Web" Version="[2.0.0, 3)" />
+		<PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.5.0, 13)" />
+		<PackageReference Include="EPiServer.CMS.Core" Version="[12.5.0, 13)" />
+		<PackageReference Include="EPiServer.Framework" Version="[12.5.0, 13)" />
+		<PackageReference Include="EPiServer.CMS.UI" Version="[12.5.0, 13)" />
+		<PackageReference Include="EPiServer.CMS.AspNetCore.Templating" Version="[12.5.0, 13)" />
+		<PackageReference Include="Microsoft.Toolkit.Diagnostics" Version="7.1.2" />
+		<PackageReference Include="Reinforced.Typings" Version="1.6.3" />
+		<PackageReference Include="SixLabors.ImageSharp.Web.Providers.Azure" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<NpmPackageFile Include="TypeScript/package.json" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<OutputPath>bin/$(Configuration)</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ProjectDir Condition="'$(ProjectDir)' == ''">$(MSBuildProjectDirectory)</ProjectDir>
+		<SolutionDir Condition="'$(SolutionDir)' == ''">$(ProjectDir)</SolutionDir>
+		<TmpOutDir Condition="'$(TmpOutir)' == ''">$(OutputPath)/temp</TmpOutDir>
+		<!-- NOTE! This is different between cms versions, the zip file needs to be named the same in the package -->
+		<ZipFile>$(OutputPath)/Forte.EpiResponsivePicture.zip</ZipFile>
+		<RunPostBuildEvent>Always</RunPostBuildEvent>
+	</PropertyGroup>
+
+	<Target Name="CreateNugetPackage" AfterTargets="Build;Rebuild" Condition="'$(Configuration)' == 'Release' ">
+		<Message Text="Creating Nuget Package" />
+		<!-- Create the Versioned out dir for the client resources-->
+		<!-- Copy -->
+		<ItemGroup>
+			<ClientResources Include="$(ProjectDir)/ClientResources/**/*" />
+		</ItemGroup>
+		<Copy SourceFiles="$(ProjectDir)/module.config" DestinationFolder="$(TmpOutDir)/content" />
+		<Copy SourceFiles="@(ClientResources)" DestinationFiles="@(ClientResources -> '$(TmpOutDir)/content/ClientResources/%(RecursiveDir)%(Filename)%(Extension)')" />
+		<!-- Delete old Zip file -->
+		<Delete Files="$(ZipFile)" />
+		<!-- Create the Zip file -->
+		<ZipDirectory SourceDirectory="$(TmpOutDir)/content" DestinationFile="$(ZipFile)" Overwrite="true" />
+		<!-- Cleanup -->
+		<RemoveDir Directories="$(TmpOutDir)" />
+	</Target>
+
+	<Target Name="NpmInstall" Inputs="package.json" Outputs="node_modules/.install-stamp">
+		<Exec Command="npm install" WorkingDirectory="$(ProjectDir)/TypeScript" />
+		<Touch Files="TypeScript/node_modules/.install-stamp" AlwaysCreate="true" />
+	</Target>
+	<!--<Target Name="NpmRunBuild" DependsOnTargets="NpmInstall" BeforeTargets="BeforeBuild">
+		<Exec Command="npx tsc" WorkingDirectory="$(ProjectDir)/TypeScript" />
+	</Target>-->
+
 </Project>
