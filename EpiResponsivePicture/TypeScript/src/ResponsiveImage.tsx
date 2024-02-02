@@ -188,7 +188,7 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
   render(): ReactNode {
     const sources = this.buildSources();
     return (
-      <picture>
+      <picture className={this.props.className}>
         {sources}
         <img
           alt={this.props.model.alt || ""}
