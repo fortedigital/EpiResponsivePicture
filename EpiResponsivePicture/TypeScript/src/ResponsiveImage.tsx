@@ -145,9 +145,9 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
 
   private buildSize(
     width: number,
-    mode: ScaleMode,
     targetAspectRatio: IAspectRatio,
-    quality: number | undefined
+    quality?: number | undefined,
+    mode?: ScaleMode
   ): string {
     const url = ResponsivePicture.buildResizedImageUrl(
       this.props.model.url,
@@ -167,9 +167,9 @@ export class ResponsivePicture extends React.Component<ResponsivePictureProps> {
       .map((width) =>
         this.buildSize(
           width,
-          source.mode,
           source.targetAspectRatio,
-          source.quality
+          source.quality?.quality || undefined,
+          source.mode
         )
       )
       .join(", ");
