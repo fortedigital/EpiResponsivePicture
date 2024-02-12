@@ -21,6 +21,7 @@ public class AspectRatio : IEquatable<AspectRatio>
     public static AspectRatio Default => Original;
 
     public double Ratio { get; }
+    [TsIgnore]
     public bool HasValue => Ratio > 0;
 
     public static AspectRatio Create(double width, double height)

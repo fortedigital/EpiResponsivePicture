@@ -333,3 +333,5 @@ EpiResponsivePicture/TypeScript/node_modules
 EpiResponsivePicture/TypeScript/dist
 
 EpiResponsivePicture/modules
+EpiResponsivePicture/TypeScript/src/generated.ts
+EpiResponsivePicture/TypeScript/optimizely-responsive-picture*.tgz

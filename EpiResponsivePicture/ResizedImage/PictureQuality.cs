@@ -1,8 +1,10 @@
 using System;
 using Microsoft.Toolkit.Diagnostics;
+using Reinforced.Typings.Attributes;
 
 namespace Forte.EpiResponsivePicture.ResizedImage;
 
+[TsInterface(AutoExportProperties = true, AutoExportMethods = false)]
 public class PictureQuality : IEquatable<PictureQuality>
 {
     public int Quality { get; }
@@ -14,8 +16,10 @@ public class PictureQuality : IEquatable<PictureQuality>
         Quality = quality;
     }
 
+    [TsIgnore]
     public static PictureQuality Default => new(-1);
 
+    [TsIgnore]
     public static PictureQuality Create(int quality) => new(quality);
     
     #region IEquatable implementation

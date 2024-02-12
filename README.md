@@ -226,12 +226,9 @@ Apart from nuget there is npm package published (`optimizely-responsive-picture`
       {
         allowedWidths: allowedWidths || defaultAllowedWidths,
         mode: mode || ScaleMode.Crop,
-        targetAspectRatio: targetAspectRatio || {
-          ratio: 2.963,
-          hasValue: true,
-        },
+        targetAspectRatio: { ratio: image.width / image.height },
         sizes: sizes || defaultSizes,
-        quality: quality || 60,
+        quality: { quality: 60 },
         mediaCondition: "(min-width: 1024px)",
       },
     ],
